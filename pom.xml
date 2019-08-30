@@ -1,0 +1,56 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0"
+         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+  <modelVersion>4.0.0</modelVersion>
+
+  <parent>
+    <artifactId>kmdp-inference-service-base</artifactId>
+    <groupId>edu.mayo.kmdp</groupId>
+    <version>[5.1.0,6.0.0]</version>
+  </parent>
+
+  <artifactId>kmdp-inference-broker</artifactId>
+  <version>3.6.0</version>
+  <packaging>pom</packaging>
+
+  <name>KMDP :: Server :: TEST :: Inference Broker</name>
+
+  <properties>
+    <kmdp.servers.version>[3.5.9,4.0.0]</kmdp.servers.version>
+  </properties>
+
+  <modules>
+    <module>kmdp-inference-broker-core</module>
+    <module>kmdp-inference-broker-impl</module>
+  </modules>
+
+  <profiles>
+    <profile>
+      <id>public</id>
+      <activation>
+        <activeByDefault>false</activeByDefault>
+      </activation>
+      <repositories>
+        <repository>
+          <id>bintray-api4kbs-API4KP-Mvn-Repo</id>
+          <snapshots>
+            <enabled>false</enabled>
+          </snapshots>
+          <name>bintray</name>
+          <url>https://dl.bintray.com/api4kbs/API4KP-Mvn-Repo</url>
+        </repository>
+      </repositories>
+
+      <distributionManagement>
+        <repository>
+          <id>bintray-api4kbs-API4KP-Mvn-Repo</id>
+          <name>api4kbs-API4KP-Mvn-Repo</name>
+          <url>https://api.bintray.com/maven/api4kbs/API4KP-Mvn-Repo/kmdp-inference-broker/;override=1;publish=1</url>
+        </repository>
+      </distributionManagement>
+    </profile>
+  </profiles>
+
+</project>
+

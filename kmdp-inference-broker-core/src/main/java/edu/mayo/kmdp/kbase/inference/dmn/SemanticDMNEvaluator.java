@@ -1,0 +1,200 @@
+/**
+ * Copyright © 2018 Mayo Clinic (RSTKNOWLEDGEMGMT@mayo.edu)
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License"); you may not use this file except
+ * in compliance with the License. You may obtain a copy of the License at
+ *
+ * http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software distributed under the License
+ * is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express
+ * or implied. See the License for the specific language governing permissions and limitations under
+ * the License.
+ */
+package edu.mayo.kmdp.kbase.inference.dmn;
+
+import static edu.mayo.kmdp.util.NameUtils.camelCase;
+
+import edu.mayo.kmdp.id.Term;
+
+import edu.mayo.kmdp.inference.v3.server.InferenceApiInternal._infer;
+import edu.mayo.kmdp.terms.ConceptScheme;
+import edu.mayo.kmdp.util.Util;
+import edu.mayo.kmdp.util.fhir.fhir3.FHIR3DataTypeConstructor;
+import edu.mayo.ontology.taxonomies.api4kp.knowledgeoperations.KnowledgeProcessingOperationSeries;
+import edu.mayo.ontology.taxonomies.krlanguage.KnowledgeRepresentationLanguageSeries;
+import java.util.HashMap;
+import java.util.Map;
+import java.util.Optional;
+import java.util.UUID;
+import java.util.stream.Collectors;
+import org.hl7.fhir.dstu3.model.Base;
+import org.hl7.fhir.dstu3.model.DataElement;
+import org.hl7.fhir.dstu3.model.Type;
+import org.kie.dmn.api.core.DMNContext;
+import org.kie.dmn.api.core.DMNModel;
+import org.kie.dmn.api.core.DMNResult;
+import org.kie.dmn.api.core.DMNRuntime;
+import org.kie.dmn.api.core.ast.DecisionNode;
+import org.omg.spec.api4kp._1_0.Answer;
+import org.omg.spec.api4kp._1_0.identifiers.ConceptIdentifier;
+import org.omg.spec.api4kp._1_0.services.KPOperation;
+import org.omg.spec.api4kp._1_0.services.KPSupport;
+import org.omg.spec.api4kp._1_0.services.KnowledgeBase;
+
+
+@KPSupport(KnowledgeRepresentationLanguageSeries.DMN_1_1)
+@KPOperation(KnowledgeProcessingOperationSeries.Inference_Task)
+public class SemanticDMNEvaluator implements _infer {
+
+  private DMNRuntime runtime;
+
+  public SemanticDMNEvaluator(KnowledgeBase knowledgeBase) {
+    runtime = KieDMNHelper.initRuntime(knowledgeBase);
+  }
+
+  @Override
+  public Answer<Map> infer(UUID modelId, String versionTag,
+      java.util.Map features) {
+    DMNModel model = resolveModel(modelId, versionTag);
+
+    Map<Term, Object> concepts = resolveConcepts(features);
+    DMNContext ctx = bindInputs(concepts, model);
+    DMNResult res = runtime.evaluateAll(model, ctx);
+//    Map<Term, Object> out = bindOutputs(res.getContext());
+    Map<String, Object> out = extractOutputs(res.getContext());
+    return Answer.of(out);
+  }
+
+
+  /**
+   * Resolve model by versioned ID Assumption : the ID resolves to a Semantic Decision Model Asset
+   * expressed in DMN
+   */
+  private DMNModel resolveModel(UUID modelId, String versionTag) {
+    // TODO
+    return runtime.getModels().get(0);
+  }
+
+  /**
+   * Resolve the URIs of the input data concepts Maybe TODO : Validate that the 'Object' value
+   * conforms to the canonical schema associated to its data concept
+   */
+  private java.util.Map<Term, Object> resolveConcepts(
+      ConceptScheme<Term> scheme,
+      java.util.Map<String, Object> features) {
+    java.util.Map<Term, Object> resolved = new HashMap<>();
+
+    features.forEach((k, v) -> {
+      Optional<Term> pc = resolveConceptByUUID(scheme, k);
+      if (pc.isPresent()) {
+        resolved.put(pc.get(), v);
+      } else {
+        resolveConceptByLabel(scheme, k)
+            .ifPresent(pcl -> resolved.put(pcl, v));
+      }
+    });
+
+    return resolved;
+  }
+
+  private java.util.Map<Term, Object> resolveConcepts(Map<String, Object> features) {
+    return features.keySet().stream()
+        .collect(Collectors.toMap(
+            this::toConcept,
+            features::get
+        ));
+  }
+
+  private Term toConcept(String k) {
+    return new ConceptIdentifier()
+        .withLabel(k)
+        .withConceptUUID(Util.uuid(k))
+        .withTag(k);
+  }
+
+  /**
+   * Resolve a PC URI to its corresponding term
+   */
+  private Optional<Term> resolveConceptByUUID(ConceptScheme<Term> scheme, String key) {
+    return scheme.getConcepts()
+        .filter(t -> t.getTag().equals(key))
+        .findFirst();
+  }
+
+  /**
+   * Resolve a PC (normalized) label to its corresponding term
+   */
+  private Optional<Term> resolveConceptByLabel(ConceptScheme<Term> scheme, String label) {
+    return scheme.getConcepts()
+        .filter(pc -> label.equals(toVariableName(pc))
+            || label.equals(pc.getLabel()))
+        .findAny();
+  }
+
+
+  /**
+   * Maps a 'natural' PC label to its normalized variable name counterpart
+   */
+  private String toVariableName(Term pc) {
+    String label = pc.getLabel();
+    if (label.contains(" ")) {
+      return camelCase(label);
+    } else {
+      return Character.toLowerCase(label.charAt(0)) + label.substring(1);
+    }
+  }
+
+  /**
+   *
+   */
+  private DMNContext bindInputs(java.util.Map<Term, ?> inputs, DMNModel model) {
+    DMNContext ctx = runtime.newContext();
+    inputs.forEach((pc, value) -> ctx.set(toVariableName(pc), castIntoDMN(value, pc, model)));
+    return ctx;
+  }
+
+
+  /**
+   * Inverse mapping
+   */
+  private Map<Term, Object> bindOutputs(DMNContext result) {
+    Map<Term, Object> map = new HashMap<>();
+    result.getAll().forEach((k, v) -> {
+      Optional<Term> pc = Optional.empty(); //resolveConceptByLabel(k);
+      pc.ifPresent(term -> map.put(
+          term,
+          castIntoFHIR(v, term)));
+    });
+    return map;
+  }
+
+  private Map<String, Object> extractOutputs(DMNContext result) {
+    Map<String, Object> map = new HashMap<>();
+    result.getAll().forEach((k, v) ->
+        map.put( k, v instanceof Base ? v : castIntoFHIR(v, null)));
+    return map;
+  }
+
+
+  private Type castIntoFHIR(final Object x, final Term concept) {
+    Optional<DataElement> schema = FHIR3DataTypeConstructor.getType();
+    Optional<Type> cast = schema.flatMap(de -> FHIR3DataTypeConstructor.construct(de, x));
+    return cast.orElseThrow(IllegalStateException::new);
+  }
+
+  private Object castIntoDMN(Object value, Term pc, DMNModel model) {
+    if (needUnwrapping(value, pc, model)) {
+      return value; //FHIR3DataTypeConstructor.destruct(value);
+    } else {
+      return value;
+    }
+  }
+
+  private boolean needUnwrapping(Object value, Term pc, DMNModel model) {
+    DecisionNode dec = model.getDecisionByName(toVariableName(pc));
+    return dec != null
+        && !dec.getResultType().isAssignableValue(value);
+  }
+}
+
