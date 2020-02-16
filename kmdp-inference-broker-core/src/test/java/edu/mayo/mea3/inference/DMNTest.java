@@ -16,8 +16,14 @@
 package edu.mayo.mea3.inference;
 
 import static edu.mayo.kmdp.util.NameUtils.camelCase;
+import static edu.mayo.ontology.taxonomies.krformat.SerializationFormatSeries.TXT;
+import static edu.mayo.ontology.taxonomies.krformat.SerializationFormatSeries.XML_1_1;
+import static edu.mayo.ontology.taxonomies.krlanguage.KnowledgeRepresentationLanguageSeries.DMN_1_1;
+import static edu.mayo.ontology.taxonomies.krlanguage.KnowledgeRepresentationLanguageSeries.DMN_1_2;
+import static edu.mayo.ontology.taxonomies.krlanguage.KnowledgeRepresentationLanguageSeries.HL7_CQL;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertTrue;
+import static org.omg.spec.api4kp._1_0.AbstractCarrier.rep;
 
 import ca.uhn.fhir.context.FhirContext;
 import ca.uhn.fhir.parser.IParser;
@@ -69,7 +75,7 @@ public class DMNTest extends InferenceBaseTest {
 		UUID id = UUID.randomUUID();
 
 		KnowledgeAssetRepositoryService semRepo =
-				initMockRepo(id, VTAG, "/MockPredictor.dmn");
+				initMockRepo(id, VTAG, "/MockPredictor.dmn",rep(DMN_1_1,XML_1_1));
 
 		DMNRuntime runtime = KieDMNHelper
 				.initRuntime(new KnowledgeBase().withManifestation(

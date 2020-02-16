@@ -32,10 +32,20 @@
       <artifactId>kmdp-inference-service-interfaces</artifactId>
       <version>${kmdp.impl.version}</version>
     </dependency>
+    <dependency>
+      <groupId>edu.mayo.kmdp</groupId>
+      <artifactId>kmdp-terminology-service-interfaces</artifactId>
+      <version>${kmdp.impl.version}</version>
+    </dependency>
 
     <dependency>
       <groupId>edu.mayo.kmdp</groupId>
       <artifactId>kmdp-knowledge-transrepresentation-core</artifactId>
+      <version>${kmdp.servers.version}</version>
+    </dependency>
+    <dependency>
+      <groupId>edu.mayo.kmdp</groupId>
+      <artifactId>kmdp-knowledgebase-construction-service-core</artifactId>
       <version>${kmdp.servers.version}</version>
     </dependency>
 

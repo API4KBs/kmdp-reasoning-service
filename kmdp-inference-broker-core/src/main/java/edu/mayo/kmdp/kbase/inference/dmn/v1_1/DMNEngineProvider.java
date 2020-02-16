@@ -1,10 +1,11 @@
-package edu.mayo.kmdp.kbase.inference.dmn;
+package edu.mayo.kmdp.kbase.inference.dmn.v1_1;
 
 import static edu.mayo.kmdp.util.Util.uuid;
 
 import edu.mayo.kmdp.id.helper.DatatypeHelper;
 import edu.mayo.kmdp.inference.v3.server.InferenceApiInternal._infer;
 import edu.mayo.kmdp.kbase.inference.AbstractEvaluatorProvider;
+import edu.mayo.kmdp.kbase.inference.dmn.SemanticDMNEvaluator;
 import edu.mayo.kmdp.knowledgebase.v3.server.KnowledgeBaseApiInternal;
 import edu.mayo.kmdp.metadata.surrogate.KnowledgeAsset;
 import edu.mayo.ontology.taxonomies.krlanguage.KnowledgeRepresentationLanguageSeries;
