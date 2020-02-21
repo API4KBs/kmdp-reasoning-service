@@ -1,4 +1,4 @@
-package edu.mayo.kmdp.kbase.introspection.dmn;
+package edu.mayo.kmdp.kbase.introspection.dmn.v1_1;
 
 import static edu.mayo.kmdp.SurrogateBuilder.newSurrogate;
 import static edu.mayo.ontology.taxonomies.api4kp.parsinglevel.ParsingLevelSeries.Abstract_Knowledge_Expression;
@@ -6,11 +6,13 @@ import static edu.mayo.ontology.taxonomies.api4kp.parsinglevel.ParsingLevelSerie
 import static edu.mayo.ontology.taxonomies.krlanguage.KnowledgeRepresentationLanguageSeries.DMN_1_1;
 import static edu.mayo.ontology.taxonomies.krlanguage.KnowledgeRepresentationLanguageSeries.Knowledge_Asset_Surrogate;
 
-import edu.mayo.kmdp.knowledgebase.v3.server.IntrospectionApiInternal;
-import edu.mayo.kmdp.language.parsers.DMNParser;
+import edu.mayo.kmdp.id.helper.DatatypeHelper;
+import edu.mayo.kmdp.inference.v3.server.IntrospectionApiInternal;
+import edu.mayo.kmdp.language.parsers.dmn.v1_1.DMN11Parser;
 import edu.mayo.kmdp.metadata.surrogate.ComputableKnowledgeArtifact;
 import edu.mayo.kmdp.metadata.surrogate.KnowledgeAsset;
 import edu.mayo.kmdp.metadata.surrogate.Representation;
+import edu.mayo.kmdp.registry.Registry;
 import edu.mayo.kmdp.tranx.v3.server.DeserializeApiInternal;
 import edu.mayo.ontology.taxonomies.api4kp.knowledgeoperations.KnowledgeProcessingOperationSeries;
 import java.util.UUID;
@@ -29,17 +31,20 @@ import org.springframework.beans.factory.annotation.Autowired;
 @KPOperation(KnowledgeProcessingOperationSeries.Extract_Description_Task)
 @KPSupport(DMN_1_1)
 @KPComponent
-public class DMN11MetadataIntrospector implements IntrospectionApiInternal {
+public class DMN11MetadataIntrospector implements IntrospectionApiInternal._introspect {
 
   public static final UUID DMN1_1_EXTRACTOR
       = UUID.fromString("0c6f2884-60ce-4112-8dfd-231c96f7eca6");
 
   @Autowired
   @KPSupport(DMN_1_1)
-  DeserializeApiInternal parser = new DMNParser();
+  DeserializeApiInternal parser = new DMN11Parser();
 
   @Override
-  public Answer<KnowledgeCarrier> extractSurrogate(UUID lambdaId, KnowledgeCarrier sourceArtifact) {
+  public Answer<KnowledgeCarrier> introspect(
+      UUID lambdaId,
+      KnowledgeCarrier sourceArtifact,
+      String xAccept) {
     return parser
         // Parse as needed
         .lift(sourceArtifact, Abstract_Knowledge_Expression)
@@ -54,6 +59,7 @@ public class DMN11MetadataIntrospector implements IntrospectionApiInternal {
     KnowledgeAsset surrogate = newSurrogate(carrier.getAssetId()).get()
         .withName(dmnModel.getName())
         .withCarriers(new ComputableKnowledgeArtifact()
+            .withArtifactId(carrier.getArtifactId())
             .withRepresentation(new Representation()
                 .withLanguage(DMN_1_1)));
 
@@ -67,7 +73,6 @@ public class DMN11MetadataIntrospector implements IntrospectionApiInternal {
                 .withLanguage(Knowledge_Asset_Surrogate))
     );
   }
-
 
 
 }

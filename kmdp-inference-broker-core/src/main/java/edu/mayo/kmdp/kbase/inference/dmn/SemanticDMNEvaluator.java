@@ -30,6 +30,9 @@ import java.util.UUID;
 import java.util.stream.Collectors;
 import org.hl7.fhir.dstu3.model.Base;
 import org.hl7.fhir.dstu3.model.DataElement;
+import org.hl7.fhir.dstu3.model.ElementDefinition;
+import org.hl7.fhir.dstu3.model.ElementDefinition.TypeRefComponent;
+import org.hl7.fhir.dstu3.model.Enumerations.DataType;
 import org.hl7.fhir.dstu3.model.Type;
 import org.kie.dmn.api.core.DMNContext;
 import org.kie.dmn.api.core.DMNModel;
@@ -41,6 +44,8 @@ import org.omg.spec.api4kp._1_0.identifiers.ConceptIdentifier;
 import org.omg.spec.api4kp._1_0.services.KPOperation;
 import org.omg.spec.api4kp._1_0.services.KPSupport;
 import org.omg.spec.api4kp._1_0.services.KnowledgeBase;
+import org.opencds.cqf.cql.terminology.TerminologyProvider;
+import org.springframework.beans.factory.annotation.Autowired;
 
 
 @KPSupport(KnowledgeRepresentationLanguageSeries.DMN_1_1)
@@ -48,6 +53,9 @@ import org.omg.spec.api4kp._1_0.services.KnowledgeBase;
 public class SemanticDMNEvaluator implements _infer {
 
   private DMNRuntime runtime;
+
+  @Autowired(required = false)
+  private TerminologyProvider termsProvider;
 
   public SemanticDMNEvaluator(KnowledgeBase knowledgeBase) {
     runtime = KieDMNHelper.initRuntime(knowledgeBase);
@@ -176,11 +184,17 @@ public class SemanticDMNEvaluator implements _infer {
     return map;
   }
 
-
   private Type castIntoFHIR(final Object x, final Term concept) {
-    Optional<DataElement> schema = FHIR3DataTypeConstructor.getType();
+    Optional<DataElement> schema = getType(concept);
     Optional<Type> cast = schema.flatMap(de -> FHIR3DataTypeConstructor.construct(de, x));
     return cast.orElseThrow(IllegalStateException::new);
+  }
+
+  private static Optional<DataElement> getType(Term concept) {
+    return Optional.ofNullable(
+        new DataElement().addElement(
+            new ElementDefinition().addType(
+                new TypeRefComponent().setCode(DataType.QUANTITY.toCode()))));
   }
 
   private Object castIntoDMN(Object value, Term pc, DMNModel model) {

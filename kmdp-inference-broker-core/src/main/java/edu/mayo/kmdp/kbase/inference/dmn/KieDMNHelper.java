@@ -13,7 +13,6 @@
  */
 package edu.mayo.kmdp.kbase.inference.dmn;
 
-import edu.mayo.kmdp.metadata.surrogate.KnowledgeAsset;
 import java.io.ByteArrayInputStream;
 import org.kie.api.KieServices;
 import org.kie.api.builder.KieFileSystem;

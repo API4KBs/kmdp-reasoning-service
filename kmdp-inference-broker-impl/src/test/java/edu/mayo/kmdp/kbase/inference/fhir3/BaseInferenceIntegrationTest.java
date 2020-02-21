@@ -1,12 +1,10 @@
 package edu.mayo.kmdp.kbase.inference.fhir3;
 
-import static edu.mayo.kmdp.kbase.introspection.cql.CQLMetadataIntrospector.CQL_1_3_EXTRACTOR;
-import static edu.mayo.kmdp.kbase.introspection.dmn.DMN11MetadataIntrospector.DMN1_1_EXTRACTOR;
-import static edu.mayo.ontology.taxonomies.kao.languagerole.KnowledgeRepresentationLanguageRoleSeries.Schema_Language;
+import static edu.mayo.kmdp.kbase.introspection.cql.v1_3.CQLMetadataIntrospector.CQL_1_3_EXTRACTOR;
+import static edu.mayo.kmdp.kbase.introspection.dmn.v1_1.DMN11MetadataIntrospector.DMN1_1_EXTRACTOR;
 import static edu.mayo.ontology.taxonomies.krformat.SerializationFormatSeries.TXT;
 import static edu.mayo.ontology.taxonomies.krformat.SerializationFormatSeries.XML_1_1;
 import static edu.mayo.ontology.taxonomies.krlanguage.KnowledgeRepresentationLanguageSeries.DMN_1_1;
-import static edu.mayo.ontology.taxonomies.krlanguage.KnowledgeRepresentationLanguageSeries.FHIR_STU3;
 import static edu.mayo.ontology.taxonomies.krlanguage.KnowledgeRepresentationLanguageSeries.HL7_CQL;
 import static org.junit.jupiter.api.Assertions.fail;
 import static org.omg.spec.api4kp._1_0.AbstractCarrier.rep;
@@ -14,24 +12,20 @@ import static org.omg.spec.api4kp._1_0.AbstractCarrier.rep;
 import edu.mayo.kmdp.SurrogateBuilder;
 import edu.mayo.kmdp.id.helper.DatatypeHelper;
 import edu.mayo.kmdp.kbase.inference.InferenceBroker;
-import edu.mayo.kmdp.kbase.inference.knowledgebase.KnowledgeBaseProvider;
-import edu.mayo.kmdp.kbase.introspection.cql.CQLMetadataIntrospector;
+import edu.mayo.kmdp.kbase.introspection.cql.v1_3.CQLMetadataIntrospector;
 import edu.mayo.kmdp.kbase.introspection.dmn.DMNMetadataIntrospector;
+import edu.mayo.kmdp.knowledgebase.KnowledgeBaseProvider;
 import edu.mayo.kmdp.language.LanguageDeSerializer;
-import edu.mayo.kmdp.metadata.surrogate.ComputableKnowledgeArtifact;
 import edu.mayo.kmdp.metadata.surrogate.KnowledgeAsset;
-import edu.mayo.kmdp.metadata.surrogate.Representation;
-import edu.mayo.kmdp.metadata.surrogate.SubLanguage;
+import edu.mayo.kmdp.registry.Registry;
 import edu.mayo.kmdp.repository.asset.KnowledgeAssetRepositoryService;
 import edu.mayo.kmdp.util.Util;
 import edu.mayo.ontology.taxonomies.api4kp.parsinglevel.ParsingLevelSeries;
 import edu.mayo.ontology.taxonomies.krlanguage.KnowledgeRepresentationLanguage;
 import java.io.InputStream;
 import java.util.UUID;
-import org.junit.jupiter.api.BeforeEach;
 import org.omg.spec.api4kp._1_0.AbstractCarrier;
 import org.omg.spec.api4kp._1_0.identifiers.URIIdentifier;
-import org.omg.spec.api4kp._1_0.services.KPComponent;
 import org.omg.spec.api4kp._1_0.services.KPServer;
 import org.omg.spec.api4kp._1_0.services.KnowledgeCarrier;
 import org.omg.spec.api4kp._1_0.services.SyntacticRepresentation;
@@ -93,31 +87,30 @@ public abstract class BaseInferenceIntegrationTest {
       KnowledgeCarrier carrier = AbstractCarrier
           .of(getBytes(path))
           .withAssetId(assetId)
+          .withArtifactId(DatatypeHelper.uri(Registry.MAYO_ARTIFACTS_BASE_URI,UUID.randomUUID().toString(),VTAG))
           .withLevel(ParsingLevelSeries.Encoded_Knowledge_Expression)
-          .withArtifactId(DatatypeHelper.uri(UUID.randomUUID().toString(), VTAG))
           .withRepresentation(rep);
 
-      KnowledgeAsset surrogate = getSurrogate(modelName, carrier);
+      KnowledgeAsset surrogate = getSurrogate(carrier);
 
       semRepo.publish(surrogate, carrier);
     }
 
 
-    private KnowledgeAsset getSurrogate(
-        String modelName, KnowledgeCarrier artifactCarrier) {
+    private KnowledgeAsset getSurrogate(KnowledgeCarrier artifactCarrier) {
       KnowledgeRepresentationLanguage lang = artifactCarrier.getRepresentation().getLanguage();
       // TODO Implement an introspector broker
       switch (lang.asEnum()) {
         case DMN_1_1:
           return dmnMetadataExtractor
-              .extractSurrogate(
-                  DMN1_1_EXTRACTOR, artifactCarrier)
+              .introspect(
+                  DMN1_1_EXTRACTOR, artifactCarrier, null)
               .flatOpt(kc -> kc.as(KnowledgeAsset.class))
               .orElseThrow(UnsupportedOperationException::new);
         case HL7_CQL:
           return cqlMetadataExtractor
-              .extractSurrogate(
-                  CQL_1_3_EXTRACTOR, artifactCarrier)
+              .introspect(
+                  CQL_1_3_EXTRACTOR, artifactCarrier, null)
               .flatOpt(kc -> kc.as(KnowledgeAsset.class))
               .orElseThrow(UnsupportedOperationException::new);
 

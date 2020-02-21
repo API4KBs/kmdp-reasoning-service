@@ -1,6 +1,4 @@
-package edu.mayo.kmdp.kbase.inference.cql;
-
-import static edu.mayo.kmdp.util.Util.uuid;
+package edu.mayo.kmdp.kbase.inference.cql.v1_3;
 
 import edu.mayo.kmdp.id.helper.DatatypeHelper;
 import edu.mayo.kmdp.inference.v3.server.InferenceApiInternal._infer;
@@ -33,6 +31,7 @@ public class CQLEngineProvider
         .orElseThrow(UnsupportedOperationException::new);
   }
 
+  @Override
   protected boolean supportsRepresentation(KnowledgeAsset knowledgeAsset) {
     return detectLanguage(knowledgeAsset)
         .map(lang -> lang.asEnum() == KnowledgeRepresentationLanguageSeries.HL7_CQL)

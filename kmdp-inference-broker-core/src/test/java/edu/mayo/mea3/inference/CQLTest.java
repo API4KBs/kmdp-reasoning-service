@@ -20,9 +20,9 @@ import static org.junit.jupiter.api.Assertions.assertSame;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import edu.mayo.kmdp.kbase.inference.InferenceBroker;
-import edu.mayo.kmdp.kbase.inference.cql.CQLEngineProvider;
-import edu.mayo.kmdp.kbase.inference.dmn.DMNEngineProvider;
-import edu.mayo.kmdp.kbase.inference.knowledgebase.KnowledgeBaseProvider;
+import edu.mayo.kmdp.kbase.inference.cql.v1_3.CQLEngineProvider;
+import edu.mayo.kmdp.kbase.inference.dmn.v1_1.DMNEngineProvider;
+import edu.mayo.kmdp.knowledgebase.KnowledgeBaseProvider;
 import edu.mayo.kmdp.knowledgebase.v3.server.KnowledgeBaseApiInternal;
 import edu.mayo.kmdp.repository.asset.KnowledgeAssetRepositoryService;
 import edu.mayo.kmdp.util.DateTimeUtil;
@@ -69,7 +69,6 @@ public class CQLTest extends InferenceBaseTest {
 
 		java.util.Map<?,?> out = server.infer(id, VTAG, new HashMap<>())
 				.orElse(Collections.emptyMap());
-
 
 		assertEquals(1, out.size());
 		assertEquals(3, out.get("Number3"));

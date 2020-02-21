@@ -1,4 +1,4 @@
-package edu.mayo.kmdp.kbase.introspection.cql;
+package edu.mayo.kmdp.kbase.introspection.cql.v1_3;
 
 import static edu.mayo.kmdp.SurrogateBuilder.newSurrogate;
 import static edu.mayo.ontology.taxonomies.api4kp.parsinglevel.ParsingLevelSeries.Parsed_Knowedge_Expression;
@@ -7,11 +7,13 @@ import static edu.mayo.ontology.taxonomies.krlanguage.KnowledgeRepresentationLan
 import static edu.mayo.ontology.taxonomies.krlanguage.KnowledgeRepresentationLanguageSeries.HL7_CQL;
 import static edu.mayo.ontology.taxonomies.krlanguage.KnowledgeRepresentationLanguageSeries.Knowledge_Asset_Surrogate;
 
-import edu.mayo.kmdp.knowledgebase.v3.server.IntrospectionApiInternal;
+import edu.mayo.kmdp.id.helper.DatatypeHelper;
+import edu.mayo.kmdp.inference.v3.server.IntrospectionApiInternal;
 import edu.mayo.kmdp.metadata.surrogate.ComputableKnowledgeArtifact;
 import edu.mayo.kmdp.metadata.surrogate.KnowledgeAsset;
 import edu.mayo.kmdp.metadata.surrogate.Representation;
 import edu.mayo.kmdp.metadata.surrogate.SubLanguage;
+import edu.mayo.kmdp.registry.Registry;
 import edu.mayo.ontology.taxonomies.api4kp.knowledgeoperations.KnowledgeProcessingOperationSeries;
 import java.util.UUID;
 import javax.inject.Named;
@@ -27,17 +29,18 @@ import org.omg.spec.api4kp._1_0.services.SyntacticRepresentation;
 @KPOperation(KnowledgeProcessingOperationSeries.Extract_Description_Task)
 @KPSupport(HL7_CQL)
 @KPComponent
-public class CQLMetadataIntrospector implements IntrospectionApiInternal {
+public class CQLMetadataIntrospector implements IntrospectionApiInternal._introspect {
 
   public static final UUID CQL_1_3_EXTRACTOR
       = UUID.fromString("8969059a-0f3e-41c6-83be-fe0d14bdbfc6");
 
   @Override
-  public Answer<KnowledgeCarrier> extractSurrogate(UUID lambdaId, KnowledgeCarrier sourceArtifact) {
+  public Answer<KnowledgeCarrier> introspect(UUID lambdaId, KnowledgeCarrier sourceArtifact, String xAccept) {
 
     KnowledgeAsset surrogate = newSurrogate(sourceArtifact.getAssetId()).get()
         .withName("TODO")
         .withCarriers(new ComputableKnowledgeArtifact()
+            .withArtifactId(sourceArtifact.getArtifactId())
             .withRepresentation(new Representation()
                 .withLanguage(HL7_CQL)
                 .withWith(new SubLanguage().withRole(Schema_Language)
@@ -55,7 +58,6 @@ public class CQLMetadataIntrospector implements IntrospectionApiInternal {
                 .withLanguage(Knowledge_Asset_Surrogate))
     );
   }
-
 
 
 }

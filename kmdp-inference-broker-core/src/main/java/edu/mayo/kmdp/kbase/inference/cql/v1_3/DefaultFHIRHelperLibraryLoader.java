@@ -13,7 +13,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package edu.mayo.kmdp.kbase.inference.cql;
+package edu.mayo.kmdp.kbase.inference.cql.v1_3;
 
 import edu.mayo.kmdp.util.FileUtil;
 import java.io.InputStream;
