@@ -2,6 +2,7 @@ package edu.mayo.kmdp.kbase.inference.fhir3;
 
 import static edu.mayo.kmdp.kbase.introspection.cql.v1_3.CQLMetadataIntrospector.CQL_1_3_EXTRACTOR;
 import static edu.mayo.kmdp.kbase.introspection.dmn.v1_1.DMN11MetadataIntrospector.DMN1_1_EXTRACTOR;
+import static edu.mayo.kmdp.kbase.introspection.fhir.stu3.PlanDefinitionMetadataIntrospector.FHIR_STU3_EXTRACTOR;
 import static edu.mayo.ontology.taxonomies.krformat.SerializationFormatSeries.TXT;
 import static edu.mayo.ontology.taxonomies.krformat.SerializationFormatSeries.XML_1_1;
 import static edu.mayo.ontology.taxonomies.krlanguage.KnowledgeRepresentationLanguageSeries.DMN_1_1;
@@ -14,6 +15,7 @@ import edu.mayo.kmdp.id.helper.DatatypeHelper;
 import edu.mayo.kmdp.kbase.inference.InferenceBroker;
 import edu.mayo.kmdp.kbase.introspection.cql.v1_3.CQLMetadataIntrospector;
 import edu.mayo.kmdp.kbase.introspection.dmn.DMNMetadataIntrospector;
+import edu.mayo.kmdp.kbase.introspection.fhir.stu3.PlanDefinitionMetadataIntrospector;
 import edu.mayo.kmdp.knowledgebase.KnowledgeBaseProvider;
 import edu.mayo.kmdp.language.LanguageDeSerializer;
 import edu.mayo.kmdp.metadata.surrogate.KnowledgeAsset;
@@ -52,6 +54,7 @@ public abstract class BaseInferenceIntegrationTest {
       basePackageClasses = {
           DMNMetadataIntrospector.class,
           CQLMetadataIntrospector.class,
+          PlanDefinitionMetadataIntrospector.class,
           InferenceBroker.class,
           LanguageDeSerializer.class,
           KnowledgeBaseProvider.class})
@@ -64,6 +67,8 @@ public abstract class BaseInferenceIntegrationTest {
     @Autowired
     CQLMetadataIntrospector cqlMetadataExtractor;
 
+    @Autowired
+    PlanDefinitionMetadataIntrospector pdMetadataExtractor;
 
     @Bean
     @KPServer
@@ -111,6 +116,12 @@ public abstract class BaseInferenceIntegrationTest {
           return cqlMetadataExtractor
               .introspect(
                   CQL_1_3_EXTRACTOR, artifactCarrier, null)
+              .flatOpt(kc -> kc.as(KnowledgeAsset.class))
+              .orElseThrow(UnsupportedOperationException::new);
+        case FHIR_STU3:
+          return pdMetadataExtractor
+              .introspect(
+                  FHIR_STU3_EXTRACTOR, artifactCarrier, null)
               .flatOpt(kc -> kc.as(KnowledgeAsset.class))
               .orElseThrow(UnsupportedOperationException::new);
 
