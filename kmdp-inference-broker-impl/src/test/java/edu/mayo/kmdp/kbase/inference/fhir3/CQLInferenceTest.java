@@ -45,6 +45,7 @@ public class CQLInferenceTest extends BaseInferenceIntegrationTest {
 	}
 
 	@Test
+	@Disabled
 	public void testCQLaaS() {
 		InferenceApiInternal infService = InferenceApi.newInstance(serverUrl);
 

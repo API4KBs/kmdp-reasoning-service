@@ -63,6 +63,7 @@ public class CQLTest extends InferenceBaseTest {
 	}
 
 	@Test
+	@Disabled
 	public void testEngine() {
 		UUID id = UUID.randomUUID();
 
@@ -79,6 +80,7 @@ public class CQLTest extends InferenceBaseTest {
 	}
 
 	@Test
+	@Disabled
 	public void testEngineWithFHIR() {
 		UUID id = UUID.randomUUID();
 
@@ -109,6 +111,7 @@ public class CQLTest extends InferenceBaseTest {
 
 
 	@Test
+	@Disabled
 	public void testEngineWithPCO() {
 		UUID id = UUID.randomUUID();
 
@@ -142,6 +145,7 @@ public class CQLTest extends InferenceBaseTest {
 	}
 
 	@Test
+	@Disabled
 	public void testEngineWithAgeBuiltIn() {
 		UUID id = UUID.randomUUID();
 
@@ -169,6 +173,7 @@ public class CQLTest extends InferenceBaseTest {
 
 
 	@Test
+	@Disabled
 	public void testTEEInference() {
 		UUID id = UUID.randomUUID();
 
