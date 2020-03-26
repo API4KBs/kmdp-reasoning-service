@@ -29,11 +29,6 @@
     </dependency>
     <dependency>
       <groupId>edu.mayo.kmdp</groupId>
-      <artifactId>kmdp-inference-service-interfaces</artifactId>
-      <version>${kmdp.impl.version}</version>
-    </dependency>
-    <dependency>
-      <groupId>edu.mayo.kmdp</groupId>
       <artifactId>kmdp-terminology-service-interfaces</artifactId>
       <version>${kmdp.impl.version}</version>
     </dependency>
@@ -88,6 +83,14 @@
         <exclusion>
           <groupId>ca.uhn.hapi.fhir</groupId>
           <artifactId>hapi-fhir-base</artifactId>
+        </exclusion>
+        <exclusion>
+          <groupId>com.googlecode.json-simple</groupId>
+          <artifactId>json-simple</artifactId>
+        </exclusion>
+        <exclusion>
+          <groupId>junit</groupId>
+          <artifactId>junit</artifactId>
         </exclusion>
       </exclusions>
     </dependency>
