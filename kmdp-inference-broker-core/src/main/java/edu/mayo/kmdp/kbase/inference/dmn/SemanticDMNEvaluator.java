@@ -17,7 +17,7 @@ import static edu.mayo.kmdp.util.NameUtils.camelCase;
 
 import edu.mayo.kmdp.id.Term;
 
-import edu.mayo.kmdp.inference.v3.server.InferenceApiInternal._infer;
+import edu.mayo.kmdp.inference.v4.server.InferenceApiInternal._infer;
 import edu.mayo.kmdp.terms.ConceptScheme;
 import edu.mayo.kmdp.util.Util;
 import edu.mayo.kmdp.util.fhir.fhir3.FHIR3DataTypeConstructor;

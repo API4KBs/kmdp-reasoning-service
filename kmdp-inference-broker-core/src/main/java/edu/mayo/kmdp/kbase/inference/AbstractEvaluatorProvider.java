@@ -1,10 +1,9 @@
 package edu.mayo.kmdp.kbase.inference;
 
 import edu.mayo.kmdp.SurrogateHelper;
-import edu.mayo.kmdp.id.VersionedIdentifier;
 import edu.mayo.kmdp.id.helper.DatatypeHelper;
-import edu.mayo.kmdp.inference.v3.server.InferenceApiInternal;
-import edu.mayo.kmdp.knowledgebase.v3.server.KnowledgeBaseApiInternal;
+import edu.mayo.kmdp.inference.v4.server.InferenceApiInternal;
+import edu.mayo.kmdp.knowledgebase.v4.server.KnowledgeBaseApiInternal;
 import edu.mayo.kmdp.metadata.surrogate.KnowledgeAsset;
 import edu.mayo.kmdp.metadata.surrogate.Representation;
 import edu.mayo.ontology.taxonomies.krlanguage.KnowledgeRepresentationLanguage;
@@ -12,13 +11,15 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.Optional;
 import java.util.function.Function;
+import org.omg.spec.api4kp._1_0.id.KeyIdentifier;
+import org.omg.spec.api4kp._1_0.id.ResourceIdentifier;
 
 public abstract class AbstractEvaluatorProvider
     implements Function<KnowledgeAsset, Optional<InferenceApiInternal._infer>> {
 
   protected KnowledgeBaseApiInternal kbase;
 
-  protected Map<VersionedIdentifier,InferenceApiInternal._infer> evaluators = new HashMap<>();
+  protected Map<KeyIdentifier,InferenceApiInternal._infer> evaluators = new HashMap<>();
 
   protected AbstractEvaluatorProvider(KnowledgeBaseApiInternal kbaseManager) {
     this.kbase = kbaseManager;
@@ -26,10 +27,10 @@ public abstract class AbstractEvaluatorProvider
 
   @Override
   public Optional<InferenceApiInternal._infer> apply(KnowledgeAsset knowledgeAsset) {
-    VersionedIdentifier vid = getAssetId(knowledgeAsset);
+    ResourceIdentifier vid = getAssetId(knowledgeAsset);
     return Optional.ofNullable(
         evaluators.computeIfAbsent(
-            vid,
+            vid.asKey(),
             k -> tryGetEvaluator(knowledgeAsset)));
   }
 
@@ -50,8 +51,8 @@ public abstract class AbstractEvaluatorProvider
     return knowledgeAsset == null;
   }
 
-  protected VersionedIdentifier getAssetId(KnowledgeAsset asset) {
-    return DatatypeHelper.toVersionIdentifier(asset.getAssetId());
+  protected ResourceIdentifier getAssetId(KnowledgeAsset asset) {
+    return DatatypeHelper.toSemanticIdentifier(asset.getAssetId());
   }
 
   protected Optional<KnowledgeRepresentationLanguage> detectLanguage(KnowledgeAsset asset) {

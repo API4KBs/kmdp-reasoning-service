@@ -44,7 +44,7 @@ public class KieDMNHelper {
             .newInputStreamResource(
                 new ByteArrayInputStream(((BinaryCarrier) carrier).getEncodedExpression()))
             .setTargetPath(
-                "/" + carrier.getAssetId().getTag() + "/versions/" + carrier.getAssetId().getVersion())
+                "/" + carrier.getAssetId().getTag() + "/versions/" + carrier.getAssetId().getVersionTag())
             .setResourceType(ResourceType.DMN));
 
     KieModule km = kieServices.newKieBuilder(kfs).buildAll().getKieModule();

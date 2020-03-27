@@ -2,18 +2,16 @@ package edu.mayo.kmdp.kbase.introspection.dmn.v1_1;
 
 import static edu.mayo.kmdp.SurrogateBuilder.newSurrogate;
 import static edu.mayo.ontology.taxonomies.api4kp.parsinglevel.ParsingLevelSeries.Abstract_Knowledge_Expression;
-import static edu.mayo.ontology.taxonomies.api4kp.parsinglevel.ParsingLevelSeries.Parsed_Knowedge_Expression;
 import static edu.mayo.ontology.taxonomies.krlanguage.KnowledgeRepresentationLanguageSeries.DMN_1_1;
 import static edu.mayo.ontology.taxonomies.krlanguage.KnowledgeRepresentationLanguageSeries.Knowledge_Asset_Surrogate;
 
 import edu.mayo.kmdp.id.helper.DatatypeHelper;
-import edu.mayo.kmdp.inference.v3.server.IntrospectionApiInternal;
+import edu.mayo.kmdp.inference.v4.server.IntrospectionApiInternal;
 import edu.mayo.kmdp.language.parsers.dmn.v1_1.DMN11Parser;
 import edu.mayo.kmdp.metadata.surrogate.ComputableKnowledgeArtifact;
 import edu.mayo.kmdp.metadata.surrogate.KnowledgeAsset;
 import edu.mayo.kmdp.metadata.surrogate.Representation;
-import edu.mayo.kmdp.registry.Registry;
-import edu.mayo.kmdp.tranx.v3.server.DeserializeApiInternal;
+import edu.mayo.kmdp.tranx.v4.server.DeserializeApiInternal;
 import edu.mayo.ontology.taxonomies.api4kp.knowledgeoperations.KnowledgeProcessingOperationSeries;
 import java.util.UUID;
 import javax.inject.Named;
@@ -56,10 +54,10 @@ public class DMN11MetadataIntrospector implements IntrospectionApiInternal._intr
     TDefinitions dmnModel = carrier.as(TDefinitions.class)
         .orElseThrow(IllegalStateException::new);
 
-    KnowledgeAsset surrogate = newSurrogate(carrier.getAssetId()).get()
+    KnowledgeAsset surrogate = newSurrogate(DatatypeHelper.toURIIdentifier(carrier.getAssetId())).get()
         .withName(dmnModel.getName())
         .withCarriers(new ComputableKnowledgeArtifact()
-            .withArtifactId(carrier.getArtifactId())
+            .withArtifactId(DatatypeHelper.toURIIdentifier(carrier.getArtifactId()))
             .withRepresentation(new Representation()
                 .withLanguage(DMN_1_1)));
 
@@ -68,7 +66,7 @@ public class DMN11MetadataIntrospector implements IntrospectionApiInternal._intr
             .withAssetId(carrier.getAssetId())
             .withLevel(Abstract_Knowledge_Expression)
             // TODO improve...
-            .withArtifactId(surrogate.getSurrogate().get(0).getArtifactId())
+            .withArtifactId(DatatypeHelper.toSemanticIdentifier(surrogate.getSurrogate().get(0).getArtifactId()))
             .withRepresentation(new SyntacticRepresentation()
                 .withLanguage(Knowledge_Asset_Surrogate))
     );

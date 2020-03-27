@@ -6,7 +6,7 @@ import static edu.mayo.ontology.taxonomies.krlanguage.KnowledgeRepresentationLan
 import static edu.mayo.ontology.taxonomies.krlanguage.KnowledgeRepresentationLanguageSeries.Knowledge_Asset_Surrogate;
 
 import edu.mayo.kmdp.id.helper.DatatypeHelper;
-import edu.mayo.kmdp.inference.v3.server.IntrospectionApiInternal;
+import edu.mayo.kmdp.inference.v4.server.IntrospectionApiInternal;
 import edu.mayo.kmdp.metadata.surrogate.ComputableKnowledgeArtifact;
 import edu.mayo.kmdp.metadata.surrogate.KnowledgeAsset;
 import edu.mayo.kmdp.metadata.surrogate.Representation;
@@ -55,7 +55,7 @@ public class PlanDefinitionMetadataIntrospector implements IntrospectionApiInter
         .withName(knowledgeCarrier.getLabel())
         .withFormalType(KnowledgeAssetTypeSeries.Cognitive_Care_Process_Model)
         .withCarriers(new ComputableKnowledgeArtifact()
-            .withArtifactId(knowledgeCarrier.getArtifactId())
+            .withArtifactId(DatatypeHelper.toURIIdentifier(knowledgeCarrier.getArtifactId()))
             .withRepresentation(new Representation()
                 .withLanguage(FHIR_STU3)));
 
@@ -64,7 +64,7 @@ public class PlanDefinitionMetadataIntrospector implements IntrospectionApiInter
             .withAssetId(knowledgeCarrier.getAssetId())
             .withLevel(Parsed_Knowedge_Expression)
             // TODO improve...
-            .withArtifactId(surrogate.getSurrogate().get(0).getArtifactId())
+            .withArtifactId(DatatypeHelper.toSemanticIdentifier(surrogate.getSurrogate().get(0).getArtifactId()))
             .withRepresentation(new SyntacticRepresentation()
                 .withLanguage(Knowledge_Asset_Surrogate))
     );

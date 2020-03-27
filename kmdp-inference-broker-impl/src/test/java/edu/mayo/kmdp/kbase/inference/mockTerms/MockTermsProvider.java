@@ -30,17 +30,23 @@ public class MockTermsProvider implements TermsApiInternal {
   }
 
   @Override
+  public Answer<Void> isAncestor(UUID vocabularyId, String versionTag, String conceptId,
+      String testConceptId) {
+    return Answer.unsupported();
+  }
+
+  @Override
   public Answer<Void> isMember(UUID uuid, String s, String s1) {
     return Answer.unsupported();
   }
 
   @Override
-  public Answer<List<Pointer>> listTerminologies() {
+  public Answer<Void> listAncestors(UUID vocabularyId, String versionTag, String conceptId) {
     return Answer.unsupported();
   }
 
   @Override
-  public Answer<Void> relatesTo(UUID uuid, String s, String s1, String s2) {
+  public Answer<List<Pointer>> listTerminologies() {
     return Answer.unsupported();
   }
 }

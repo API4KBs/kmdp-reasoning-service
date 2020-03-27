@@ -5,7 +5,7 @@ import static edu.mayo.kmdp.kbase.introspection.dmn.v1_2.DMN12MetadataIntrospect
 import static edu.mayo.ontology.taxonomies.krlanguage.KnowledgeRepresentationLanguageSeries.DMN_1_1;
 import static edu.mayo.ontology.taxonomies.krlanguage.KnowledgeRepresentationLanguageSeries.DMN_1_2;
 
-import edu.mayo.kmdp.inference.v3.server.IntrospectionApiInternal;
+import edu.mayo.kmdp.inference.v4.server.IntrospectionApiInternal;
 import edu.mayo.kmdp.kbase.introspection.dmn.v1_1.DMN11MetadataIntrospector;
 import edu.mayo.kmdp.kbase.introspection.dmn.v1_2.DMN12MetadataIntrospector;
 import edu.mayo.ontology.taxonomies.api4kp.knowledgeoperations.KnowledgeProcessingOperationSeries;
@@ -13,7 +13,7 @@ import java.util.UUID;
 import javax.inject.Inject;
 import javax.inject.Named;
 import org.omg.spec.api4kp._1_0.Answer;
-import org.omg.spec.api4kp._1_0.identifiers.Pointer;
+import org.omg.spec.api4kp._1_0.id.Pointer;
 import org.omg.spec.api4kp._1_0.services.KPComponent;
 import org.omg.spec.api4kp._1_0.services.KPOperation;
 import org.omg.spec.api4kp._1_0.services.KPServer;

@@ -3,15 +3,14 @@ package edu.mayo.kmdp.kbase.inference.fhir3;
 import static edu.mayo.kmdp.kbase.introspection.cql.v1_3.CQLMetadataIntrospector.CQL_1_3_EXTRACTOR;
 import static edu.mayo.kmdp.kbase.introspection.dmn.v1_1.DMN11MetadataIntrospector.DMN1_1_EXTRACTOR;
 import static edu.mayo.kmdp.kbase.introspection.fhir.stu3.PlanDefinitionMetadataIntrospector.FHIR_STU3_EXTRACTOR;
+import static edu.mayo.kmdp.metadata.v2.surrogate.SurrogateBuilder.artifactId;
+import static edu.mayo.kmdp.metadata.v2.surrogate.SurrogateBuilder.assetId;
 import static edu.mayo.ontology.taxonomies.krformat.SerializationFormatSeries.TXT;
 import static edu.mayo.ontology.taxonomies.krformat.SerializationFormatSeries.XML_1_1;
 import static edu.mayo.ontology.taxonomies.krlanguage.KnowledgeRepresentationLanguageSeries.DMN_1_1;
 import static edu.mayo.ontology.taxonomies.krlanguage.KnowledgeRepresentationLanguageSeries.HL7_CQL;
 import static org.junit.jupiter.api.Assertions.fail;
-import static org.omg.spec.api4kp._1_0.AbstractCarrier.rep;
 
-import edu.mayo.kmdp.SurrogateBuilder;
-import edu.mayo.kmdp.id.helper.DatatypeHelper;
 import edu.mayo.kmdp.kbase.inference.InferenceBroker;
 import edu.mayo.kmdp.kbase.introspection.cql.v1_3.CQLMetadataIntrospector;
 import edu.mayo.kmdp.kbase.introspection.dmn.DMNMetadataIntrospector;
@@ -19,7 +18,6 @@ import edu.mayo.kmdp.kbase.introspection.fhir.stu3.PlanDefinitionMetadataIntrosp
 import edu.mayo.kmdp.knowledgebase.KnowledgeBaseProvider;
 import edu.mayo.kmdp.language.LanguageDeSerializer;
 import edu.mayo.kmdp.metadata.surrogate.KnowledgeAsset;
-import edu.mayo.kmdp.registry.Registry;
 import edu.mayo.kmdp.repository.asset.KnowledgeAssetRepositoryService;
 import edu.mayo.kmdp.util.Util;
 import edu.mayo.ontology.taxonomies.api4kp.parsinglevel.ParsingLevelSeries;
@@ -27,7 +25,7 @@ import edu.mayo.ontology.taxonomies.krlanguage.KnowledgeRepresentationLanguage;
 import java.io.InputStream;
 import java.util.UUID;
 import org.omg.spec.api4kp._1_0.AbstractCarrier;
-import org.omg.spec.api4kp._1_0.identifiers.URIIdentifier;
+import org.omg.spec.api4kp._1_0.id.ResourceIdentifier;
 import org.omg.spec.api4kp._1_0.services.KPServer;
 import org.omg.spec.api4kp._1_0.services.KnowledgeCarrier;
 import org.omg.spec.api4kp._1_0.services.SyntacticRepresentation;
@@ -87,12 +85,12 @@ public abstract class BaseInferenceIntegrationTest {
 
     private void publish(KnowledgeAssetRepositoryService semRepo, String modelName,
         String path, SyntacticRepresentation rep) {
-      URIIdentifier assetId = SurrogateBuilder.assetId(Util.uuid(modelName), VTAG);
+      ResourceIdentifier assetId = assetId(Util.uuid(modelName), VTAG);
 
       KnowledgeCarrier carrier = AbstractCarrier
           .of(getBytes(path))
           .withAssetId(assetId)
-          .withArtifactId(DatatypeHelper.uri(Registry.MAYO_ARTIFACTS_BASE_URI,UUID.randomUUID().toString(),VTAG))
+          .withArtifactId(artifactId(UUID.randomUUID().toString(),VTAG))
           .withLevel(ParsingLevelSeries.Encoded_Knowledge_Expression)
           .withRepresentation(rep);
 
