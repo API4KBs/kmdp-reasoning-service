@@ -5,9 +5,9 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
-import edu.mayo.kmdp.inference.v3.InferenceApi;
-import edu.mayo.kmdp.inference.v3.server.InferenceApiInternal;
-import edu.mayo.kmdp.inference.v3.server.Swagger2SpringBoot;
+import edu.mayo.kmdp.inference.v4.InferenceApi;
+import edu.mayo.kmdp.inference.v4.server.InferenceApiInternal;
+import edu.mayo.kmdp.inference.v4.server.Swagger2SpringBoot;
 import edu.mayo.kmdp.kbase.inference.mockTerms.PCO;
 import edu.mayo.kmdp.util.Util;
 import java.util.HashMap;

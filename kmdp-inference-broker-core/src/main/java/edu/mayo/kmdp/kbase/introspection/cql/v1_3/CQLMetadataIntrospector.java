@@ -8,12 +8,11 @@ import static edu.mayo.ontology.taxonomies.krlanguage.KnowledgeRepresentationLan
 import static edu.mayo.ontology.taxonomies.krlanguage.KnowledgeRepresentationLanguageSeries.Knowledge_Asset_Surrogate;
 
 import edu.mayo.kmdp.id.helper.DatatypeHelper;
-import edu.mayo.kmdp.inference.v3.server.IntrospectionApiInternal;
+import edu.mayo.kmdp.inference.v4.server.IntrospectionApiInternal;
 import edu.mayo.kmdp.metadata.surrogate.ComputableKnowledgeArtifact;
 import edu.mayo.kmdp.metadata.surrogate.KnowledgeAsset;
 import edu.mayo.kmdp.metadata.surrogate.Representation;
 import edu.mayo.kmdp.metadata.surrogate.SubLanguage;
-import edu.mayo.kmdp.registry.Registry;
 import edu.mayo.ontology.taxonomies.api4kp.knowledgeoperations.KnowledgeProcessingOperationSeries;
 import java.util.UUID;
 import javax.inject.Named;
@@ -37,10 +36,10 @@ public class CQLMetadataIntrospector implements IntrospectionApiInternal._intros
   @Override
   public Answer<KnowledgeCarrier> introspect(UUID lambdaId, KnowledgeCarrier sourceArtifact, String xAccept) {
 
-    KnowledgeAsset surrogate = newSurrogate(sourceArtifact.getAssetId()).get()
+    KnowledgeAsset surrogate = newSurrogate(DatatypeHelper.toURIIdentifier(sourceArtifact.getAssetId())).get()
         .withName("TODO")
         .withCarriers(new ComputableKnowledgeArtifact()
-            .withArtifactId(sourceArtifact.getArtifactId())
+            .withArtifactId(DatatypeHelper.toURIIdentifier(sourceArtifact.getArtifactId()))
             .withRepresentation(new Representation()
                 .withLanguage(HL7_CQL)
                 .withWith(new SubLanguage().withRole(Schema_Language)
@@ -53,7 +52,7 @@ public class CQLMetadataIntrospector implements IntrospectionApiInternal._intros
             .withAssetId(sourceArtifact.getAssetId())
             .withLevel(Parsed_Knowedge_Expression)
             // TODO improve...
-            .withArtifactId(surrogate.getSurrogate().get(0).getArtifactId())
+            .withArtifactId(DatatypeHelper.toSemanticIdentifier(surrogate.getSurrogate().get(0).getArtifactId()))
             .withRepresentation(new SyntacticRepresentation()
                 .withLanguage(Knowledge_Asset_Surrogate))
     );

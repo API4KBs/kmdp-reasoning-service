@@ -4,10 +4,10 @@ import static java.util.Collections.emptyMap;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
-import edu.mayo.kmdp.inference.v3.InferenceApi;
-import edu.mayo.kmdp.inference.v3.ModelApi;
-import edu.mayo.kmdp.inference.v3.server.InferenceApiInternal;
-import edu.mayo.kmdp.inference.v3.server.Swagger2SpringBoot;
+import edu.mayo.kmdp.inference.v4.InferenceApi;
+import edu.mayo.kmdp.inference.v4.ModelApi;
+import edu.mayo.kmdp.inference.v4.server.InferenceApiInternal;
+import edu.mayo.kmdp.inference.v4.server.Swagger2SpringBoot;
 import edu.mayo.kmdp.kbase.inference.mockTerms.PCO;
 import edu.mayo.kmdp.util.Util;
 import java.util.Collections;
@@ -22,7 +22,7 @@ import org.hl7.fhir.dstu3.model.Observation;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.omg.spec.api4kp._1_0.Answer;
-import org.omg.spec.api4kp._1_0.identifiers.Pointer;
+import org.omg.spec.api4kp._1_0.id.Pointer;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.context.SpringBootTest.WebEnvironment;
 import org.springframework.test.context.ContextConfiguration;
@@ -66,7 +66,7 @@ public class CQLInferenceTest extends BaseInferenceIntegrationTest {
 		modelRefs
 				.forEach(ptr -> {
 					System.out.println(ptr.getName());
-					System.out.println(ptr.getEntityRef().getUri());
+					System.out.println(ptr.getHref());
 				});
 	}
 

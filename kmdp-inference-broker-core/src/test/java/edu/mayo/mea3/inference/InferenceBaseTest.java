@@ -9,12 +9,11 @@ import static edu.mayo.ontology.taxonomies.krlanguage.KnowledgeRepresentationLan
 import static org.omg.spec.api4kp._1_0.AbstractCarrier.rep;
 import static org.springframework.test.util.AssertionErrors.fail;
 
-import edu.mayo.kmdp.id.helper.DatatypeHelper;
 import edu.mayo.kmdp.kbase.inference.dmn.KieDMNHelper;
 import edu.mayo.kmdp.kbase.introspection.cql.v1_3.CQLMetadataIntrospector;
 import edu.mayo.kmdp.kbase.introspection.dmn.DMNMetadataIntrospector;
 import edu.mayo.kmdp.metadata.surrogate.KnowledgeAsset;
-import edu.mayo.kmdp.registry.Registry;
+import edu.mayo.kmdp.metadata.v2.surrogate.SurrogateBuilder;
 import edu.mayo.kmdp.repository.asset.KnowledgeAssetRepositoryService;
 import edu.mayo.ontology.taxonomies.api4kp.parsinglevel.ParsingLevelSeries;
 import java.io.InputStream;
@@ -62,8 +61,8 @@ public abstract class InferenceBaseTest {
 
     KnowledgeCarrier carrier = AbstractCarrier
         .of(getBytes(path))
-        .withAssetId(DatatypeHelper.uri(Registry.MAYO_ASSETS_BASE_URI,modelId.toString(),version))
-        .withArtifactId(DatatypeHelper.uri(Registry.MAYO_ARTIFACTS_BASE_URI,UUID.randomUUID().toString(),VTAG))
+        .withAssetId(SurrogateBuilder.assetId(modelId.toString(),version))
+        .withArtifactId(SurrogateBuilder.artifactId(UUID.randomUUID().toString(),VTAG))
         .withLevel(ParsingLevelSeries.Encoded_Knowledge_Expression)
         .withRepresentation(rep);
 

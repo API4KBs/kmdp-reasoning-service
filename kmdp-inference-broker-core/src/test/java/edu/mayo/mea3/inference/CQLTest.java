@@ -23,7 +23,7 @@ import edu.mayo.kmdp.kbase.inference.InferenceBroker;
 import edu.mayo.kmdp.kbase.inference.cql.v1_3.CQLEngineProvider;
 import edu.mayo.kmdp.kbase.inference.dmn.v1_1.DMNEngineProvider;
 import edu.mayo.kmdp.knowledgebase.KnowledgeBaseProvider;
-import edu.mayo.kmdp.knowledgebase.v3.server.KnowledgeBaseApiInternal;
+import edu.mayo.kmdp.knowledgebase.v4.server.KnowledgeBaseApiInternal;
 import edu.mayo.kmdp.repository.asset.KnowledgeAssetRepositoryService;
 import edu.mayo.kmdp.util.DateTimeUtil;
 import edu.mayo.mea3.inference.mockTerms.PCO;

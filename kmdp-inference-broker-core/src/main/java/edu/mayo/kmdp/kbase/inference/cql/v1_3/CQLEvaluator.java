@@ -18,7 +18,7 @@ import static edu.mayo.ontology.taxonomies.krlanguage.KnowledgeRepresentationLan
 
 import edu.mayo.kmdp.SurrogateHelper;
 import edu.mayo.kmdp.id.helper.DatatypeHelper;
-import edu.mayo.kmdp.inference.v3.server.InferenceApiInternal._infer;
+import edu.mayo.kmdp.inference.v4.server.InferenceApiInternal._infer;
 import edu.mayo.kmdp.metadata.surrogate.KnowledgeAsset;
 import edu.mayo.ontology.taxonomies.api4kp.knowledgeoperations.KnowledgeProcessingOperationSeries;
 import edu.mayo.ontology.taxonomies.krlanguage.KnowledgeRepresentationLanguage;
@@ -30,6 +30,7 @@ import org.cqframework.cql.elm.execution.AccessModifier;
 import org.cqframework.cql.elm.execution.FunctionDef;
 import org.cqframework.cql.elm.execution.Library;
 import org.omg.spec.api4kp._1_0.Answer;
+import org.omg.spec.api4kp._1_0.id.KeyIdentifier;
 import org.omg.spec.api4kp._1_0.services.BinaryCarrier;
 import org.omg.spec.api4kp._1_0.services.KPOperation;
 import org.omg.spec.api4kp._1_0.services.KPSupport;
@@ -43,7 +44,7 @@ import org.opencds.cqf.cql.execution.Context;
 public class CQLEvaluator
     implements _infer {
 
-  private Map<String, byte[]> artifactCache = new HashMap<>();
+  private Map<KeyIdentifier, byte[]> artifactCache = new HashMap<>();
 
   private CQL2ELMTranslatorHelper translator;
 
@@ -52,7 +53,7 @@ public class CQLEvaluator
   public CQLEvaluator(KnowledgeBase knowledgeBase) {
     BinaryCarrier carrier = (BinaryCarrier) knowledgeBase.getManifestation();
 
-    artifactCache.put(DatatypeHelper.toVersionIdentifier(carrier.getAssetId()).getTag(),
+    artifactCache.put(carrier.getAssetId().asKey(),
         carrier.getEncodedExpression());
     this.translator = new CQL2ELMTranslatorHelper();
     modelLanguage = detectInformationModel(carrier.getRepresentation())

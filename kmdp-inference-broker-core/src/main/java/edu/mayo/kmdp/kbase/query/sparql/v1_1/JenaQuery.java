@@ -15,8 +15,8 @@
  */
 package edu.mayo.kmdp.kbase.query.sparql.v1_1;
 
-import edu.mayo.kmdp.inference.v3.server.QueryApiInternal._askQuery;
-import edu.mayo.kmdp.knowledgebase.v3.server.KnowledgeBaseApiInternal;
+import edu.mayo.kmdp.inference.v4.server.QueryApiInternal._askQuery;
+import edu.mayo.kmdp.knowledgebase.v4.server.KnowledgeBaseApiInternal;
 import edu.mayo.kmdp.util.JenaUtil;
 import edu.mayo.kmdp.util.Util;
 import java.util.LinkedList;
