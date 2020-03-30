@@ -10,14 +10,14 @@ import edu.mayo.kmdp.inference.v4.server.IntrospectionApiInternal;
 import edu.mayo.kmdp.metadata.surrogate.ComputableKnowledgeArtifact;
 import edu.mayo.kmdp.metadata.surrogate.KnowledgeAsset;
 import edu.mayo.kmdp.metadata.surrogate.Representation;
-import edu.mayo.kmdp.registry.Registry;
+import edu.mayo.kmdp.metadata.v2.surrogate.SurrogateBuilder;
 import edu.mayo.ontology.taxonomies.api4kp.knowledgeoperations.KnowledgeProcessingOperationSeries;
 import edu.mayo.ontology.taxonomies.kao.knowledgeassettype.KnowledgeAssetTypeSeries;
 import java.util.UUID;
 import javax.inject.Named;
 import org.omg.spec.api4kp._1_0.AbstractCarrier;
 import org.omg.spec.api4kp._1_0.Answer;
-import org.omg.spec.api4kp._1_0.identifiers.URIIdentifier;
+import org.omg.spec.api4kp._1_0.id.ResourceIdentifier;
 import org.omg.spec.api4kp._1_0.services.KPComponent;
 import org.omg.spec.api4kp._1_0.services.KPOperation;
 import org.omg.spec.api4kp._1_0.services.KPSupport;
@@ -50,8 +50,8 @@ public class PlanDefinitionMetadataIntrospector implements IntrospectionApiInter
   public Answer<KnowledgeCarrier> introspect(UUID uuid, KnowledgeCarrier knowledgeCarrier,
       String s) {
     // ignore 's' for now
-    URIIdentifier uri = DatatypeHelper.uri(Registry.MAYO_ASSETS_BASE_URI, uuid.toString(), "LATEST");
-    KnowledgeAsset surrogate = newSurrogate(uri).get()
+    ResourceIdentifier uri = SurrogateBuilder.assetId(uuid.toString(), "LATEST");
+    KnowledgeAsset surrogate = newSurrogate(DatatypeHelper.toURIIdentifier(uri)).get()
         .withName(knowledgeCarrier.getLabel())
         .withFormalType(KnowledgeAssetTypeSeries.Cognitive_Care_Process_Model)
         .withCarriers(new ComputableKnowledgeArtifact()

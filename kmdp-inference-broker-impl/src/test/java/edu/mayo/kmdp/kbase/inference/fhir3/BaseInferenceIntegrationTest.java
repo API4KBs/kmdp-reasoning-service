@@ -12,17 +12,18 @@ import static edu.mayo.ontology.taxonomies.krlanguage.KnowledgeRepresentationLan
 import static org.junit.jupiter.api.Assertions.fail;
 
 import edu.mayo.kmdp.kbase.inference.InferenceBroker;
+import edu.mayo.kmdp.kbase.inference.mockRepo.MockAssetRepository;
 import edu.mayo.kmdp.kbase.introspection.cql.v1_3.CQLMetadataIntrospector;
 import edu.mayo.kmdp.kbase.introspection.dmn.DMNMetadataIntrospector;
 import edu.mayo.kmdp.kbase.introspection.fhir.stu3.PlanDefinitionMetadataIntrospector;
 import edu.mayo.kmdp.knowledgebase.KnowledgeBaseProvider;
 import edu.mayo.kmdp.language.LanguageDeSerializer;
 import edu.mayo.kmdp.metadata.surrogate.KnowledgeAsset;
-import edu.mayo.kmdp.repository.asset.KnowledgeAssetRepositoryService;
 import edu.mayo.kmdp.util.Util;
 import edu.mayo.ontology.taxonomies.api4kp.parsinglevel.ParsingLevelSeries;
 import edu.mayo.ontology.taxonomies.krlanguage.KnowledgeRepresentationLanguage;
 import java.io.InputStream;
+import java.util.Arrays;
 import java.util.UUID;
 import org.omg.spec.api4kp._1_0.AbstractCarrier;
 import org.omg.spec.api4kp._1_0.id.ResourceIdentifier;
@@ -70,20 +71,20 @@ public abstract class BaseInferenceIntegrationTest {
 
     @Bean
     @KPServer
-    public KnowledgeAssetRepositoryService backingRepo() {
-      KnowledgeAssetRepositoryService semRepo =
-          KnowledgeAssetRepositoryService.selfContainedRepository();
-
-      publish(semRepo, "mockCQL", "/mockCQL.cql",
+    public MockAssetRepository backingRepo() {
+      KnowledgeCarrier c1 = loadCarrier("mockCQL", "/mockCQL.cql",
           AbstractCarrier.rep(HL7_CQL, TXT));
-      publish(semRepo, "mockPredictor", "/MockPredictor.dmn",
+      KnowledgeCarrier c2 = loadCarrier("mockPredictor", "/MockPredictor.dmn",
           AbstractCarrier.rep(DMN_1_1, XML_1_1));
 
-      return semRepo;
+      return new MockAssetRepository(
+          Arrays.asList(getSurrogate(c1), getSurrogate(c2)),
+          Arrays.asList(c1, c2)
+      );
+
     }
 
-
-    private void publish(KnowledgeAssetRepositoryService semRepo, String modelName,
+    private KnowledgeCarrier loadCarrier(String modelName,
         String path, SyntacticRepresentation rep) {
       ResourceIdentifier assetId = assetId(Util.uuid(modelName), VTAG);
 
@@ -94,9 +95,7 @@ public abstract class BaseInferenceIntegrationTest {
           .withLevel(ParsingLevelSeries.Encoded_Knowledge_Expression)
           .withRepresentation(rep);
 
-      KnowledgeAsset surrogate = getSurrogate(carrier);
-
-      semRepo.publish(surrogate, carrier);
+      return carrier;
     }
 
 

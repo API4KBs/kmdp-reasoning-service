@@ -14,7 +14,8 @@ import edu.mayo.kmdp.kbase.introspection.cql.v1_3.CQLMetadataIntrospector;
 import edu.mayo.kmdp.kbase.introspection.dmn.DMNMetadataIntrospector;
 import edu.mayo.kmdp.metadata.surrogate.KnowledgeAsset;
 import edu.mayo.kmdp.metadata.v2.surrogate.SurrogateBuilder;
-import edu.mayo.kmdp.repository.asset.KnowledgeAssetRepositoryService;
+import edu.mayo.kmdp.repository.asset.v4.server.KnowledgeAssetRepositoryApiInternal;
+import edu.mayo.mea3.inference.mockRepo.MockSingletonAssetRepository;
 import edu.mayo.ontology.taxonomies.api4kp.parsinglevel.ParsingLevelSeries;
 import java.io.InputStream;
 import java.util.UUID;
@@ -36,7 +37,7 @@ public abstract class InferenceBaseTest {
   CQLMetadataIntrospector cqlMetadataExtractor = new CQLMetadataIntrospector();
 
 
-  public KnowledgeAssetRepositoryService initMockRepo(UUID modelId, String version,
+  protected MockSingletonAssetRepository initMockRepo(UUID modelId, String version,
       String path) {
     return initMockRepo(modelId,version,path,getRepresentation(path));
   }
@@ -53,11 +54,9 @@ public abstract class InferenceBaseTest {
     return rep;
   }
 
-  public KnowledgeAssetRepositoryService initMockRepo(UUID modelId, String version,
+  protected MockSingletonAssetRepository initMockRepo(UUID modelId, String version,
       String path,
       SyntacticRepresentation rep) {
-    KnowledgeAssetRepositoryService semRepo =
-        KnowledgeAssetRepositoryService.selfContainedRepository();
 
     KnowledgeCarrier carrier = AbstractCarrier
         .of(getBytes(path))
@@ -66,11 +65,7 @@ public abstract class InferenceBaseTest {
         .withLevel(ParsingLevelSeries.Encoded_Knowledge_Expression)
         .withRepresentation(rep);
 
-    KnowledgeAsset surrogate = getSurrogate(carrier);
-
-    semRepo.publish(surrogate, carrier);
-
-    return semRepo;
+    return new MockSingletonAssetRepository(modelId, version, carrier);
   }
 
   private KnowledgeAsset getSurrogate(KnowledgeCarrier carrier) {
@@ -101,7 +96,7 @@ public abstract class InferenceBaseTest {
     UUID id = UUID.randomUUID();
 
     SyntacticRepresentation rep = getRepresentation(modelPath);
-    KnowledgeAssetRepositoryService semRepo =
+    KnowledgeAssetRepositoryApiInternal semRepo =
         initMockRepo(id, VTAG, modelPath, rep);
 
     return KieDMNHelper

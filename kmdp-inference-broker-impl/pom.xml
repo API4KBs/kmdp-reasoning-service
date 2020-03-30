@@ -50,12 +50,6 @@
     </dependency>
     <dependency>
       <groupId>edu.mayo.kmdp</groupId>
-      <artifactId>kmdp-knowledge-asset-repository-core</artifactId>
-      <scope>test</scope>
-      <version>${kmdp.servers.version}</version>
-    </dependency>
-    <dependency>
-      <groupId>edu.mayo.kmdp</groupId>
       <artifactId>kmdp-knowledge-transrepresentation-core</artifactId>
       <scope>test</scope>
       <version>${kmdp.servers.version}</version>

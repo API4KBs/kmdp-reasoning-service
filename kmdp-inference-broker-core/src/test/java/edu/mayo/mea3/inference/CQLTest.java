@@ -24,8 +24,10 @@ import edu.mayo.kmdp.kbase.inference.cql.v1_3.CQLEngineProvider;
 import edu.mayo.kmdp.kbase.inference.dmn.v1_1.DMNEngineProvider;
 import edu.mayo.kmdp.knowledgebase.KnowledgeBaseProvider;
 import edu.mayo.kmdp.knowledgebase.v4.server.KnowledgeBaseApiInternal;
-import edu.mayo.kmdp.repository.asset.KnowledgeAssetRepositoryService;
+import edu.mayo.kmdp.repository.asset.v4.server.KnowledgeAssetCatalogApiInternal;
+import edu.mayo.kmdp.repository.asset.v4.server.KnowledgeAssetRepositoryApiInternal;
 import edu.mayo.kmdp.util.DateTimeUtil;
+import edu.mayo.mea3.inference.mockRepo.MockSingletonAssetRepository;
 import edu.mayo.mea3.inference.mockTerms.PCO;
 import java.time.Year;
 import java.util.Arrays;
@@ -51,10 +53,10 @@ public class CQLTest extends InferenceBaseTest {
 
 	static String PATIENT = "Patient";
 
-	InferenceBroker initServer(KnowledgeAssetRepositoryService semRepo) {
+	InferenceBroker initServer(KnowledgeAssetRepositoryApiInternal semRepo, KnowledgeAssetCatalogApiInternal catalog) {
 		KnowledgeBaseApiInternal kbp = new KnowledgeBaseProvider(semRepo);
 		return new InferenceBroker(
-				semRepo,
+				catalog,
 				new HashSet<>(Arrays.asList(new DMNEngineProvider(kbp), new CQLEngineProvider(kbp))));
 	}
 
@@ -62,10 +64,10 @@ public class CQLTest extends InferenceBaseTest {
 	public void testEngine() {
 		UUID id = UUID.randomUUID();
 
-		KnowledgeAssetRepositoryService semRepo =
+		MockSingletonAssetRepository semRepo =
 				initMockRepo(id, VTAG, "/helloworld.cql");
 
-		InferenceBroker server = initServer(semRepo);
+		InferenceBroker server = initServer(semRepo,semRepo);
 
 		java.util.Map<?,?> out = server.infer(id, VTAG, new HashMap<>())
 				.orElse(Collections.emptyMap());
@@ -80,10 +82,10 @@ public class CQLTest extends InferenceBaseTest {
 	public void testEngineWithFHIR() {
 		UUID id = UUID.randomUUID();
 
-		KnowledgeAssetRepositoryService semRepo =
+		MockSingletonAssetRepository semRepo =
 				initMockRepo(id, VTAG, "/testFHIR.cql");
 
-		InferenceBroker server = initServer(semRepo);
+		InferenceBroker server = initServer(semRepo,semRepo);
 
 		Map<String, BaseResource> inputs = new HashMap<>();
 		inputs.put(PATIENT, new Patient().setGender(AdministrativeGender.OTHER)
@@ -110,10 +112,10 @@ public class CQLTest extends InferenceBaseTest {
 	public void testEngineWithPCO() {
 		UUID id = UUID.randomUUID();
 
-		KnowledgeAssetRepositoryService semRepo =
+		MockSingletonAssetRepository semRepo =
 				initMockRepo(id, VTAG, "/testFHIRPCO.cql");
 
-		InferenceBroker server = initServer(semRepo);
+		InferenceBroker server = initServer(semRepo, semRepo);
 
 		Map<String, Base> inputs = new HashMap<>();
 
@@ -143,10 +145,10 @@ public class CQLTest extends InferenceBaseTest {
 	public void testEngineWithAgeBuiltIn() {
 		UUID id = UUID.randomUUID();
 
-		KnowledgeAssetRepositoryService semRepo =
+		MockSingletonAssetRepository semRepo =
 				initMockRepo(id, VTAG, "/testAge.cql");
 
-		InferenceBroker server = initServer(semRepo);
+		InferenceBroker server = initServer(semRepo,semRepo);
 
 		Map<String, Base> inputs = new HashMap<>();
 		inputs.put(PATIENT, new Patient()
@@ -170,10 +172,10 @@ public class CQLTest extends InferenceBaseTest {
 	public void testTEEInference() {
 		UUID id = UUID.randomUUID();
 
-		KnowledgeAssetRepositoryService semRepo =
+		MockSingletonAssetRepository semRepo =
 				initMockRepo(id, VTAG, "/testTEE.cql");
 
-		InferenceBroker server = initServer(semRepo);
+		InferenceBroker server = initServer(semRepo,semRepo);
 
 		Map<String, Base> inputs = new HashMap<>();
 

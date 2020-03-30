@@ -16,7 +16,6 @@ package edu.mayo.kmdp.kbase.inference.dmn;
 import static edu.mayo.kmdp.util.NameUtils.camelCase;
 
 import edu.mayo.kmdp.id.Term;
-
 import edu.mayo.kmdp.inference.v4.server.InferenceApiInternal._infer;
 import edu.mayo.kmdp.terms.ConceptScheme;
 import edu.mayo.kmdp.util.Util;
