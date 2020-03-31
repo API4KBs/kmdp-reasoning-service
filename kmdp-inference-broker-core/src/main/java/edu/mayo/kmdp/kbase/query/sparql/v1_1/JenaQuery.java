@@ -15,6 +15,8 @@
  */
 package edu.mayo.kmdp.kbase.query.sparql.v1_1;
 
+import static edu.mayo.ontology.taxonomies.krlanguage.KnowledgeRepresentationLanguageSeries.SPARQL_1_1;
+
 import edu.mayo.kmdp.inference.v4.server.QueryApiInternal._askQuery;
 import edu.mayo.kmdp.knowledgebase.v4.server.KnowledgeBaseApiInternal;
 import edu.mayo.kmdp.util.JenaUtil;
@@ -27,8 +29,8 @@ import java.util.Set;
 import java.util.UUID;
 import java.util.function.Function;
 import java.util.stream.Collectors;
-import javax.inject.Inject;
 import javax.inject.Named;
+import org.apache.jena.query.ParameterizedSparqlString;
 import org.apache.jena.query.Query;
 import org.apache.jena.query.QueryExecution;
 import org.apache.jena.query.QueryExecutionFactory;
@@ -38,18 +40,29 @@ import org.apache.jena.rdf.model.Model;
 import org.apache.jena.rdf.model.RDFNode;
 import org.omg.spec.api4kp._1_0.Answer;
 import org.omg.spec.api4kp._1_0.datatypes.Bindings;
+import org.omg.spec.api4kp._1_0.services.KPComponent;
+import org.omg.spec.api4kp._1_0.services.KPSupport;
 import org.omg.spec.api4kp._1_0.services.KnowledgeBase;
 import org.omg.spec.api4kp._1_0.services.KnowledgeCarrier;
+import org.springframework.beans.factory.annotation.Autowired;
 
 @Named
+@KPComponent
+@KPSupport(SPARQL_1_1)
 public class JenaQuery implements _askQuery {
 
-  @Inject
-  KnowledgeBaseApiInternal kbManager;
+  KnowledgeBaseApiInternal._getKnowledgeBase kBaseSource;
+
+  public JenaQuery(@Autowired(required = false) KnowledgeBaseApiInternal._getKnowledgeBase kBaseSource) {
+    this.kBaseSource = kBaseSource;
+  }
 
   @Override
   public Answer<List<Bindings>> askQuery(UUID modelId, String versionTag, KnowledgeCarrier query) {
-    return kbManager.getKnowledgeBase(modelId, versionTag)
+    if (kBaseSource == null) {
+      return Answer.unsupported();
+    }
+    return kBaseSource.getKnowledgeBase(modelId, versionTag)
         .flatMap(kBase -> {
           if (isLocal(kBase)) {
             return Answer.of(kBase)
@@ -90,7 +103,20 @@ public class JenaQuery implements _askQuery {
 
 
   private Optional<List<Bindings>> applyQuery(KnowledgeCarrier query, Model m) {
-    return query.asParseTree(Query.class)
+    Optional<Query> qry = Optional.empty();
+    switch (query.getLevel().asEnum()) {
+      case Encoded_Knowledge_Expression:
+      case Concrete_Knowledge_Expression:
+        qry = query.asString()
+            .map(ParameterizedSparqlString::new)
+            .map(ParameterizedSparqlString::asQuery);
+        break;
+      case Parsed_Knowedge_Expression:
+        qry = query.asParseTree(Query.class);
+        break;
+      default:
+    }
+    return qry
         .map(q -> JenaUtil.askQueryResults(m, q))
         .map(this::toBindings);
   }
