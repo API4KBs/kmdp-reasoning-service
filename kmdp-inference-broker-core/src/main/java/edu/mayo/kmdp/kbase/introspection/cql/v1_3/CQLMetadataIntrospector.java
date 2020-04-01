@@ -1,18 +1,16 @@
 package edu.mayo.kmdp.kbase.introspection.cql.v1_3;
 
-import static edu.mayo.kmdp.SurrogateBuilder.newSurrogate;
+import static edu.mayo.kmdp.metadata.v2.surrogate.SurrogateBuilder.newSurrogate;
 import static edu.mayo.ontology.taxonomies.api4kp.parsinglevel.ParsingLevelSeries.Parsed_Knowedge_Expression;
 import static edu.mayo.ontology.taxonomies.kao.languagerole.KnowledgeRepresentationLanguageRoleSeries.Schema_Language;
 import static edu.mayo.ontology.taxonomies.krlanguage.KnowledgeRepresentationLanguageSeries.FHIR_STU3;
 import static edu.mayo.ontology.taxonomies.krlanguage.KnowledgeRepresentationLanguageSeries.HL7_CQL;
 import static edu.mayo.ontology.taxonomies.krlanguage.KnowledgeRepresentationLanguageSeries.Knowledge_Asset_Surrogate;
+import static org.omg.spec.api4kp._1_0.AbstractCarrier.rep;
 
-import edu.mayo.kmdp.id.helper.DatatypeHelper;
 import edu.mayo.kmdp.inference.v4.server.IntrospectionApiInternal;
-import edu.mayo.kmdp.metadata.surrogate.ComputableKnowledgeArtifact;
-import edu.mayo.kmdp.metadata.surrogate.KnowledgeAsset;
-import edu.mayo.kmdp.metadata.surrogate.Representation;
-import edu.mayo.kmdp.metadata.surrogate.SubLanguage;
+import edu.mayo.kmdp.metadata.v2.surrogate.ComputableKnowledgeArtifact;
+import edu.mayo.kmdp.metadata.v2.surrogate.KnowledgeAsset;
 import edu.mayo.ontology.taxonomies.api4kp.knowledgeoperations.KnowledgeProcessingOperationSeries;
 import java.util.UUID;
 import javax.inject.Named;
@@ -36,23 +34,19 @@ public class CQLMetadataIntrospector implements IntrospectionApiInternal._intros
   @Override
   public Answer<KnowledgeCarrier> introspect(UUID lambdaId, KnowledgeCarrier sourceArtifact, String xAccept) {
 
-    KnowledgeAsset surrogate = newSurrogate(DatatypeHelper.toURIIdentifier(sourceArtifact.getAssetId())).get()
+    KnowledgeAsset surrogate = newSurrogate(sourceArtifact.getAssetId()).get()
         .withName("TODO")
         .withCarriers(new ComputableKnowledgeArtifact()
-            .withArtifactId(DatatypeHelper.toURIIdentifier(sourceArtifact.getArtifactId()))
-            .withRepresentation(new Representation()
-                .withLanguage(HL7_CQL)
-                .withWith(new SubLanguage().withRole(Schema_Language)
-                    .withSubLanguage(new Representation()
-                        // TODO: This depends on the 'import' in the CQL library
-                        .withLanguage(FHIR_STU3)))));
+            .withArtifactId(sourceArtifact.getArtifactId())
+            .withRepresentation(rep(HL7_CQL)
+                .withSubLanguage(rep(FHIR_STU3).withRole(Schema_Language))));
 
     return Answer.of(
         AbstractCarrier.ofAst(surrogate)
             .withAssetId(sourceArtifact.getAssetId())
             .withLevel(Parsed_Knowedge_Expression)
-            // TODO improve...
-            .withArtifactId(DatatypeHelper.toSemanticIdentifier(surrogate.getSurrogate().get(0).getArtifactId()))
+            // TODO Improve..
+            .withArtifactId(surrogate.getSurrogate().get(0).getArtifactId())
             .withRepresentation(new SyntacticRepresentation()
                 .withLanguage(Knowledge_Asset_Surrogate))
     );

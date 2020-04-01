@@ -3,7 +3,8 @@ package edu.mayo.kmdp.kbase.inference.cql.v1_3;
 import edu.mayo.kmdp.inference.v4.server.InferenceApiInternal._infer;
 import edu.mayo.kmdp.kbase.inference.AbstractEvaluatorProvider;
 import edu.mayo.kmdp.knowledgebase.v4.server.KnowledgeBaseApiInternal;
-import edu.mayo.kmdp.metadata.surrogate.KnowledgeAsset;
+import edu.mayo.kmdp.metadata.v2.surrogate.KnowledgeAsset;
+import edu.mayo.kmdp.repository.asset.v4.server.KnowledgeAssetRepositoryApiInternal;
 import edu.mayo.ontology.taxonomies.krlanguage.KnowledgeRepresentationLanguageSeries;
 import javax.inject.Named;
 import org.omg.spec.api4kp._1_0.services.KPServer;
@@ -13,10 +14,16 @@ import org.springframework.beans.factory.annotation.Autowired;
 public class CQLEngineProvider
     extends AbstractEvaluatorProvider {
 
+//  private final KnowledgeAssetRepositoryApiInternal repo;
+
   public CQLEngineProvider(
       @KPServer
       @Autowired
-      KnowledgeBaseApiInternal kbaseManager) {
+      KnowledgeBaseApiInternal kbaseManager
+//      @KPServer
+//      @Autowired
+//      KnowledgeAssetRepositoryApiInternal assetRepo
+  ) {
     super(kbaseManager);
   }
 

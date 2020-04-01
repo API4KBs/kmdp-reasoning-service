@@ -14,11 +14,10 @@
 
 package edu.mayo.kmdp.kbase.inference;
 
-import edu.mayo.kmdp.id.VersionedIdentifier;
-import edu.mayo.kmdp.id.helper.DatatypeHelper;
 import edu.mayo.kmdp.inference.v4.server.InferenceApiInternal;
 import edu.mayo.kmdp.inference.v4.server.ModelApiInternal;
-import edu.mayo.kmdp.metadata.surrogate.KnowledgeAsset;
+import edu.mayo.kmdp.metadata.v2.surrogate.KnowledgeAsset;
+import edu.mayo.kmdp.repository.asset.v4.KnowledgeAssetCatalogApi;
 import edu.mayo.kmdp.repository.asset.v4.server.KnowledgeAssetCatalogApiInternal;
 import edu.mayo.kmdp.util.StreamUtil;
 import edu.mayo.ontology.taxonomies.api4kp.knowledgeoperations.KnowledgeProcessingOperationSeries;
@@ -31,18 +30,22 @@ import java.util.UUID;
 import java.util.function.Function;
 import javax.inject.Named;
 import org.omg.spec.api4kp._1_0.Answer;
+import org.omg.spec.api4kp._1_0.id.KeyIdentifier;
 import org.omg.spec.api4kp._1_0.id.Pointer;
+import org.omg.spec.api4kp._1_0.id.ResourceIdentifier;
+import org.omg.spec.api4kp._1_0.id.SemanticIdentifier;
 import org.omg.spec.api4kp._1_0.services.KPOperation;
 import org.omg.spec.api4kp._1_0.services.KPServer;
 import org.omg.spec.api4kp._1_0.services.KnowledgeCarrier;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.w3._1999.xhtml.P;
 
 @KPServer
 @Named
 @KPOperation(KnowledgeProcessingOperationSeries.Inference_Task)
 public class InferenceBroker implements InferenceApiInternal, ModelApiInternal {
 
-  private java.util.Map<VersionedIdentifier, KnowledgeAsset> knownModels = new HashMap<>();
+  private java.util.Map<KeyIdentifier, KnowledgeAsset> knownModels = new HashMap<>();
   private KnowledgeAssetCatalogApiInternal assetCatalog;
 
   private Set<Function<KnowledgeAsset, Optional<_infer>>> evaluatorProviders;
@@ -65,14 +68,20 @@ public class InferenceBroker implements InferenceApiInternal, ModelApiInternal {
 
 
   private Answer<_infer> getEvaluator(UUID modelId, String versionTag) {
-    VersionedIdentifier vid = DatatypeHelper.uri(modelId.toString(), versionTag);
+    KeyIdentifier vid = SemanticIdentifier.newId(modelId, versionTag).asKey();
+    KnowledgeAsset asset;
 
-    // lookup the model (metadata)
-    KnowledgeAsset asset = knownModels.computeIfAbsent(
-        vid,
-        v -> assetCatalog
-            .getVersionedKnowledgeAsset(modelId, versionTag)
-            .orElse(new KnowledgeAsset()));
+    if (! knownModels.containsKey(vid)) {
+      Answer<KnowledgeAsset> surr = assetCatalog
+          .getVersionedKnowledgeAsset(modelId, versionTag);
+      if (! surr.isSuccess()) {
+        return Answer.notFound();
+      }
+      asset = surr.get();
+      knownModels.put(vid,asset);
+    } else {
+      asset = knownModels.get(vid);
+    }
 
     return Answer.of(
         evaluatorProviders.stream()

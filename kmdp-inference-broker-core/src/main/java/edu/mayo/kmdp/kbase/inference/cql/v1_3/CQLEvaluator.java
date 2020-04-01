@@ -13,13 +13,12 @@
  */
 package edu.mayo.kmdp.kbase.inference.cql.v1_3;
 
+import static edu.mayo.kmdp.metadata.v2.surrogate.SurrogateHelper.canonicalRepresentationOf;
 import static edu.mayo.ontology.taxonomies.krlanguage.KnowledgeRepresentationLanguageSeries.FHIR_STU3;
 import static edu.mayo.ontology.taxonomies.krlanguage.KnowledgeRepresentationLanguageSeries.HL7_CQL;
 
-import edu.mayo.kmdp.SurrogateHelper;
-import edu.mayo.kmdp.id.helper.DatatypeHelper;
 import edu.mayo.kmdp.inference.v4.server.InferenceApiInternal._infer;
-import edu.mayo.kmdp.metadata.surrogate.KnowledgeAsset;
+import edu.mayo.kmdp.metadata.v2.surrogate.KnowledgeAsset;
 import edu.mayo.ontology.taxonomies.api4kp.knowledgeoperations.KnowledgeProcessingOperationSeries;
 import edu.mayo.ontology.taxonomies.krlanguage.KnowledgeRepresentationLanguage;
 import java.util.HashMap;
@@ -31,6 +30,7 @@ import org.cqframework.cql.elm.execution.FunctionDef;
 import org.cqframework.cql.elm.execution.Library;
 import org.omg.spec.api4kp._1_0.Answer;
 import org.omg.spec.api4kp._1_0.id.KeyIdentifier;
+import org.omg.spec.api4kp._1_0.id.SemanticIdentifier;
 import org.omg.spec.api4kp._1_0.services.BinaryCarrier;
 import org.omg.spec.api4kp._1_0.services.KPOperation;
 import org.omg.spec.api4kp._1_0.services.KPSupport;
@@ -77,7 +77,7 @@ public class CQLEvaluator
   }
 
   private KnowledgeRepresentationLanguage detectRepresentationLanguage(KnowledgeAsset asset) {
-    return SurrogateHelper.canonicalRepresentationOf(asset).getLanguage();
+    return canonicalRepresentationOf(asset).getLanguage();
   }
 
   private Map<String, Object> internalEvaluate(Library lib, Context ctx) {
@@ -116,8 +116,9 @@ public class CQLEvaluator
 
 
   private Optional<BinaryCarrier> getCarrier(UUID modelId, String versionTag) {
+    KeyIdentifier key = SemanticIdentifier.newId(modelId,versionTag).asKey();
     return Optional.ofNullable(new BinaryCarrier()
-        .withEncodedExpression(artifactCache.getOrDefault(modelId.toString(), null)));
+        .withEncodedExpression(artifactCache.getOrDefault(key, null)));
   }
 
 }

@@ -1,7 +1,6 @@
 package edu.mayo.kmdp.kbase.inference.mockRepo;
 
-import edu.mayo.kmdp.id.helper.DatatypeHelper;
-import edu.mayo.kmdp.metadata.surrogate.KnowledgeAsset;
+import edu.mayo.kmdp.metadata.v2.surrogate.KnowledgeAsset;
 import edu.mayo.kmdp.repository.asset.v4.server.KnowledgeAssetCatalogApiInternal;
 import edu.mayo.kmdp.repository.asset.v4.server.KnowledgeAssetRepositoryApiInternal;
 import edu.mayo.kmdp.repository.asset.v4.server.KnowledgeAssetRetrievalApiInternal;
@@ -14,7 +13,6 @@ import org.omg.spec.api4kp._1_0.Answer;
 import org.omg.spec.api4kp._1_0.datatypes.Bindings;
 import org.omg.spec.api4kp._1_0.id.Pointer;
 import org.omg.spec.api4kp._1_0.id.ResourceIdentifier;
-import org.omg.spec.api4kp._1_0.id.SemanticIdentifier;
 import org.omg.spec.api4kp._1_0.services.KnowledgeCarrier;
 import org.omg.spec.api4kp._1_0.services.repository.KnowledgeAssetCatalog;
 
@@ -22,11 +20,11 @@ public class MockAssetRepository implements KnowledgeAssetRepositoryApiInternal,
     KnowledgeAssetCatalogApiInternal, KnowledgeAssetRetrievalApiInternal {
 
   private Map<String,KnowledgeCarrier> carriers = new HashMap<>();
-  private Map<String,KnowledgeAsset> surrogates = new HashMap<>();
+  private Map<String, KnowledgeAsset> surrogates = new HashMap<>();
 
   public MockAssetRepository(List<KnowledgeAsset> surrogates, List<KnowledgeCarrier> carriers) {
     surrogates.forEach(s -> {
-      ResourceIdentifier rid = DatatypeHelper.toSemanticIdentifier(s.getAssetId());
+      ResourceIdentifier rid = s.getAssetId();
       String key = getKey(rid.getUuid(),rid.getVersionTag());
       this.surrogates.put(key, s);
     });
@@ -58,7 +56,7 @@ public class MockAssetRepository implements KnowledgeAssetRepositoryApiInternal,
   public Answer<List<Pointer>> listKnowledgeAssets(String assetTypeTag, String assetAnnotationTag,
       String assetAnnotationConcept, Integer offset, Integer limit) {
     return Answer.of(surrogates.values().stream()
-        .map(ax -> DatatypeHelper.toSemanticIdentifier(ax.getAssetId()).toPointer())
+        .map(ax -> ax.getAssetId().toPointer())
         .collect(Collectors.toList()));
   }
 

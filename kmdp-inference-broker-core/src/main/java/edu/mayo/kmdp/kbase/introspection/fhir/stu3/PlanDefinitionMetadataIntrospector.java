@@ -1,15 +1,14 @@
 package edu.mayo.kmdp.kbase.introspection.fhir.stu3;
 
-import static edu.mayo.kmdp.SurrogateBuilder.newSurrogate;
+import static edu.mayo.kmdp.metadata.v2.surrogate.SurrogateBuilder.newSurrogate;
 import static edu.mayo.ontology.taxonomies.api4kp.parsinglevel.ParsingLevelSeries.Parsed_Knowedge_Expression;
 import static edu.mayo.ontology.taxonomies.krlanguage.KnowledgeRepresentationLanguageSeries.FHIR_STU3;
 import static edu.mayo.ontology.taxonomies.krlanguage.KnowledgeRepresentationLanguageSeries.Knowledge_Asset_Surrogate;
+import static org.omg.spec.api4kp._1_0.AbstractCarrier.rep;
 
-import edu.mayo.kmdp.id.helper.DatatypeHelper;
 import edu.mayo.kmdp.inference.v4.server.IntrospectionApiInternal;
-import edu.mayo.kmdp.metadata.surrogate.ComputableKnowledgeArtifact;
-import edu.mayo.kmdp.metadata.surrogate.KnowledgeAsset;
-import edu.mayo.kmdp.metadata.surrogate.Representation;
+import edu.mayo.kmdp.metadata.v2.surrogate.ComputableKnowledgeArtifact;
+import edu.mayo.kmdp.metadata.v2.surrogate.KnowledgeAsset;
 import edu.mayo.kmdp.metadata.v2.surrogate.SurrogateBuilder;
 import edu.mayo.ontology.taxonomies.api4kp.knowledgeoperations.KnowledgeProcessingOperationSeries;
 import edu.mayo.ontology.taxonomies.kao.knowledgeassettype.KnowledgeAssetTypeSeries;
@@ -22,7 +21,6 @@ import org.omg.spec.api4kp._1_0.services.KPComponent;
 import org.omg.spec.api4kp._1_0.services.KPOperation;
 import org.omg.spec.api4kp._1_0.services.KPSupport;
 import org.omg.spec.api4kp._1_0.services.KnowledgeCarrier;
-import org.omg.spec.api4kp._1_0.services.SyntacticRepresentation;
 
 /**
  * Introspection class for PlanDefinitions. Generates the surrogate (KnowledgeAsset) for the
@@ -51,22 +49,20 @@ public class PlanDefinitionMetadataIntrospector implements IntrospectionApiInter
       String s) {
     // ignore 's' for now
     ResourceIdentifier uri = SurrogateBuilder.assetId(uuid.toString(), "LATEST");
-    KnowledgeAsset surrogate = newSurrogate(DatatypeHelper.toURIIdentifier(uri)).get()
+    KnowledgeAsset surrogate = newSurrogate(uri).get()
         .withName(knowledgeCarrier.getLabel())
         .withFormalType(KnowledgeAssetTypeSeries.Cognitive_Care_Process_Model)
         .withCarriers(new ComputableKnowledgeArtifact()
-            .withArtifactId(DatatypeHelper.toURIIdentifier(knowledgeCarrier.getArtifactId()))
-            .withRepresentation(new Representation()
-                .withLanguage(FHIR_STU3)));
+            .withArtifactId(knowledgeCarrier.getArtifactId())
+            .withRepresentation(rep(FHIR_STU3)));
 
     return Answer.of(
         AbstractCarrier.ofAst(surrogate)
             .withAssetId(knowledgeCarrier.getAssetId())
             .withLevel(Parsed_Knowedge_Expression)
             // TODO improve...
-            .withArtifactId(DatatypeHelper.toSemanticIdentifier(surrogate.getSurrogate().get(0).getArtifactId()))
-            .withRepresentation(new SyntacticRepresentation()
-                .withLanguage(Knowledge_Asset_Surrogate))
+            .withArtifactId(surrogate.getSurrogate().get(0).getArtifactId())
+            .withRepresentation(rep(Knowledge_Asset_Surrogate))
     );
 
   }

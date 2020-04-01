@@ -78,8 +78,6 @@ public class CQLTest extends InferenceBaseTest {
 		assertEquals(3, out.get("Number3"));
 	}
 
-
-
 	@Test
 	public void testEngineWithFHIR() {
 		UUID id = UUID.randomUUID();

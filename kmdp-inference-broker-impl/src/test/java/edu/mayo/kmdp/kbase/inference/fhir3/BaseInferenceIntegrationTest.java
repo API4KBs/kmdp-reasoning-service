@@ -18,7 +18,7 @@ import edu.mayo.kmdp.kbase.introspection.dmn.DMNMetadataIntrospector;
 import edu.mayo.kmdp.kbase.introspection.fhir.stu3.PlanDefinitionMetadataIntrospector;
 import edu.mayo.kmdp.knowledgebase.KnowledgeBaseProvider;
 import edu.mayo.kmdp.language.LanguageDeSerializer;
-import edu.mayo.kmdp.metadata.surrogate.KnowledgeAsset;
+import edu.mayo.kmdp.metadata.v2.surrogate.KnowledgeAsset;
 import edu.mayo.kmdp.util.Util;
 import edu.mayo.ontology.taxonomies.api4kp.parsinglevel.ParsingLevelSeries;
 import edu.mayo.ontology.taxonomies.krlanguage.KnowledgeRepresentationLanguage;
@@ -88,14 +88,12 @@ public abstract class BaseInferenceIntegrationTest {
         String path, SyntacticRepresentation rep) {
       ResourceIdentifier assetId = assetId(Util.uuid(modelName), VTAG);
 
-      KnowledgeCarrier carrier = AbstractCarrier
+      return AbstractCarrier
           .of(getBytes(path))
           .withAssetId(assetId)
           .withArtifactId(artifactId(UUID.randomUUID().toString(),VTAG))
           .withLevel(ParsingLevelSeries.Encoded_Knowledge_Expression)
           .withRepresentation(rep);
-
-      return carrier;
     }
 
 

@@ -12,7 +12,7 @@ import static org.springframework.test.util.AssertionErrors.fail;
 import edu.mayo.kmdp.kbase.inference.dmn.KieDMNHelper;
 import edu.mayo.kmdp.kbase.introspection.cql.v1_3.CQLMetadataIntrospector;
 import edu.mayo.kmdp.kbase.introspection.dmn.DMNMetadataIntrospector;
-import edu.mayo.kmdp.metadata.surrogate.KnowledgeAsset;
+import edu.mayo.kmdp.metadata.v2.surrogate.KnowledgeAsset;
 import edu.mayo.kmdp.metadata.v2.surrogate.SurrogateBuilder;
 import edu.mayo.kmdp.repository.asset.v4.server.KnowledgeAssetRepositoryApiInternal;
 import edu.mayo.mea3.inference.mockRepo.MockSingletonAssetRepository;
@@ -65,7 +65,7 @@ public abstract class InferenceBaseTest {
         .withLevel(ParsingLevelSeries.Encoded_Knowledge_Expression)
         .withRepresentation(rep);
 
-    return new MockSingletonAssetRepository(modelId, version, carrier);
+    return new MockSingletonAssetRepository(modelId, version, carrier, getSurrogate(carrier));
   }
 
   private KnowledgeAsset getSurrogate(KnowledgeCarrier carrier) {

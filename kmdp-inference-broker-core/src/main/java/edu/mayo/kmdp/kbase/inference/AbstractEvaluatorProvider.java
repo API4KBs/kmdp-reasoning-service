@@ -1,11 +1,10 @@
 package edu.mayo.kmdp.kbase.inference;
 
-import edu.mayo.kmdp.SurrogateHelper;
-import edu.mayo.kmdp.id.helper.DatatypeHelper;
+import static edu.mayo.kmdp.metadata.v2.surrogate.SurrogateHelper.canonicalRepresentationOf;
+
 import edu.mayo.kmdp.inference.v4.server.InferenceApiInternal;
 import edu.mayo.kmdp.knowledgebase.v4.server.KnowledgeBaseApiInternal;
-import edu.mayo.kmdp.metadata.surrogate.KnowledgeAsset;
-import edu.mayo.kmdp.metadata.surrogate.Representation;
+import edu.mayo.kmdp.metadata.v2.surrogate.KnowledgeAsset;
 import edu.mayo.ontology.taxonomies.krlanguage.KnowledgeRepresentationLanguage;
 import java.util.HashMap;
 import java.util.Map;
@@ -13,6 +12,7 @@ import java.util.Optional;
 import java.util.function.Function;
 import org.omg.spec.api4kp._1_0.id.KeyIdentifier;
 import org.omg.spec.api4kp._1_0.id.ResourceIdentifier;
+import org.omg.spec.api4kp._1_0.services.SyntacticRepresentation;
 
 public abstract class AbstractEvaluatorProvider
     implements Function<KnowledgeAsset, Optional<InferenceApiInternal._infer>> {
@@ -27,7 +27,7 @@ public abstract class AbstractEvaluatorProvider
 
   @Override
   public Optional<InferenceApiInternal._infer> apply(KnowledgeAsset knowledgeAsset) {
-    ResourceIdentifier vid = getAssetId(knowledgeAsset);
+    ResourceIdentifier vid = knowledgeAsset.getAssetId();
     return Optional.ofNullable(
         evaluators.computeIfAbsent(
             vid.asKey(),
@@ -51,13 +51,9 @@ public abstract class AbstractEvaluatorProvider
     return knowledgeAsset == null;
   }
 
-  protected ResourceIdentifier getAssetId(KnowledgeAsset asset) {
-    return DatatypeHelper.toSemanticIdentifier(asset.getAssetId());
-  }
-
   protected Optional<KnowledgeRepresentationLanguage> detectLanguage(KnowledgeAsset asset) {
-    return Optional.ofNullable(SurrogateHelper.canonicalRepresentationOf(asset))
-        .map(Representation::getLanguage);
+    return Optional.ofNullable(canonicalRepresentationOf(asset))
+        .map(SyntacticRepresentation::getLanguage);
   }
 
 }

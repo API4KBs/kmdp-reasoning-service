@@ -23,7 +23,6 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
-import org.hl7.fhir.dstu3.model.Base;
 import org.opencds.cqf.cql.data.fhir.BaseDataProviderStu3;
 import org.opencds.cqf.cql.runtime.Code;
 import org.opencds.cqf.cql.runtime.Interval;
