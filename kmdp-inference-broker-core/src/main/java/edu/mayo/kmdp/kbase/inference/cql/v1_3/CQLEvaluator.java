@@ -28,13 +28,14 @@ import java.util.UUID;
 import org.cqframework.cql.elm.execution.AccessModifier;
 import org.cqframework.cql.elm.execution.FunctionDef;
 import org.cqframework.cql.elm.execution.Library;
+import org.omg.spec.api4kp._1_0.AbstractCarrier;
 import org.omg.spec.api4kp._1_0.Answer;
 import org.omg.spec.api4kp._1_0.id.KeyIdentifier;
 import org.omg.spec.api4kp._1_0.id.SemanticIdentifier;
-import org.omg.spec.api4kp._1_0.services.BinaryCarrier;
 import org.omg.spec.api4kp._1_0.services.KPOperation;
 import org.omg.spec.api4kp._1_0.services.KPSupport;
 import org.omg.spec.api4kp._1_0.services.KnowledgeBase;
+import org.omg.spec.api4kp._1_0.services.KnowledgeCarrier;
 import org.omg.spec.api4kp._1_0.services.SyntacticRepresentation;
 import org.opencds.cqf.cql.execution.Context;
 
@@ -51,10 +52,12 @@ public class CQLEvaluator
   private KnowledgeRepresentationLanguage modelLanguage;
 
   public CQLEvaluator(KnowledgeBase knowledgeBase) {
-    BinaryCarrier carrier = (BinaryCarrier) knowledgeBase.getManifestation();
+    KnowledgeCarrier carrier = knowledgeBase.getManifestation();
 
-    artifactCache.put(carrier.getAssetId().asKey(),
-        carrier.getEncodedExpression());
+    artifactCache.put(
+        carrier.getAssetId().asKey(),
+        carrier.asBinary().orElseThrow(IllegalStateException::new));
+
     this.translator = new CQL2ELMTranslatorHelper();
     modelLanguage = detectInformationModel(carrier.getRepresentation())
         .orElse(FHIR_STU3);
@@ -115,10 +118,11 @@ public class CQLEvaluator
   }
 
 
-  private Optional<BinaryCarrier> getCarrier(UUID modelId, String versionTag) {
-    KeyIdentifier key = SemanticIdentifier.newId(modelId,versionTag).asKey();
-    return Optional.ofNullable(new BinaryCarrier()
-        .withEncodedExpression(artifactCache.getOrDefault(key, null)));
+  private Optional<KnowledgeCarrier> getCarrier(UUID modelId, String versionTag) {
+    KeyIdentifier key = SemanticIdentifier.newId(modelId, versionTag).asKey();
+    return Optional.ofNullable(
+        artifactCache.getOrDefault(key, null))
+        .map(AbstractCarrier::of);
   }
 
 }

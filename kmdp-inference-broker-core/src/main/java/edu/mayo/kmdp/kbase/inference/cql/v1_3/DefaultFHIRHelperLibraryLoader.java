@@ -19,7 +19,7 @@ import edu.mayo.kmdp.util.FileUtil;
 import java.io.InputStream;
 import org.cqframework.cql.elm.execution.Library;
 import org.cqframework.cql.elm.execution.VersionedIdentifier;
-import org.omg.spec.api4kp._1_0.services.BinaryCarrier;
+import org.omg.spec.api4kp._1_0.AbstractCarrier;
 import org.opencds.cqf.cql.execution.LibraryLoader;
 
 public class DefaultFHIRHelperLibraryLoader implements LibraryLoader {
@@ -37,7 +37,7 @@ public class DefaultFHIRHelperLibraryLoader implements LibraryLoader {
 						+ ".cql";
 		InputStream is = CQLEvaluator.class.getResourceAsStream(libName);
 		return FileUtil.readBytes(is)
-				.map(b -> new BinaryCarrier().withEncodedExpression(b))
+				.map(AbstractCarrier::of)
 				.flatMap(translator::cqlToExecutableLibrary)
 				.orElseThrow(
 						() -> new IllegalStateException("Unable to load library " + libraryIdentifier));

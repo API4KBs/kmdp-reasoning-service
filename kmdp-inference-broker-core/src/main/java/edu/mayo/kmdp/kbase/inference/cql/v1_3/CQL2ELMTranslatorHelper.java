@@ -27,7 +27,7 @@ import org.cqframework.cql.cql2elm.ModelManager;
 import org.cqframework.cql.elm.execution.Library;
 import org.fhir.ucum.UcumEssenceService;
 import org.fhir.ucum.UcumService;
-import org.omg.spec.api4kp._1_0.services.BinaryCarrier;
+import org.omg.spec.api4kp._1_0.AbstractCarrier;
 import org.omg.spec.api4kp._1_0.services.KnowledgeCarrier;
 import org.opencds.cqf.cql.execution.CqlLibraryReader;
 import org.slf4j.Logger;
@@ -54,10 +54,11 @@ public class CQL2ELMTranslatorHelper {
   }
 
   // MASSIVE TODO: Plug the Translator service in here
-  public Optional<KnowledgeCarrier> doTranslate(BinaryCarrier input) {
+  public Optional<KnowledgeCarrier> doTranslate(KnowledgeCarrier input) {
     try {
       CqlTranslator translator = CqlTranslator
-          .fromStream(new ByteArrayInputStream(input.getEncodedExpression()),
+          .fromStream(new ByteArrayInputStream(input.asBinary()
+                  .orElseThrow(IllegalStateException::new)),
               modelManager,
               libraryManager,
               ucumService);
@@ -70,24 +71,23 @@ public class CQL2ELMTranslatorHelper {
           .map(CqlTranslatorException::getMessage).forEach(logger::error);
 
       String xml = translator.toXml();
-      return Optional.of(new BinaryCarrier().withEncodedExpression(xml.getBytes()));
+      return Optional.of(AbstractCarrier.of(xml.getBytes()));
     } catch (IOException e) {
-      System.err.println(e.getMessage());
       logger.error(e.getMessage(), e);
     }
     return Optional.empty();
   }
 
-  public Optional<Library> cqlToExecutableLibrary(BinaryCarrier binaryCarrier) {
-    return doTranslate(binaryCarrier)
-        .map(BinaryCarrier.class::cast)
+  public Optional<Library> cqlToExecutableLibrary(KnowledgeCarrier carrier) {
+    return doTranslate(carrier)
         .flatMap(this::parse);
   }
 
-  private Optional<org.cqframework.cql.elm.execution.Library> parse(BinaryCarrier elm) {
+  private Optional<org.cqframework.cql.elm.execution.Library> parse(KnowledgeCarrier elm) {
     try {
       return Optional
-          .of(CqlLibraryReader.read(new ByteArrayInputStream(elm.getEncodedExpression())));
+          .of(CqlLibraryReader.read(new ByteArrayInputStream(elm.asBinary()
+              .orElseThrow(UnsupportedOperationException::new))));
     } catch (IOException | JAXBException e) {
       logger.error(e.getMessage(), e);
     }

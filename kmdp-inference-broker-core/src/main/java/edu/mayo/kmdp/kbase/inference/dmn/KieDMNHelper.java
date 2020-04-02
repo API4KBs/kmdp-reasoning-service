@@ -21,7 +21,6 @@ import org.kie.api.builder.Message;
 import org.kie.api.io.ResourceType;
 import org.kie.api.runtime.KieContainer;
 import org.kie.dmn.api.core.DMNRuntime;
-import org.omg.spec.api4kp._1_0.services.BinaryCarrier;
 import org.omg.spec.api4kp._1_0.services.KnowledgeBase;
 import org.omg.spec.api4kp._1_0.services.KnowledgeCarrier;
 import org.slf4j.Logger;
@@ -42,7 +41,8 @@ public class KieDMNHelper {
     KieFileSystem kfs = kieServices.newKieFileSystem()
         .write(kieServices.getResources()
             .newInputStreamResource(
-                new ByteArrayInputStream(((BinaryCarrier) carrier).getEncodedExpression()))
+                new ByteArrayInputStream(carrier.asBinary()
+                    .orElseThrow(UnsupportedOperationException::new)))
             .setTargetPath(
                 "/" + carrier.getAssetId().getTag() + "/versions/" + carrier.getAssetId().getVersionTag())
             .setResourceType(ResourceType.DMN));

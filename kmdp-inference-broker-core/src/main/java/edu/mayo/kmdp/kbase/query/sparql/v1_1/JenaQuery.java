@@ -67,7 +67,7 @@ public class JenaQuery implements _askQuery {
           if (isLocal(kBase)) {
             return Answer.of(kBase)
                 .map(KnowledgeBase::getManifestation)
-                .flatOpt(m -> m.asParseTree(Model.class))
+                .flatOpt(m -> m.as(Model.class))
                 .flatOpt(m -> applyQuery(query, m));
           } else {
             return askQueryRemote(kBase.getEndpoint().toString(), query);
@@ -82,7 +82,7 @@ public class JenaQuery implements _askQuery {
 
   private Answer<List<Bindings>> askQueryRemote(String endpoint, KnowledgeCarrier query) {
     return Answer.of(
-        query.asParseTree(Query.class)
+        query.as(Query.class)
             .map(q -> submitQuery(q, endpoint)));
   }
 
@@ -112,7 +112,7 @@ public class JenaQuery implements _askQuery {
             .map(ParameterizedSparqlString::asQuery);
         break;
       case Parsed_Knowedge_Expression:
-        qry = query.asParseTree(Query.class);
+        qry = query.as(Query.class);
         break;
       default:
     }
