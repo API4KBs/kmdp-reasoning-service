@@ -79,18 +79,36 @@ public class MockAssetRepository implements KnowledgeAssetRepositoryApiInternal,
   }
 
   @Override
+  public Answer<KnowledgeCarrier> getCanonicalKnowledgeAssetSurrogateVersion(UUID assetId,
+      String versionTag, String surrogateVersionTag, String xAccept) {
+    throw new UnsupportedOperationException("Test should not have invoked this");
+  }
+
+  @Override
+  public Answer<List<Pointer>> getCanonicalKnowledgeAssetSurrogateVersions(UUID assetId,
+      String versionTag) {
+    throw new UnsupportedOperationException("Test should not have invoked this");
+  }
+
+  @Override
   public Answer<List<Pointer>> getKnowledgeAssetCarriers(UUID assetId, String versionTag) {
     throw new UnsupportedOperationException("Test should not have invoked this");
   }
 
   @Override
   public Answer<KnowledgeCarrier> getKnowledgeAssetSurrogateVersion(UUID assetId, String versionTag,
-      String surrogateVersionTag, String xAccept) {
+      UUID artifactId, String artifactVersionTag) {
     throw new UnsupportedOperationException("Test should not have invoked this");
   }
 
   @Override
-  public Answer<List<Pointer>> getKnowledgeAssetSurrogateVersions(UUID assetId, String versionTag) {
+  public Answer<List<Pointer>> getKnowledgeAssetSurrogates(UUID assetId, String versionTag) {
+    throw new UnsupportedOperationException("Test should not have invoked this");
+  }
+
+  @Override
+  public Answer<Void> publishKnowledgeAsset(UUID assetId, String versionTag,
+      KnowledgeCarrier assetSurrogateCarrier) {
     throw new UnsupportedOperationException("Test should not have invoked this");
   }
 

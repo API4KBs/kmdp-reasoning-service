@@ -67,18 +67,36 @@ public class MockSingletonAssetRepository implements KnowledgeAssetRepositoryApi
   }
 
   @Override
+  public Answer<KnowledgeCarrier> getCanonicalKnowledgeAssetSurrogateVersion(UUID assetId,
+      String versionTag, String surrogateVersionTag, String xAccept) {
+    return Answer.unsupported();
+  }
+
+  @Override
+  public Answer<List<Pointer>> getCanonicalKnowledgeAssetSurrogateVersions(UUID assetId,
+      String versionTag) {
+    return Answer.unsupported();
+  }
+
+  @Override
   public Answer<List<Pointer>> getKnowledgeAssetCarriers(UUID assetId, String versionTag) {
     return Answer.unsupported();
   }
 
   @Override
   public Answer<KnowledgeCarrier> getKnowledgeAssetSurrogateVersion(UUID assetId, String versionTag,
-      String surrogateVersionTag, String xAccept) {
+      UUID artifactId, String artifactVersionTag) {
     return Answer.unsupported();
   }
 
   @Override
-  public Answer<List<Pointer>> getKnowledgeAssetSurrogateVersions(UUID assetId, String versionTag) {
+  public Answer<List<Pointer>> getKnowledgeAssetSurrogates(UUID assetId, String versionTag) {
+    return Answer.unsupported();
+  }
+
+  @Override
+  public Answer<Void> publishKnowledgeAsset(UUID assetId, String versionTag,
+      KnowledgeCarrier assetSurrogateCarrier) {
     return Answer.unsupported();
   }
 
