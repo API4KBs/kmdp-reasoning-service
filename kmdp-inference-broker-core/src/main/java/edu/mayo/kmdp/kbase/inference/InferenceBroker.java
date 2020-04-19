@@ -17,7 +17,6 @@ package edu.mayo.kmdp.kbase.inference;
 import edu.mayo.kmdp.inference.v4.server.InferenceApiInternal;
 import edu.mayo.kmdp.inference.v4.server.ModelApiInternal;
 import edu.mayo.kmdp.metadata.v2.surrogate.KnowledgeAsset;
-import edu.mayo.kmdp.repository.asset.v4.KnowledgeAssetCatalogApi;
 import edu.mayo.kmdp.repository.asset.v4.server.KnowledgeAssetCatalogApiInternal;
 import edu.mayo.kmdp.util.StreamUtil;
 import edu.mayo.ontology.taxonomies.api4kp.knowledgeoperations.KnowledgeProcessingOperationSeries;
@@ -32,13 +31,11 @@ import javax.inject.Named;
 import org.omg.spec.api4kp._1_0.Answer;
 import org.omg.spec.api4kp._1_0.id.KeyIdentifier;
 import org.omg.spec.api4kp._1_0.id.Pointer;
-import org.omg.spec.api4kp._1_0.id.ResourceIdentifier;
 import org.omg.spec.api4kp._1_0.id.SemanticIdentifier;
 import org.omg.spec.api4kp._1_0.services.KPOperation;
 import org.omg.spec.api4kp._1_0.services.KPServer;
 import org.omg.spec.api4kp._1_0.services.KnowledgeCarrier;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.w3._1999.xhtml.P;
 
 @KPServer
 @Named
@@ -73,7 +70,7 @@ public class InferenceBroker implements InferenceApiInternal, ModelApiInternal {
 
     if (! knownModels.containsKey(vid)) {
       Answer<KnowledgeAsset> surr = assetCatalog
-          .getVersionedKnowledgeAsset(modelId, versionTag);
+          .getKnowledgeAssetVersion(modelId, versionTag);
       if (! surr.isSuccess()) {
         return Answer.notFound();
       }

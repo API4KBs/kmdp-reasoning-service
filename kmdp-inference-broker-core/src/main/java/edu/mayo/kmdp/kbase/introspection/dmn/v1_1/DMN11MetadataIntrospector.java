@@ -11,6 +11,7 @@ import edu.mayo.kmdp.language.parsers.dmn.v1_1.DMN11Parser;
 import edu.mayo.kmdp.metadata.v2.surrogate.ComputableKnowledgeArtifact;
 import edu.mayo.kmdp.metadata.v2.surrogate.KnowledgeAsset;
 import edu.mayo.kmdp.tranx.v4.server.DeserializeApiInternal;
+import edu.mayo.kmdp.tranx.v4.server.DeserializeApiInternal._applyLift;
 import edu.mayo.ontology.taxonomies.api4kp.knowledgeoperations.KnowledgeProcessingOperationSeries;
 import java.util.UUID;
 import javax.inject.Named;
@@ -35,7 +36,7 @@ public class DMN11MetadataIntrospector implements IntrospectionApiInternal._intr
 
   @Autowired
   @KPSupport(DMN_1_1)
-  DeserializeApiInternal parser = new DMN11Parser();
+  _applyLift parser = new DMN11Parser();
 
   @Override
   public Answer<KnowledgeCarrier> introspect(
@@ -44,7 +45,7 @@ public class DMN11MetadataIntrospector implements IntrospectionApiInternal._intr
       String xAccept) {
     return parser
         // Parse as needed
-        .lift(sourceArtifact, Abstract_Knowledge_Expression)
+        .applyLift(sourceArtifact, Abstract_Knowledge_Expression, null, null)
         .flatMap(this::extractSurrogate);
   }
 

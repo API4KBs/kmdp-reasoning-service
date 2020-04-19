@@ -70,14 +70,14 @@ public class JenaQuery implements _askQuery {
                 .flatOpt(m -> m.as(Model.class))
                 .flatOpt(m -> applyQuery(query, m));
           } else {
-            return askQueryRemote(kBase.getEndpoint().toString(), query);
+            return askQueryRemote(kBase.getKbaseId().getHref().toString(), query);
           }
         });
   }
 
   private boolean isLocal(KnowledgeBase kBase) {
-    return kBase.getEndpoint() == null
-        || Util.isEmpty(kBase.getEndpoint().getScheme());
+    return kBase.getKbaseId().getHref() == null
+        || Util.isEmpty(kBase.getKbaseId().getHref().getScheme());
   }
 
   private Answer<List<Bindings>> askQueryRemote(String endpoint, KnowledgeCarrier query) {

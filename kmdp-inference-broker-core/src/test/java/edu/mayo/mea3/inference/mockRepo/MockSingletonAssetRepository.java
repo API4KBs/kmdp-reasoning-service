@@ -6,6 +6,7 @@ import edu.mayo.kmdp.repository.asset.v4.server.KnowledgeAssetRepositoryApiInter
 import java.util.List;
 import java.util.UUID;
 import org.omg.spec.api4kp._1_0.Answer;
+import org.omg.spec.api4kp._1_0.datatypes.Bindings;
 import org.omg.spec.api4kp._1_0.id.Pointer;
 import org.omg.spec.api4kp._1_0.services.KnowledgeCarrier;
 import org.omg.spec.api4kp._1_0.services.repository.KnowledgeAssetCatalog;
@@ -27,6 +28,24 @@ public class MockSingletonAssetRepository implements KnowledgeAssetRepositoryApi
   }
 
   @Override
+  public Answer<Void> addKnowledgeAssetCarrier(UUID assetId, String versionTag,
+      KnowledgeCarrier assetCarrier) {
+    return Answer.unsupported();
+  }
+
+  @Override
+  public Answer<Void> addKnowledgeAssetSurrogate(UUID assetId, String versionTag,
+      KnowledgeCarrier surrogateCarrier) {
+    return Answer.unsupported();
+  }
+
+  @Override
+  public Answer<Void> addKnowledgeAssetVersion(UUID assetId, String versionTag,
+      KnowledgeCarrier surrogateCarrier) {
+    return Answer.unsupported();
+  }
+
+  @Override
   public Answer<KnowledgeCarrier> getCanonicalKnowledgeAssetCarrier(UUID assetId, String versionTag,
       String xAccept) {
     if (assetId.equals(this.modelId) && versionTag.equals(this.version)) {
@@ -37,12 +56,17 @@ public class MockSingletonAssetRepository implements KnowledgeAssetRepositoryApi
   }
 
   @Override
-  public Answer<KnowledgeAsset> getVersionedKnowledgeAsset(UUID assetId, String versionTag) {
+  public Answer<KnowledgeAsset> getKnowledgeAssetVersion(UUID assetId, String versionTag) {
     if (assetId.equals(this.modelId) && versionTag.equals(this.version)) {
       return Answer.of(surrogate);
     } else {
       return Answer.notFound();
     }
+  }
+
+  @Override
+  public Answer<KnowledgeCarrier> getKnowledgeGraph(String xAccept) {
+    return Answer.unsupported();
   }
 
   @Override
@@ -56,9 +80,11 @@ public class MockSingletonAssetRepository implements KnowledgeAssetRepositoryApi
   }
 
   @Override
-  public Answer<Void> addKnowledgeAssetCarrier(UUID assetId, String versionTag, byte[] exemplar) {
+  public Answer<KnowledgeCarrier> getKnowledgeAssetSurrogateVersion(UUID assetId, String versionTag,
+      UUID surrogateId, String surrogateVersionTag, String xAccept) {
     return Answer.unsupported();
   }
+
 
   @Override
   public Answer<KnowledgeCarrier> getCanonicalKnowledgeAssetSurrogate(UUID assetId,
@@ -67,21 +93,35 @@ public class MockSingletonAssetRepository implements KnowledgeAssetRepositoryApi
   }
 
   @Override
-  public Answer<KnowledgeCarrier> getCanonicalKnowledgeAssetSurrogateVersion(UUID assetId,
-      String versionTag, String surrogateVersionTag, String xAccept) {
+  public Answer<KnowledgeCarrier> getCompositeKnowledgeAssetCarrier(UUID assetId, String versionTag,
+      Boolean flat, String xAccept) {
     return Answer.unsupported();
   }
 
   @Override
-  public Answer<List<Pointer>> getCanonicalKnowledgeAssetSurrogateVersions(UUID assetId,
-      String versionTag) {
+  public Answer<KnowledgeCarrier> getCompositeKnowledgeAssetStructure(UUID assetId,
+      String versionTag, String xAccept) {
     return Answer.unsupported();
   }
 
   @Override
-  public Answer<List<Pointer>> getKnowledgeAssetCarriers(UUID assetId, String versionTag) {
+  public Answer<KnowledgeCarrier> getCompositeKnowledgeAssetSurrogate(UUID assetId,
+      String versionTag, Boolean flat, String xAccept) {
     return Answer.unsupported();
   }
+
+  @Override
+  public Answer<KnowledgeCarrier> getKnowledgeAssetCarrier(UUID assetId, String versionTag,
+      UUID artifactId, String xAccept) {
+    return Answer.unsupported();
+  }
+
+  @Override
+  public Answer<KnowledgeCarrier> getKnowledgeAssetCarrierVersion(UUID assetId, String versionTag,
+      UUID artifactId, String artifactVersionTag, String xAccept) {
+    return Answer.unsupported();
+  }
+
 
   @Override
   public Answer<KnowledgeCarrier> getKnowledgeAssetSurrogateVersion(UUID assetId, String versionTag,
@@ -90,24 +130,40 @@ public class MockSingletonAssetRepository implements KnowledgeAssetRepositoryApi
   }
 
   @Override
-  public Answer<List<Pointer>> getKnowledgeAssetSurrogates(UUID assetId, String versionTag) {
+  public Answer<List<KnowledgeCarrier>> initCompositeKnowledgeAsset(UUID assetId, String versionTag,
+      String assetRelationshipTag, Integer depth) {
     return Answer.unsupported();
   }
 
   @Override
-  public Answer<Void> publishKnowledgeAsset(UUID assetId, String versionTag,
-      KnowledgeCarrier assetSurrogateCarrier) {
+  public Answer<List<Pointer>> listKnowledgeAssetCarrierVersions(UUID assetId, String versionTag,
+      UUID artifactId) {
     return Answer.unsupported();
   }
+
+  @Override
+  public Answer<List<Pointer>> listKnowledgeAssetCarriers(UUID assetId, String versionTag,
+      Integer offset, Integer limit, String beforeTag, String afterTag, String sort) {
+    return Answer.unsupported();
+  }
+
+  @Override
+  public Answer<List<Pointer>> listKnowledgeAssetSurrogateVersions(UUID assetId, String versionTag,
+      UUID surrogateId, Integer offset, Integer limit, String beforeTag, String afterTag,
+      String sort) {
+    return Answer.unsupported();
+  }
+
+  @Override
+  public Answer<List<Pointer>> listKnowledgeAssetSurrogates(UUID assetId, String versionTag,
+      Integer offset, Integer limit, String beforeTag, String afterTag, String sort) {
+    return Answer.unsupported();
+  }
+
 
   @Override
   public Answer<Void> setKnowledgeAssetCarrierVersion(UUID assetId, String versionTag,
       UUID artifactId, String artifactVersionTag, byte[] exemplar) {
-    return Answer.unsupported();
-  }
-
-  @Override
-  public Answer<KnowledgeAssetCatalog> getAssetCatalog() {
     return Answer.unsupported();
   }
 
@@ -117,13 +173,25 @@ public class MockSingletonAssetRepository implements KnowledgeAssetRepositoryApi
   }
 
   @Override
-  public Answer<List<Pointer>> getKnowledgeAssetVersions(UUID assetId, Integer offset,
-      Integer limit, String beforeTag, String afterTag, String sort) {
+  public Answer<KnowledgeAssetCatalog> getKnowledgeAssetCatalog() {
     return Answer.unsupported();
   }
 
   @Override
+  public Answer<KnowledgeAsset> getKnowledgeAssetVersion(UUID assetId, String versionTag,
+      String xAccept) {
+    return Answer.unsupported();
+  }
+
+
+  @Override
   public Answer<UUID> initKnowledgeAsset() {
+    return Answer.unsupported();
+  }
+
+  @Override
+  public Answer<List<Pointer>> listKnowledgeAssetVersions(UUID assetId, Integer offset,
+      Integer limit, String beforeTag, String afterTag, String sort) {
     return Answer.unsupported();
   }
 
@@ -134,8 +202,15 @@ public class MockSingletonAssetRepository implements KnowledgeAssetRepositoryApi
   }
 
   @Override
-  public Answer<Void> setVersionedKnowledgeAsset(UUID assetId, String versionTag,
+  public Answer<List<Bindings>> queryKnowledgeAssetGraph(KnowledgeCarrier graphQuery) {
+    return Answer.unsupported();
+  }
+
+  @Override
+  public Answer<Void> setKnowledgeAssetVersion(UUID assetId, String versionTag,
       KnowledgeAsset assetSurrogate) {
     return Answer.unsupported();
   }
+
+
 }
