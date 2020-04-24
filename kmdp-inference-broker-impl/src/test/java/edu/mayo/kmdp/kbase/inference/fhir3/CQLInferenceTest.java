@@ -28,7 +28,6 @@ import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.context.SpringBootTest.WebEnvironment;
 import org.springframework.test.context.ContextConfiguration;
 
-@Disabled
 @SpringBootTest(
 		webEnvironment = WebEnvironment.RANDOM_PORT,
 		classes = Swagger2SpringBoot.class)
@@ -45,7 +44,7 @@ public class CQLInferenceTest extends BaseInferenceIntegrationTest {
 	}
 
 	@Test
-	@Disabled
+	@Disabled("Current CQL engine does not support HAPI FHIR 4.x")
 	public void testCQLaaS() {
 		InferenceApiInternal infService = InferenceApi.newInstance(serverUrl);
 

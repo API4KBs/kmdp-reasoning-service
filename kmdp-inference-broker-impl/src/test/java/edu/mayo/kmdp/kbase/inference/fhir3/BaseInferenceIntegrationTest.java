@@ -26,6 +26,7 @@ import java.io.InputStream;
 import java.util.Arrays;
 import java.util.UUID;
 import org.omg.spec.api4kp._1_0.AbstractCarrier;
+import org.omg.spec.api4kp._1_0.id.IdentifierConstants;
 import org.omg.spec.api4kp._1_0.id.ResourceIdentifier;
 import org.omg.spec.api4kp._1_0.services.KPServer;
 import org.omg.spec.api4kp._1_0.services.KnowledgeCarrier;
@@ -39,7 +40,7 @@ import org.springframework.test.context.TestPropertySource;
 
 public abstract class BaseInferenceIntegrationTest {
 
-  static final String VTAG = "LATEST";
+  static final String VTAG = IdentifierConstants.VERSION_ZERO;
 
   @LocalServerPort
   protected int port;
