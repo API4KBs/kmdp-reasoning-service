@@ -15,12 +15,17 @@
  */
 package edu.mayo.kmdp.kbase.query.sparql.v1_1;
 
+import static edu.mayo.ontology.taxonomies.krformat.SerializationFormatSeries.TXT;
 import static edu.mayo.ontology.taxonomies.krlanguage.KnowledgeRepresentationLanguageSeries.SPARQL_1_1;
+import static org.omg.spec.api4kp._1_0.AbstractCarrier.rep;
 
 import edu.mayo.kmdp.inference.v4.server.QueryApiInternal._askQuery;
 import edu.mayo.kmdp.knowledgebase.v4.server.KnowledgeBaseApiInternal;
 import edu.mayo.kmdp.util.JenaUtil;
 import edu.mayo.kmdp.util.Util;
+import edu.mayo.ontology.taxonomies.kao.rel.dependencyreltype.DependencyTypeSeries;
+import java.net.URI;
+import java.nio.charset.Charset;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
@@ -38,8 +43,10 @@ import org.apache.jena.query.QuerySolution;
 import org.apache.jena.query.ResultSet;
 import org.apache.jena.rdf.model.Model;
 import org.apache.jena.rdf.model.RDFNode;
+import org.omg.spec.api4kp._1_0.AbstractCarrier;
 import org.omg.spec.api4kp._1_0.Answer;
 import org.omg.spec.api4kp._1_0.datatypes.Bindings;
+import org.omg.spec.api4kp._1_0.id.ResourceIdentifier;
 import org.omg.spec.api4kp._1_0.services.KPComponent;
 import org.omg.spec.api4kp._1_0.services.KPSupport;
 import org.omg.spec.api4kp._1_0.services.KnowledgeBase;
@@ -52,6 +59,13 @@ import org.springframework.beans.factory.annotation.Autowired;
 public class JenaQuery implements _askQuery {
 
   KnowledgeBaseApiInternal._getKnowledgeBase kBaseSource;
+
+  public static KnowledgeCarrier transitiveClosure(URI subject, URI property) {
+    String query = "" +
+        "select ?component where { <" + subject + "> <" + property + ">* ?component . }";
+    return AbstractCarrier.of(query)
+        .withRepresentation(rep(SPARQL_1_1, TXT, Charset.defaultCharset()));
+  }
 
   public JenaQuery(@Autowired(required = false) KnowledgeBaseApiInternal._getKnowledgeBase kBaseSource) {
     this.kBaseSource = kBaseSource;
