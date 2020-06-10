@@ -9,13 +9,13 @@
   </parent>
 
   <artifactId>kmdp-inference-broker</artifactId>
-  <version>3.7.1-SNAPSHOT</version>
+  <version>3.7.2-SNAPSHOT</version>
   <packaging>pom</packaging>
 
   <name>KMDP :: Server :: TEST :: Inference Broker</name>
 
   <properties>
-    <kmdp.servers.version>3.7.1-SNAPSHOT</kmdp.servers.version>
+    <kmdp.servers.version>3.7.2-SNAPSHOT</kmdp.servers.version>
   </properties>
 
   <modules>
