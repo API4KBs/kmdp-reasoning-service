@@ -12,7 +12,7 @@
   <version>3.7.2-SNAPSHOT</version>
   <packaging>pom</packaging>
 
-  <name>KMDP :: Server :: TEST :: Inference Broker</name>
+  <name>KMDP :: Service :: Inference Broker :: TEST</name>
 
   <properties>
     <kmdp.servers.version>3.7.2-SNAPSHOT</kmdp.servers.version>

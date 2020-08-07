@@ -15,7 +15,6 @@ package edu.mayo.kmdp.kbase.inference.dmn;
 
 import static edu.mayo.kmdp.util.NameUtils.camelCase;
 
-import edu.mayo.kmdp.id.Term;
 import edu.mayo.kmdp.inference.v4.server.InferenceApiInternal._infer;
 import edu.mayo.kmdp.terms.ConceptScheme;
 import edu.mayo.kmdp.util.Util;
@@ -39,7 +38,8 @@ import org.kie.dmn.api.core.DMNResult;
 import org.kie.dmn.api.core.DMNRuntime;
 import org.kie.dmn.api.core.ast.DecisionNode;
 import org.omg.spec.api4kp._1_0.Answer;
-import org.omg.spec.api4kp._1_0.identifiers.ConceptIdentifier;
+import org.omg.spec.api4kp._1_0.id.ConceptIdentifier;
+import org.omg.spec.api4kp._1_0.id.Term;
 import org.omg.spec.api4kp._1_0.services.KPOperation;
 import org.omg.spec.api4kp._1_0.services.KPSupport;
 import org.omg.spec.api4kp._1_0.services.KnowledgeBase;
@@ -115,8 +115,8 @@ public class SemanticDMNEvaluator implements _infer {
 
   private Term toConcept(String k) {
     return new ConceptIdentifier()
-        .withLabel(k)
-        .withConceptUUID(Util.uuid(k))
+        .withName(k)
+        .withUuid(Util.uuid(k))
         .withTag(k);
   }
 

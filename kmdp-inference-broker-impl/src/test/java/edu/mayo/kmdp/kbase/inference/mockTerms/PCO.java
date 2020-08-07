@@ -1,10 +1,7 @@
 package edu.mayo.kmdp.kbase.inference.mockTerms;
 
-
-import static edu.mayo.kmdp.id.helper.DatatypeHelper.resolveTerm;
-
-import edu.mayo.kmdp.id.Identifier;
-import edu.mayo.kmdp.id.Term;
+import java.util.Date;
+import org.omg.spec.api4kp._1_0.id.Term;
 import edu.mayo.kmdp.util.Util;
 import java.net.URI;
 import java.util.Arrays;
@@ -23,7 +20,7 @@ public enum PCO implements Term {
   ),
 
   Hodgkin_Lymphoma_5_Year_Survival_Rate(
-      "b7cdb1b3-8e96-419a-ac08-01d9b38de3e8",
+      "7ccda3bd-d8a9-4016-aef2-25ef961b1a56",
       "hodgkinLymphoma5YearSurvivalRate",
       "Hodgkin's Lymphoma Survival Rate (5 Year)"
   ),
@@ -58,7 +55,7 @@ public enum PCO implements Term {
 
 
   public static final Map<UUID,PCO> INDEX = Arrays.stream(PCO.values())
-      .collect(Collectors.toConcurrentMap(Term::getConceptUUID, Function.identity()));
+      .collect(Collectors.toConcurrentMap(Term::getUuid, Function.identity()));
 
   private UUID uuid;
   private String tag;
@@ -83,7 +80,9 @@ public enum PCO implements Term {
   }
 
   public static Optional<PCO> resolveTag(final String tag) {
-    return resolveTerm(tag, PCO.values(), Term::getTag);
+    return Arrays.stream(PCO.values())
+        .filter(x -> tag.equals(x.getTag()))
+        .findAny();
   }
 
   public static Optional<PCO> resolveUUID(final UUID conceptId) {
@@ -103,6 +102,21 @@ public enum PCO implements Term {
   }
 
   @Override
+  public String getName() {
+    return label;
+  }
+
+  @Override
+  public Date getEstablishedOn() {
+    return null;
+  }
+
+  @Override
+  public URI getReferentId() {
+    return null;
+  }
+
+  @Override
   public URI getRef() {
     return null;
   }
@@ -112,9 +126,24 @@ public enum PCO implements Term {
     return null;
   }
 
+
   @Override
-  public Identifier getNamespace() {
+  public URI getResourceId() {
     return null;
   }
 
+  @Override
+  public UUID getUuid() {
+    return uuid;
+  }
+
+  @Override
+  public URI getNamespaceUri() {
+    return null;
+  }
+
+  @Override
+  public String getVersionTag() {
+    return null;
+  }
 }

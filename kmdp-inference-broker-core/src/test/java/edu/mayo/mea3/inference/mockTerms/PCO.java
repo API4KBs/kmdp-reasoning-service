@@ -3,8 +3,8 @@ package edu.mayo.mea3.inference.mockTerms;
 
 import static edu.mayo.kmdp.id.helper.DatatypeHelper.resolveTerm;
 
-import edu.mayo.kmdp.id.Identifier;
-import edu.mayo.kmdp.id.Term;
+import java.util.Date;
+import org.omg.spec.api4kp._1_0.id.Term;
 import edu.mayo.kmdp.util.Util;
 import java.net.URI;
 import java.util.Arrays;
@@ -52,7 +52,7 @@ public enum PCO implements Term {
 
 
   public static final Map<UUID,PCO> INDEX = Arrays.stream(PCO.values())
-      .collect(Collectors.toConcurrentMap(Term::getConceptUUID, Function.identity()));
+      .collect(Collectors.toConcurrentMap(Term::getUuid, Function.identity()));
 
   private UUID uuid;
   private String tag;
@@ -85,6 +85,10 @@ public enum PCO implements Term {
   }
 
 
+  @Override
+  public URI getReferentId() {
+    return null;
+  }
 
   @Override
   public String getLabel() {
@@ -97,7 +101,12 @@ public enum PCO implements Term {
   }
 
   @Override
-  public URI getRef() {
+  public String getName() {
+    return null;
+  }
+
+  @Override
+  public Date getEstablishedOn() {
     return null;
   }
 
@@ -107,8 +116,22 @@ public enum PCO implements Term {
   }
 
   @Override
-  public Identifier getNamespace() {
+  public URI getResourceId() {
     return null;
   }
 
+  @Override
+  public UUID getUuid() {
+    return uuid;
+  }
+
+  @Override
+  public URI getNamespaceUri() {
+    return null;
+  }
+
+  @Override
+  public String getVersionTag() {
+    return null;
+  }
 }

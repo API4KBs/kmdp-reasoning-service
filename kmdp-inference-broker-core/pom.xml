@@ -12,7 +12,7 @@
 
   <artifactId>kmdp-inference-broker-core</artifactId>
 
-  <name>KMDP :: Server :: TEST :: Inference Broker (Internal)</name>
+  <name>KMDP :: Service :: Inference Broker :: TEST :: Impl</name>
 
   <dependencies>
 
