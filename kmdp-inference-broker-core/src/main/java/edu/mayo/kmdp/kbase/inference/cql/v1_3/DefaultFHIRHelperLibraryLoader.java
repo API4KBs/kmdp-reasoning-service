@@ -19,7 +19,7 @@ import edu.mayo.kmdp.util.FileUtil;
 import java.io.InputStream;
 import org.cqframework.cql.elm.execution.Library;
 import org.cqframework.cql.elm.execution.VersionedIdentifier;
-import org.omg.spec.api4kp._1_0.AbstractCarrier;
+import org.omg.spec.api4kp._20200801.AbstractCarrier;
 import org.opencds.cqf.cql.execution.LibraryLoader;
 
 public class DefaultFHIRHelperLibraryLoader implements LibraryLoader {

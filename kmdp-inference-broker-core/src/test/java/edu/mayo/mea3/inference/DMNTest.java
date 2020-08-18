@@ -16,16 +16,15 @@
 package edu.mayo.mea3.inference;
 
 import static edu.mayo.kmdp.util.NameUtils.camelCase;
-import static edu.mayo.ontology.taxonomies.krformat.SerializationFormatSeries.XML_1_1;
-import static edu.mayo.ontology.taxonomies.krlanguage.KnowledgeRepresentationLanguageSeries.DMN_1_1;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertTrue;
-import static org.omg.spec.api4kp._1_0.AbstractCarrier.rep;
+import static org.omg.spec.api4kp._20200801.AbstractCarrier.rep;
+import static org.omg.spec.api4kp.taxonomy.krformat.SerializationFormatSeries.XML_1_1;
+import static org.omg.spec.api4kp.taxonomy.krlanguage.KnowledgeRepresentationLanguageSeries.DMN_1_1;
 
 import ca.uhn.fhir.context.FhirContext;
 import ca.uhn.fhir.parser.IParser;
 import edu.mayo.kmdp.kbase.inference.dmn.KieDMNHelper;
-import edu.mayo.kmdp.repository.asset.v4.server.KnowledgeAssetRepositoryApiInternal;
 import edu.mayo.mea3.inference.mockTerms.PCO;
 import java.math.BigDecimal;
 import java.util.UUID;
@@ -39,8 +38,9 @@ import org.junit.jupiter.api.Test;
 import org.kie.dmn.api.core.DMNContext;
 import org.kie.dmn.api.core.DMNModel;
 import org.kie.dmn.api.core.DMNRuntime;
-import org.omg.spec.api4kp._1_0.datatypes.Map;
-import org.omg.spec.api4kp._1_0.services.KnowledgeBase;
+import org.omg.spec.api4kp._20200801.api.repository.asset.v4.server.KnowledgeAssetRepositoryApiInternal;
+import org.omg.spec.api4kp._20200801.datatypes.Map;
+import org.omg.spec.api4kp._20200801.services.KnowledgeBase;
 
 public class DMNTest extends InferenceBaseTest {
 

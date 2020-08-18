@@ -13,14 +13,11 @@
  */
 package edu.mayo.kmdp.kbase.inference.cql.v1_3;
 
-import static edu.mayo.kmdp.metadata.v2.surrogate.SurrogateHelper.canonicalRepresentationOf;
-import static edu.mayo.ontology.taxonomies.krlanguage.KnowledgeRepresentationLanguageSeries.FHIR_STU3;
-import static edu.mayo.ontology.taxonomies.krlanguage.KnowledgeRepresentationLanguageSeries.HL7_CQL;
+import static org.omg.spec.api4kp._20200801.surrogate.SurrogateHelper.canonicalRepresentationOf;
+import static org.omg.spec.api4kp.taxonomy.knowledgeoperation.KnowledgeProcessingOperationSeries.Inference_Task;
+import static org.omg.spec.api4kp.taxonomy.krlanguage.KnowledgeRepresentationLanguageSeries.FHIR_STU3;
+import static org.omg.spec.api4kp.taxonomy.krlanguage.KnowledgeRepresentationLanguageSeries.HL7_CQL;
 
-import edu.mayo.kmdp.inference.v4.server.InferenceApiInternal._infer;
-import edu.mayo.kmdp.metadata.v2.surrogate.KnowledgeAsset;
-import edu.mayo.ontology.taxonomies.api4kp.knowledgeoperations.KnowledgeProcessingOperationSeries;
-import edu.mayo.ontology.taxonomies.krlanguage.KnowledgeRepresentationLanguage;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Optional;
@@ -28,19 +25,22 @@ import java.util.UUID;
 import org.cqframework.cql.elm.execution.AccessModifier;
 import org.cqframework.cql.elm.execution.FunctionDef;
 import org.cqframework.cql.elm.execution.Library;
-import org.omg.spec.api4kp._1_0.AbstractCarrier;
-import org.omg.spec.api4kp._1_0.Answer;
-import org.omg.spec.api4kp._1_0.id.KeyIdentifier;
-import org.omg.spec.api4kp._1_0.id.SemanticIdentifier;
-import org.omg.spec.api4kp._1_0.services.KPOperation;
-import org.omg.spec.api4kp._1_0.services.KPSupport;
-import org.omg.spec.api4kp._1_0.services.KnowledgeBase;
-import org.omg.spec.api4kp._1_0.services.KnowledgeCarrier;
-import org.omg.spec.api4kp._1_0.services.SyntacticRepresentation;
+import org.omg.spec.api4kp._20200801.AbstractCarrier;
+import org.omg.spec.api4kp._20200801.Answer;
+import org.omg.spec.api4kp._20200801.api.inference.v4.server.InferenceApiInternal._infer;
+import org.omg.spec.api4kp._20200801.id.KeyIdentifier;
+import org.omg.spec.api4kp._20200801.id.SemanticIdentifier;
+import org.omg.spec.api4kp._20200801.services.KPOperation;
+import org.omg.spec.api4kp._20200801.services.KPSupport;
+import org.omg.spec.api4kp._20200801.services.KnowledgeBase;
+import org.omg.spec.api4kp._20200801.services.KnowledgeCarrier;
+import org.omg.spec.api4kp._20200801.services.SyntacticRepresentation;
+import org.omg.spec.api4kp._20200801.surrogate.KnowledgeAsset;
+import org.omg.spec.api4kp.taxonomy.krlanguage.KnowledgeRepresentationLanguage;
 import org.opencds.cqf.cql.execution.Context;
 
 
-@KPOperation(KnowledgeProcessingOperationSeries.Inference_Task)
+@KPOperation(Inference_Task)
 @KPSupport(HL7_CQL)
 public class CQLEvaluator
     implements _infer {

@@ -14,12 +14,9 @@
 
 package edu.mayo.kmdp.kbase.inference;
 
-import edu.mayo.kmdp.inference.v4.server.InferenceApiInternal;
-import edu.mayo.kmdp.inference.v4.server.ModelApiInternal;
-import edu.mayo.kmdp.metadata.v2.surrogate.KnowledgeAsset;
-import edu.mayo.kmdp.repository.asset.v4.server.KnowledgeAssetCatalogApiInternal;
+import static org.omg.spec.api4kp.taxonomy.knowledgeoperation.KnowledgeProcessingOperationSeries.Inference_Task;
+
 import edu.mayo.kmdp.util.StreamUtil;
-import edu.mayo.ontology.taxonomies.api4kp.knowledgeoperations.KnowledgeProcessingOperationSeries;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -28,18 +25,22 @@ import java.util.Set;
 import java.util.UUID;
 import java.util.function.Function;
 import javax.inject.Named;
-import org.omg.spec.api4kp._1_0.Answer;
-import org.omg.spec.api4kp._1_0.id.KeyIdentifier;
-import org.omg.spec.api4kp._1_0.id.Pointer;
-import org.omg.spec.api4kp._1_0.id.SemanticIdentifier;
-import org.omg.spec.api4kp._1_0.services.KPOperation;
-import org.omg.spec.api4kp._1_0.services.KPServer;
-import org.omg.spec.api4kp._1_0.services.KnowledgeCarrier;
+import org.omg.spec.api4kp._20200801.Answer;
+import org.omg.spec.api4kp._20200801.api.inference.v4.server.InferenceApiInternal;
+import org.omg.spec.api4kp._20200801.api.inference.v4.server.ModelApiInternal;
+import org.omg.spec.api4kp._20200801.api.repository.asset.v4.server.KnowledgeAssetCatalogApiInternal;
+import org.omg.spec.api4kp._20200801.id.KeyIdentifier;
+import org.omg.spec.api4kp._20200801.id.Pointer;
+import org.omg.spec.api4kp._20200801.id.SemanticIdentifier;
+import org.omg.spec.api4kp._20200801.services.KPOperation;
+import org.omg.spec.api4kp._20200801.services.KPServer;
+import org.omg.spec.api4kp._20200801.services.KnowledgeCarrier;
+import org.omg.spec.api4kp._20200801.surrogate.KnowledgeAsset;
 import org.springframework.beans.factory.annotation.Autowired;
 
 @KPServer
 @Named
-@KPOperation(KnowledgeProcessingOperationSeries.Inference_Task)
+@KPOperation(Inference_Task)
 public class InferenceBroker implements InferenceApiInternal, ModelApiInternal {
 
   private java.util.Map<KeyIdentifier, KnowledgeAsset> knownModels = new HashMap<>();

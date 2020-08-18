@@ -1,13 +1,13 @@
 package edu.mayo.kmdp.kbase.inference.cql.v1_3;
 
-import edu.mayo.kmdp.inference.v4.server.InferenceApiInternal._infer;
+import static org.omg.spec.api4kp.taxonomy.krlanguage.KnowledgeRepresentationLanguageSeries.HL7_CQL;
+
 import edu.mayo.kmdp.kbase.inference.AbstractEvaluatorProvider;
-import edu.mayo.kmdp.knowledgebase.v4.server.KnowledgeBaseApiInternal;
-import edu.mayo.kmdp.metadata.v2.surrogate.KnowledgeAsset;
-import edu.mayo.kmdp.repository.asset.v4.server.KnowledgeAssetRepositoryApiInternal;
-import edu.mayo.ontology.taxonomies.krlanguage.KnowledgeRepresentationLanguageSeries;
 import javax.inject.Named;
-import org.omg.spec.api4kp._1_0.services.KPServer;
+import org.omg.spec.api4kp._20200801.api.inference.v4.server.InferenceApiInternal._infer;
+import org.omg.spec.api4kp._20200801.api.knowledgebase.v4.server.KnowledgeBaseApiInternal;
+import org.omg.spec.api4kp._20200801.services.KPServer;
+import org.omg.spec.api4kp._20200801.surrogate.KnowledgeAsset;
 import org.springframework.beans.factory.annotation.Autowired;
 
 @Named
@@ -19,7 +19,7 @@ public class CQLEngineProvider
   public CQLEngineProvider(
       @KPServer
       @Autowired
-      KnowledgeBaseApiInternal kbaseManager
+          KnowledgeBaseApiInternal kbaseManager
 //      @KPServer
 //      @Autowired
 //      KnowledgeAssetRepositoryApiInternal assetRepo
@@ -38,7 +38,7 @@ public class CQLEngineProvider
   @Override
   protected boolean supportsRepresentation(KnowledgeAsset knowledgeAsset) {
     return detectLanguage(knowledgeAsset)
-        .map(lang -> lang.asEnum() == KnowledgeRepresentationLanguageSeries.HL7_CQL)
+        .map(lang -> lang.sameAs(HL7_CQL))
         .orElse(false);
   }
 }

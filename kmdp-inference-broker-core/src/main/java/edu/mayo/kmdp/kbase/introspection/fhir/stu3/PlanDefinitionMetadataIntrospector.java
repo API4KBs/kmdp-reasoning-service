@@ -1,33 +1,33 @@
 package edu.mayo.kmdp.kbase.introspection.fhir.stu3;
 
-import static edu.mayo.kmdp.metadata.v2.surrogate.SurrogateBuilder.newSurrogate;
-import static edu.mayo.ontology.taxonomies.api4kp.parsinglevel.ParsingLevelSeries.Parsed_Knowedge_Expression;
-import static edu.mayo.ontology.taxonomies.krlanguage.KnowledgeRepresentationLanguageSeries.FHIR_STU3;
-import static edu.mayo.ontology.taxonomies.krlanguage.KnowledgeRepresentationLanguageSeries.Knowledge_Asset_Surrogate;
-import static org.omg.spec.api4kp._1_0.AbstractCarrier.rep;
+import static org.omg.spec.api4kp._20200801.AbstractCarrier.rep;
+import static org.omg.spec.api4kp._20200801.surrogate.SurrogateBuilder.newSurrogate;
+import static org.omg.spec.api4kp.taxonomy.knowledgeassettype.KnowledgeAssetTypeSeries.Cognitive_Care_Process_Model;
+import static org.omg.spec.api4kp.taxonomy.krlanguage.KnowledgeRepresentationLanguageSeries.FHIR_STU3;
+import static org.omg.spec.api4kp.taxonomy.krlanguage.KnowledgeRepresentationLanguageSeries.Knowledge_Asset_Surrogate_2_0;
 
-import edu.mayo.kmdp.inference.v4.server.IntrospectionApiInternal;
-import edu.mayo.kmdp.metadata.v2.surrogate.ComputableKnowledgeArtifact;
-import edu.mayo.kmdp.metadata.v2.surrogate.KnowledgeAsset;
-import edu.mayo.kmdp.metadata.v2.surrogate.SurrogateBuilder;
-import edu.mayo.ontology.taxonomies.api4kp.knowledgeoperations.KnowledgeProcessingOperationSeries;
-import edu.mayo.ontology.taxonomies.kao.knowledgeassettype.KnowledgeAssetTypeSeries;
 import java.util.UUID;
 import javax.inject.Named;
-import org.omg.spec.api4kp._1_0.AbstractCarrier;
-import org.omg.spec.api4kp._1_0.Answer;
-import org.omg.spec.api4kp._1_0.id.ResourceIdentifier;
-import org.omg.spec.api4kp._1_0.services.KPComponent;
-import org.omg.spec.api4kp._1_0.services.KPOperation;
-import org.omg.spec.api4kp._1_0.services.KPSupport;
-import org.omg.spec.api4kp._1_0.services.KnowledgeCarrier;
+import org.omg.spec.api4kp._20200801.AbstractCarrier;
+import org.omg.spec.api4kp._20200801.Answer;
+import org.omg.spec.api4kp._20200801.api.inference.v4.server.IntrospectionApiInternal;
+import org.omg.spec.api4kp._20200801.id.ResourceIdentifier;
+import org.omg.spec.api4kp._20200801.services.KPComponent;
+import org.omg.spec.api4kp._20200801.services.KPOperation;
+import org.omg.spec.api4kp._20200801.services.KPSupport;
+import org.omg.spec.api4kp._20200801.services.KnowledgeCarrier;
+import org.omg.spec.api4kp._20200801.surrogate.KnowledgeArtifact;
+import org.omg.spec.api4kp._20200801.surrogate.KnowledgeAsset;
+import org.omg.spec.api4kp._20200801.surrogate.SurrogateBuilder;
+import org.omg.spec.api4kp.taxonomy.knowledgeoperation.KnowledgeProcessingOperationSeries;
+import org.omg.spec.api4kp.taxonomy.parsinglevel.ParsingLevelSeries;
 
 /**
  * Introspection class for PlanDefinitions. Generates the surrogate (KnowledgeAsset) for the
  * PlanDefinition given the KnowledgeCarrier.
  */
 @Named
-@KPOperation(KnowledgeProcessingOperationSeries.Extract_Description_Task)
+@KPOperation(KnowledgeProcessingOperationSeries.Language_Information_Detection_Task)
 @KPSupport(FHIR_STU3)
 @KPComponent
 public class PlanDefinitionMetadataIntrospector implements IntrospectionApiInternal._introspect {
@@ -51,18 +51,18 @@ public class PlanDefinitionMetadataIntrospector implements IntrospectionApiInter
     ResourceIdentifier uri = SurrogateBuilder.assetId(uuid.toString(), "LATEST");
     KnowledgeAsset surrogate = newSurrogate(uri).get()
         .withName(knowledgeCarrier.getLabel())
-        .withFormalType(KnowledgeAssetTypeSeries.Cognitive_Care_Process_Model)
-        .withCarriers(new ComputableKnowledgeArtifact()
+        .withFormalType(Cognitive_Care_Process_Model)
+        .withCarriers(new KnowledgeArtifact()
             .withArtifactId(knowledgeCarrier.getArtifactId())
             .withRepresentation(rep(FHIR_STU3)));
 
     return Answer.of(
         AbstractCarrier.ofAst(surrogate)
             .withAssetId(knowledgeCarrier.getAssetId())
-            .withLevel(Parsed_Knowedge_Expression)
+            .withLevel(ParsingLevelSeries.Abstract_Knowledge_Expression)
             // TODO improve...
             .withArtifactId(surrogate.getSurrogate().get(0).getArtifactId())
-            .withRepresentation(rep(Knowledge_Asset_Surrogate))
+            .withRepresentation(rep(Knowledge_Asset_Surrogate_2_0))
     );
 
   }

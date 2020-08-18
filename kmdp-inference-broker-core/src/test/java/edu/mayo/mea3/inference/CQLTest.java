@@ -23,9 +23,6 @@ import edu.mayo.kmdp.kbase.inference.InferenceBroker;
 import edu.mayo.kmdp.kbase.inference.cql.v1_3.CQLEngineProvider;
 import edu.mayo.kmdp.kbase.inference.dmn.v1_1.DMNEngineProvider;
 import edu.mayo.kmdp.knowledgebase.KnowledgeBaseProvider;
-import edu.mayo.kmdp.knowledgebase.v4.server.KnowledgeBaseApiInternal;
-import edu.mayo.kmdp.repository.asset.v4.server.KnowledgeAssetCatalogApiInternal;
-import edu.mayo.kmdp.repository.asset.v4.server.KnowledgeAssetRepositoryApiInternal;
 import edu.mayo.kmdp.util.DateTimeUtil;
 import edu.mayo.mea3.inference.mockRepo.MockSingletonAssetRepository;
 import edu.mayo.mea3.inference.mockTerms.PCO;
@@ -49,6 +46,9 @@ import org.hl7.fhir.dstu3.model.Patient;
 import org.hl7.fhir.dstu3.model.Quantity;
 import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
+import org.omg.spec.api4kp._20200801.api.knowledgebase.v4.server.KnowledgeBaseApiInternal;
+import org.omg.spec.api4kp._20200801.api.repository.asset.v4.server.KnowledgeAssetCatalogApiInternal;
+import org.omg.spec.api4kp._20200801.api.repository.asset.v4.server.KnowledgeAssetRepositoryApiInternal;
 
 @Disabled
 public class CQLTest extends InferenceBaseTest {

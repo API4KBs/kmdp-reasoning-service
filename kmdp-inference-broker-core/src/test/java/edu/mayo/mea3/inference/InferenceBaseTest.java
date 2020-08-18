@@ -2,29 +2,29 @@ package edu.mayo.mea3.inference;
 
 import static edu.mayo.kmdp.kbase.introspection.cql.v1_3.CQLMetadataIntrospector.CQL_1_3_EXTRACTOR;
 import static edu.mayo.kmdp.kbase.introspection.dmn.v1_1.DMN11MetadataIntrospector.DMN1_1_EXTRACTOR;
-import static edu.mayo.ontology.taxonomies.krformat.SerializationFormatSeries.TXT;
-import static edu.mayo.ontology.taxonomies.krformat.SerializationFormatSeries.XML_1_1;
-import static edu.mayo.ontology.taxonomies.krlanguage.KnowledgeRepresentationLanguageSeries.DMN_1_1;
-import static edu.mayo.ontology.taxonomies.krlanguage.KnowledgeRepresentationLanguageSeries.HL7_CQL;
-import static org.omg.spec.api4kp._1_0.AbstractCarrier.rep;
+import static org.omg.spec.api4kp._20200801.AbstractCarrier.rep;
+import static org.omg.spec.api4kp.taxonomy.krformat.SerializationFormatSeries.TXT;
+import static org.omg.spec.api4kp.taxonomy.krformat.SerializationFormatSeries.XML_1_1;
+import static org.omg.spec.api4kp.taxonomy.krlanguage.KnowledgeRepresentationLanguageSeries.DMN_1_1;
+import static org.omg.spec.api4kp.taxonomy.krlanguage.KnowledgeRepresentationLanguageSeries.HL7_CQL;
+import static org.omg.spec.api4kp.taxonomy.parsinglevel.ParsingLevelSeries.Encoded_Knowledge_Expression;
 import static org.springframework.test.util.AssertionErrors.fail;
 
 import edu.mayo.kmdp.kbase.inference.dmn.KieDMNHelper;
 import edu.mayo.kmdp.kbase.introspection.cql.v1_3.CQLMetadataIntrospector;
 import edu.mayo.kmdp.kbase.introspection.dmn.DMNMetadataIntrospector;
-import edu.mayo.kmdp.metadata.v2.surrogate.KnowledgeAsset;
-import edu.mayo.kmdp.metadata.v2.surrogate.SurrogateBuilder;
-import edu.mayo.kmdp.repository.asset.v4.server.KnowledgeAssetRepositoryApiInternal;
 import edu.mayo.mea3.inference.mockRepo.MockSingletonAssetRepository;
-import edu.mayo.ontology.taxonomies.api4kp.parsinglevel.ParsingLevelSeries;
 import java.io.InputStream;
 import java.util.UUID;
 import org.kie.dmn.api.core.DMNRuntime;
-import org.omg.spec.api4kp._1_0.AbstractCarrier;
-import org.omg.spec.api4kp._1_0.services.KPComponent;
-import org.omg.spec.api4kp._1_0.services.KnowledgeBase;
-import org.omg.spec.api4kp._1_0.services.KnowledgeCarrier;
-import org.omg.spec.api4kp._1_0.services.SyntacticRepresentation;
+import org.omg.spec.api4kp._20200801.AbstractCarrier;
+import org.omg.spec.api4kp._20200801.api.repository.asset.v4.server.KnowledgeAssetRepositoryApiInternal;
+import org.omg.spec.api4kp._20200801.services.KPComponent;
+import org.omg.spec.api4kp._20200801.services.KnowledgeBase;
+import org.omg.spec.api4kp._20200801.services.KnowledgeCarrier;
+import org.omg.spec.api4kp._20200801.services.SyntacticRepresentation;
+import org.omg.spec.api4kp._20200801.surrogate.KnowledgeAsset;
+import org.omg.spec.api4kp._20200801.surrogate.SurrogateBuilder;
 
 public abstract class InferenceBaseTest {
 
@@ -62,7 +62,7 @@ public abstract class InferenceBaseTest {
         .of(getBytes(path))
         .withAssetId(SurrogateBuilder.assetId(modelId.toString(),version))
         .withArtifactId(SurrogateBuilder.artifactId(UUID.randomUUID().toString(),VTAG))
-        .withLevel(ParsingLevelSeries.Encoded_Knowledge_Expression)
+        .withLevel(Encoded_Knowledge_Expression)
         .withRepresentation(rep);
 
     return new MockSingletonAssetRepository(modelId, version, carrier, getSurrogate(carrier));

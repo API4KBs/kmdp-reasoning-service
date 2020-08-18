@@ -1,38 +1,38 @@
 package edu.mayo.kmdp.kbase.introspection.struct;
 
-import static edu.mayo.kmdp.metadata.v2.surrogate.SurrogateBuilder.newSurrogate;
-import static edu.mayo.ontology.taxonomies.api4kp.parsinglevel.ParsingLevelSeries.Parsed_Knowedge_Expression;
-import static edu.mayo.ontology.taxonomies.kao.knowledgeassetrole.KnowledgeAssetRoleSeries.Composite_Knowledge_Asset;
-import static edu.mayo.ontology.taxonomies.krlanguage.KnowledgeRepresentationLanguageSeries.Knowledge_Asset_Surrogate_2_0;
-import static edu.mayo.ontology.taxonomies.krlanguage.KnowledgeRepresentationLanguageSeries.OWL_2;
-import static org.omg.spec.api4kp._1_0.AbstractCarrier.rep;
+import static org.omg.spec.api4kp._20200801.AbstractCarrier.rep;
+import static org.omg.spec.api4kp._20200801.surrogate.SurrogateBuilder.newSurrogate;
+import static org.omg.spec.api4kp.taxonomy.knowledgeassetrole._20190801.KnowledgeAssetRole.Composite_Knowledge_Asset;
+import static org.omg.spec.api4kp.taxonomy.krlanguage.KnowledgeRepresentationLanguageSeries.Knowledge_Asset_Surrogate_2_0;
+import static org.omg.spec.api4kp.taxonomy.krlanguage.KnowledgeRepresentationLanguageSeries.OWL_2;
+import static org.omg.spec.api4kp.taxonomy.parsinglevel.ParsingLevelSeries.Concrete_Knowledge_Expression;
+import static org.omg.spec.api4kp.taxonomy.structuralreltype.StructuralPartTypeSeries.Has_Structural_Component;
 
-import edu.mayo.kmdp.inference.v4.server.IntrospectionApiInternal;
 import edu.mayo.kmdp.language.parsers.owl2.JenaOwlParser;
-import edu.mayo.kmdp.metadata.v2.surrogate.Component;
-import edu.mayo.kmdp.metadata.v2.surrogate.ComputableKnowledgeArtifact;
-import edu.mayo.kmdp.metadata.v2.surrogate.KnowledgeAsset;
-import edu.mayo.kmdp.tranx.v4.server.DeserializeApiInternal._applyLift;
-import edu.mayo.ontology.taxonomies.api4kp.knowledgeoperations.KnowledgeProcessingOperationSeries;
-import edu.mayo.ontology.taxonomies.kao.rel.structuralreltype.StructuralPartTypeSeries;
 import java.net.URI;
 import java.util.UUID;
 import javax.inject.Named;
 import org.apache.jena.rdf.model.Model;
 import org.apache.jena.rdf.model.RDFNode;
 import org.apache.jena.rdf.model.ResourceFactory;
-import org.omg.spec.api4kp._1_0.AbstractCarrier;
-import org.omg.spec.api4kp._1_0.Answer;
-import org.omg.spec.api4kp._1_0.id.SemanticIdentifier;
-import org.omg.spec.api4kp._1_0.services.CompositeKnowledgeCarrier;
-import org.omg.spec.api4kp._1_0.services.KPComponent;
-import org.omg.spec.api4kp._1_0.services.KPOperation;
-import org.omg.spec.api4kp._1_0.services.KPSupport;
-import org.omg.spec.api4kp._1_0.services.KnowledgeCarrier;
+import org.omg.spec.api4kp._20200801.AbstractCarrier;
+import org.omg.spec.api4kp._20200801.Answer;
+import org.omg.spec.api4kp._20200801.api.inference.v4.server.IntrospectionApiInternal;
+import org.omg.spec.api4kp._20200801.api.transrepresentation.v4.server.DeserializeApiInternal._applyLift;
+import org.omg.spec.api4kp._20200801.id.SemanticIdentifier;
+import org.omg.spec.api4kp._20200801.services.CompositeKnowledgeCarrier;
+import org.omg.spec.api4kp._20200801.services.KPComponent;
+import org.omg.spec.api4kp._20200801.services.KPOperation;
+import org.omg.spec.api4kp._20200801.services.KPSupport;
+import org.omg.spec.api4kp._20200801.services.KnowledgeCarrier;
+import org.omg.spec.api4kp._20200801.surrogate.Component;
+import org.omg.spec.api4kp._20200801.surrogate.KnowledgeArtifact;
+import org.omg.spec.api4kp._20200801.surrogate.KnowledgeAsset;
+import org.omg.spec.api4kp.taxonomy.knowledgeoperation.KnowledgeProcessingOperationSeries;
 import org.springframework.beans.factory.annotation.Autowired;
 
 @Named
-@KPOperation(KnowledgeProcessingOperationSeries.Extract_Description_Task)
+@KPOperation(KnowledgeProcessingOperationSeries.Language_Information_Detection_Task)
 @KPSupport(OWL_2)
 @KPComponent
 public class CompositeAssetMetadataIntrospector
@@ -54,7 +54,7 @@ public class CompositeAssetMetadataIntrospector
       return Answer.unsupported();
     }
     CompositeKnowledgeCarrier ckc = (CompositeKnowledgeCarrier) sourceArtifact;
-    return parser.applyLift(ckc.getStruct(),Parsed_Knowedge_Expression,null,null)
+    return parser.applyLift(ckc.getStruct(), Concrete_Knowledge_Expression,null,null)
         .flatOpt(kc -> kc.as(Model.class))
         .flatMap(model -> extractSurrogate(ckc, model));
   }
@@ -68,7 +68,7 @@ public class CompositeAssetMetadataIntrospector
     KnowledgeAsset surrogate = newSurrogate(carrier.getAssetId()).get()
         .withName(carrier.getLabel())
         .withRole(Composite_Knowledge_Asset)
-        .withCarriers(new ComputableKnowledgeArtifact()
+        .withCarriers(new KnowledgeArtifact()
             .withArtifactId(struct.getArtifactId())
             .withRepresentation(struct.getRepresentation())
         );
@@ -79,7 +79,7 @@ public class CompositeAssetMetadataIntrospector
         (RDFNode) null)
         .forEachRemaining(st -> surrogate.withLinks(
             new Component()
-                .withRel(StructuralPartTypeSeries.Has_Part)
+                .withRel(Has_Structural_Component)
                 .withHref(SemanticIdentifier.newVersionId(
                     URI.create(st.getObject().asResource().getURI())))));
 

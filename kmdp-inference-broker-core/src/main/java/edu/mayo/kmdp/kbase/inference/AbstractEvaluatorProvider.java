@@ -1,18 +1,18 @@
 package edu.mayo.kmdp.kbase.inference;
 
-import static edu.mayo.kmdp.metadata.v2.surrogate.SurrogateHelper.canonicalRepresentationOf;
+import static org.omg.spec.api4kp._20200801.surrogate.SurrogateHelper.canonicalRepresentationOf;
 
-import edu.mayo.kmdp.inference.v4.server.InferenceApiInternal;
-import edu.mayo.kmdp.knowledgebase.v4.server.KnowledgeBaseApiInternal;
-import edu.mayo.kmdp.metadata.v2.surrogate.KnowledgeAsset;
-import edu.mayo.ontology.taxonomies.krlanguage.KnowledgeRepresentationLanguage;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Optional;
 import java.util.function.Function;
-import org.omg.spec.api4kp._1_0.id.KeyIdentifier;
-import org.omg.spec.api4kp._1_0.id.ResourceIdentifier;
-import org.omg.spec.api4kp._1_0.services.SyntacticRepresentation;
+import org.omg.spec.api4kp._20200801.api.inference.v4.server.InferenceApiInternal;
+import org.omg.spec.api4kp._20200801.api.knowledgebase.v4.server.KnowledgeBaseApiInternal;
+import org.omg.spec.api4kp._20200801.id.KeyIdentifier;
+import org.omg.spec.api4kp._20200801.id.ResourceIdentifier;
+import org.omg.spec.api4kp._20200801.services.SyntacticRepresentation;
+import org.omg.spec.api4kp._20200801.surrogate.KnowledgeAsset;
+import org.omg.spec.api4kp.taxonomy.krlanguage.KnowledgeRepresentationLanguage;
 
 public abstract class AbstractEvaluatorProvider
     implements Function<KnowledgeAsset, Optional<InferenceApiInternal._infer>> {

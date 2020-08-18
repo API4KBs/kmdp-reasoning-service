@@ -15,15 +15,12 @@
  */
 package edu.mayo.kmdp.kbase.query.sparql.v1_1;
 
-import static edu.mayo.ontology.taxonomies.krformat.SerializationFormatSeries.TXT;
-import static edu.mayo.ontology.taxonomies.krlanguage.KnowledgeRepresentationLanguageSeries.SPARQL_1_1;
-import static org.omg.spec.api4kp._1_0.AbstractCarrier.rep;
+import static org.omg.spec.api4kp._20200801.AbstractCarrier.rep;
+import static org.omg.spec.api4kp.taxonomy.krformat.SerializationFormatSeries.TXT;
+import static org.omg.spec.api4kp.taxonomy.krlanguage.KnowledgeRepresentationLanguageSeries.SPARQL_1_1;
 
-import edu.mayo.kmdp.inference.v4.server.QueryApiInternal._askQuery;
-import edu.mayo.kmdp.knowledgebase.v4.server.KnowledgeBaseApiInternal;
 import edu.mayo.kmdp.util.JenaUtil;
 import edu.mayo.kmdp.util.Util;
-import edu.mayo.ontology.taxonomies.kao.rel.dependencyreltype.DependencyTypeSeries;
 import java.net.URI;
 import java.nio.charset.Charset;
 import java.util.LinkedList;
@@ -43,14 +40,15 @@ import org.apache.jena.query.QuerySolution;
 import org.apache.jena.query.ResultSet;
 import org.apache.jena.rdf.model.Model;
 import org.apache.jena.rdf.model.RDFNode;
-import org.omg.spec.api4kp._1_0.AbstractCarrier;
-import org.omg.spec.api4kp._1_0.Answer;
-import org.omg.spec.api4kp._1_0.datatypes.Bindings;
-import org.omg.spec.api4kp._1_0.id.ResourceIdentifier;
-import org.omg.spec.api4kp._1_0.services.KPComponent;
-import org.omg.spec.api4kp._1_0.services.KPSupport;
-import org.omg.spec.api4kp._1_0.services.KnowledgeBase;
-import org.omg.spec.api4kp._1_0.services.KnowledgeCarrier;
+import org.omg.spec.api4kp._20200801.AbstractCarrier;
+import org.omg.spec.api4kp._20200801.Answer;
+import org.omg.spec.api4kp._20200801.api.inference.v4.server.QueryApiInternal._askQuery;
+import org.omg.spec.api4kp._20200801.api.knowledgebase.v4.server.KnowledgeBaseApiInternal;
+import org.omg.spec.api4kp._20200801.datatypes.Bindings;
+import org.omg.spec.api4kp._20200801.services.KPComponent;
+import org.omg.spec.api4kp._20200801.services.KPSupport;
+import org.omg.spec.api4kp._20200801.services.KnowledgeBase;
+import org.omg.spec.api4kp._20200801.services.KnowledgeCarrier;
 import org.springframework.beans.factory.annotation.Autowired;
 
 @Named
@@ -120,12 +118,12 @@ public class JenaQuery implements _askQuery {
     Optional<Query> qry = Optional.empty();
     switch (query.getLevel().asEnum()) {
       case Encoded_Knowledge_Expression:
-      case Concrete_Knowledge_Expression:
+      case Serialized_Knowledge_Expression:
         qry = query.asString()
             .map(ParameterizedSparqlString::new)
             .map(ParameterizedSparqlString::asQuery);
         break;
-      case Parsed_Knowedge_Expression:
+      case Concrete_Knowledge_Expression:
         qry = query.as(Query.class);
         break;
       default:

@@ -1,31 +1,30 @@
 package edu.mayo.kmdp.kbase.introspection.dmn.v1_2;
 
-import static edu.mayo.kmdp.metadata.v2.surrogate.SurrogateBuilder.newSurrogate;
-import static edu.mayo.ontology.taxonomies.api4kp.parsinglevel.ParsingLevelSeries.Abstract_Knowledge_Expression;
-import static edu.mayo.ontology.taxonomies.krlanguage.KnowledgeRepresentationLanguageSeries.DMN_1_2;
-import static edu.mayo.ontology.taxonomies.krlanguage.KnowledgeRepresentationLanguageSeries.Knowledge_Asset_Surrogate;
-import static org.omg.spec.api4kp._1_0.AbstractCarrier.rep;
+import static org.omg.spec.api4kp._20200801.AbstractCarrier.rep;
+import static org.omg.spec.api4kp._20200801.surrogate.SurrogateBuilder.newSurrogate;
+import static org.omg.spec.api4kp.taxonomy.krlanguage.KnowledgeRepresentationLanguageSeries.DMN_1_2;
+import static org.omg.spec.api4kp.taxonomy.krlanguage.KnowledgeRepresentationLanguageSeries.Knowledge_Asset_Surrogate_2_0;
+import static org.omg.spec.api4kp.taxonomy.parsinglevel.ParsingLevelSeries.Abstract_Knowledge_Expression;
 
-import edu.mayo.kmdp.inference.v4.server.IntrospectionApiInternal;
 import edu.mayo.kmdp.language.parsers.dmn.v1_2.DMN12Parser;
-import edu.mayo.kmdp.metadata.v2.surrogate.ComputableKnowledgeArtifact;
-import edu.mayo.kmdp.metadata.v2.surrogate.KnowledgeAsset;
-import edu.mayo.kmdp.tranx.v4.server.DeserializeApiInternal;
-import edu.mayo.kmdp.tranx.v4.server.DeserializeApiInternal._applyLift;
-import edu.mayo.ontology.taxonomies.api4kp.knowledgeoperations.KnowledgeProcessingOperationSeries;
 import java.util.UUID;
 import javax.inject.Named;
-import org.omg.spec.api4kp._1_0.AbstractCarrier;
-import org.omg.spec.api4kp._1_0.Answer;
-import org.omg.spec.api4kp._1_0.services.KPComponent;
-import org.omg.spec.api4kp._1_0.services.KPOperation;
-import org.omg.spec.api4kp._1_0.services.KPSupport;
-import org.omg.spec.api4kp._1_0.services.KnowledgeCarrier;
+import org.omg.spec.api4kp._20200801.AbstractCarrier;
+import org.omg.spec.api4kp._20200801.Answer;
+import org.omg.spec.api4kp._20200801.api.inference.v4.server.IntrospectionApiInternal;
+import org.omg.spec.api4kp._20200801.api.transrepresentation.v4.server.DeserializeApiInternal._applyLift;
+import org.omg.spec.api4kp._20200801.services.KPComponent;
+import org.omg.spec.api4kp._20200801.services.KPOperation;
+import org.omg.spec.api4kp._20200801.services.KPSupport;
+import org.omg.spec.api4kp._20200801.services.KnowledgeCarrier;
+import org.omg.spec.api4kp._20200801.surrogate.KnowledgeArtifact;
+import org.omg.spec.api4kp._20200801.surrogate.KnowledgeAsset;
+import org.omg.spec.api4kp.taxonomy.knowledgeoperation.KnowledgeProcessingOperationSeries;
 import org.omg.spec.dmn._20180521.model.TDefinitions;
 import org.springframework.beans.factory.annotation.Autowired;
 
 @Named
-@KPOperation(KnowledgeProcessingOperationSeries.Extract_Description_Task)
+@KPOperation(KnowledgeProcessingOperationSeries.Language_Information_Detection_Task)
 @KPSupport(DMN_1_2)
 @KPComponent
 public class DMN12MetadataIntrospector implements IntrospectionApiInternal._introspect {
@@ -55,7 +54,7 @@ public class DMN12MetadataIntrospector implements IntrospectionApiInternal._intr
 
     KnowledgeAsset surrogate = newSurrogate(carrier.getAssetId()).get()
         .withName(dmnModel.getName())
-        .withCarriers(new ComputableKnowledgeArtifact()
+        .withCarriers(new KnowledgeArtifact()
             .withArtifactId(carrier.getArtifactId())
             .withRepresentation(rep(DMN_1_2)));
 
@@ -65,7 +64,7 @@ public class DMN12MetadataIntrospector implements IntrospectionApiInternal._intr
             .withLevel(Abstract_Knowledge_Expression)
             // TODO improve...
             .withArtifactId(surrogate.getSurrogate().get(0).getArtifactId())
-            .withRepresentation(rep(Knowledge_Asset_Surrogate))
+            .withRepresentation(rep(Knowledge_Asset_Surrogate_2_0))
     );
   }
 

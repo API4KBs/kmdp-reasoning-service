@@ -14,13 +14,11 @@
 package edu.mayo.kmdp.kbase.inference.dmn;
 
 import static edu.mayo.kmdp.util.NameUtils.camelCase;
+import static org.omg.spec.api4kp.taxonomy.knowledgeoperation.KnowledgeProcessingOperationSeries.Inference_Task;
+import static org.omg.spec.api4kp.taxonomy.krlanguage.KnowledgeRepresentationLanguageSeries.DMN_1_1;
 
-import edu.mayo.kmdp.inference.v4.server.InferenceApiInternal._infer;
-import edu.mayo.kmdp.terms.ConceptScheme;
 import edu.mayo.kmdp.util.Util;
 import edu.mayo.kmdp.util.fhir.fhir3.FHIR3DataTypeConstructor;
-import edu.mayo.ontology.taxonomies.api4kp.knowledgeoperations.KnowledgeProcessingOperationSeries;
-import edu.mayo.ontology.taxonomies.krlanguage.KnowledgeRepresentationLanguageSeries;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Optional;
@@ -37,18 +35,20 @@ import org.kie.dmn.api.core.DMNModel;
 import org.kie.dmn.api.core.DMNResult;
 import org.kie.dmn.api.core.DMNRuntime;
 import org.kie.dmn.api.core.ast.DecisionNode;
-import org.omg.spec.api4kp._1_0.Answer;
-import org.omg.spec.api4kp._1_0.id.ConceptIdentifier;
-import org.omg.spec.api4kp._1_0.id.Term;
-import org.omg.spec.api4kp._1_0.services.KPOperation;
-import org.omg.spec.api4kp._1_0.services.KPSupport;
-import org.omg.spec.api4kp._1_0.services.KnowledgeBase;
+import org.omg.spec.api4kp._20200801.Answer;
+import org.omg.spec.api4kp._20200801.api.inference.v4.server.InferenceApiInternal._infer;
+import org.omg.spec.api4kp._20200801.id.ConceptIdentifier;
+import org.omg.spec.api4kp._20200801.id.Term;
+import org.omg.spec.api4kp._20200801.services.KPOperation;
+import org.omg.spec.api4kp._20200801.services.KPSupport;
+import org.omg.spec.api4kp._20200801.services.KnowledgeBase;
+import org.omg.spec.api4kp._20200801.terms.ConceptScheme;
 import org.opencds.cqf.cql.terminology.TerminologyProvider;
 import org.springframework.beans.factory.annotation.Autowired;
 
 
-@KPSupport(KnowledgeRepresentationLanguageSeries.DMN_1_1)
-@KPOperation(KnowledgeProcessingOperationSeries.Inference_Task)
+@KPSupport(DMN_1_1)
+@KPOperation(Inference_Task)
 public class SemanticDMNEvaluator implements _infer {
 
   private DMNRuntime runtime;

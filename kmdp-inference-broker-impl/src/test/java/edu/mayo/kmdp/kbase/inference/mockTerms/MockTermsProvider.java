@@ -1,14 +1,14 @@
 package edu.mayo.kmdp.kbase.inference.mockTerms;
 
-import edu.mayo.kmdp.terms.impl.model.ConceptDescriptor;
-import edu.mayo.kmdp.terms.v4.server.TermsApiInternal;
 import java.util.List;
 import java.util.UUID;
 import javax.inject.Named;
-import org.omg.spec.api4kp._1_0.Answer;
-import org.omg.spec.api4kp._1_0.id.Pointer;
-import org.omg.spec.api4kp._1_0.services.KPServer;
-import org.omg.spec.api4kp._1_0.services.KnowledgeCarrier;
+import org.omg.spec.api4kp._20200801.Answer;
+import org.omg.spec.api4kp._20200801.api.terminology.v4.server.TermsApiInternal;
+import org.omg.spec.api4kp._20200801.id.Pointer;
+import org.omg.spec.api4kp._20200801.services.KPServer;
+import org.omg.spec.api4kp._20200801.services.KnowledgeCarrier;
+import org.omg.spec.api4kp._20200801.terms.model.ConceptDescriptor;
 
 @KPServer
 @Named

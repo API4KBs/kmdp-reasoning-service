@@ -3,13 +3,14 @@ package edu.mayo.kmdp.kbase.inference.fhir3;
 import static edu.mayo.kmdp.kbase.introspection.cql.v1_3.CQLMetadataIntrospector.CQL_1_3_EXTRACTOR;
 import static edu.mayo.kmdp.kbase.introspection.dmn.v1_1.DMN11MetadataIntrospector.DMN1_1_EXTRACTOR;
 import static edu.mayo.kmdp.kbase.introspection.fhir.stu3.PlanDefinitionMetadataIntrospector.FHIR_STU3_EXTRACTOR;
-import static edu.mayo.kmdp.metadata.v2.surrogate.SurrogateBuilder.artifactId;
-import static edu.mayo.kmdp.metadata.v2.surrogate.SurrogateBuilder.assetId;
-import static edu.mayo.ontology.taxonomies.krformat.SerializationFormatSeries.TXT;
-import static edu.mayo.ontology.taxonomies.krformat.SerializationFormatSeries.XML_1_1;
-import static edu.mayo.ontology.taxonomies.krlanguage.KnowledgeRepresentationLanguageSeries.DMN_1_1;
-import static edu.mayo.ontology.taxonomies.krlanguage.KnowledgeRepresentationLanguageSeries.HL7_CQL;
 import static org.junit.jupiter.api.Assertions.fail;
+import static org.omg.spec.api4kp._20200801.surrogate.SurrogateBuilder.artifactId;
+import static org.omg.spec.api4kp._20200801.surrogate.SurrogateBuilder.assetId;
+import static org.omg.spec.api4kp.taxonomy.krformat.SerializationFormatSeries.TXT;
+import static org.omg.spec.api4kp.taxonomy.krformat.SerializationFormatSeries.XML_1_1;
+import static org.omg.spec.api4kp.taxonomy.krlanguage.KnowledgeRepresentationLanguageSeries.DMN_1_1;
+import static org.omg.spec.api4kp.taxonomy.krlanguage.KnowledgeRepresentationLanguageSeries.HL7_CQL;
+import static org.omg.spec.api4kp.taxonomy.parsinglevel.ParsingLevelSeries.Encoded_Knowledge_Expression;
 
 import edu.mayo.kmdp.kbase.inference.InferenceBroker;
 import edu.mayo.kmdp.kbase.inference.mockRepo.MockAssetRepository;
@@ -18,19 +19,18 @@ import edu.mayo.kmdp.kbase.introspection.dmn.DMNMetadataIntrospector;
 import edu.mayo.kmdp.kbase.introspection.fhir.stu3.PlanDefinitionMetadataIntrospector;
 import edu.mayo.kmdp.knowledgebase.KnowledgeBaseProvider;
 import edu.mayo.kmdp.language.LanguageDeSerializer;
-import edu.mayo.kmdp.metadata.v2.surrogate.KnowledgeAsset;
 import edu.mayo.kmdp.util.Util;
-import edu.mayo.ontology.taxonomies.api4kp.parsinglevel.ParsingLevelSeries;
-import edu.mayo.ontology.taxonomies.krlanguage.KnowledgeRepresentationLanguage;
 import java.io.InputStream;
 import java.util.Arrays;
 import java.util.UUID;
-import org.omg.spec.api4kp._1_0.AbstractCarrier;
-import org.omg.spec.api4kp._1_0.id.IdentifierConstants;
-import org.omg.spec.api4kp._1_0.id.ResourceIdentifier;
-import org.omg.spec.api4kp._1_0.services.KPServer;
-import org.omg.spec.api4kp._1_0.services.KnowledgeCarrier;
-import org.omg.spec.api4kp._1_0.services.SyntacticRepresentation;
+import org.omg.spec.api4kp._20200801.AbstractCarrier;
+import org.omg.spec.api4kp._20200801.id.IdentifierConstants;
+import org.omg.spec.api4kp._20200801.id.ResourceIdentifier;
+import org.omg.spec.api4kp._20200801.services.KPServer;
+import org.omg.spec.api4kp._20200801.services.KnowledgeCarrier;
+import org.omg.spec.api4kp._20200801.services.SyntacticRepresentation;
+import org.omg.spec.api4kp._20200801.surrogate.KnowledgeAsset;
+import org.omg.spec.api4kp.taxonomy.krlanguage.KnowledgeRepresentationLanguage;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.web.server.LocalServerPort;
 import org.springframework.context.annotation.Bean;
@@ -93,7 +93,7 @@ public abstract class BaseInferenceIntegrationTest {
           .of(getBytes(path))
           .withAssetId(assetId)
           .withArtifactId(artifactId(UUID.randomUUID().toString(),VTAG))
-          .withLevel(ParsingLevelSeries.Encoded_Knowledge_Expression)
+          .withLevel(Encoded_Knowledge_Expression)
           .withRepresentation(rep);
     }
 

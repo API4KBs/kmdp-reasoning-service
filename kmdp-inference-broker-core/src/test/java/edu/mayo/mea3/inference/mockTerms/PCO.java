@@ -4,7 +4,7 @@ package edu.mayo.mea3.inference.mockTerms;
 import static edu.mayo.kmdp.id.helper.DatatypeHelper.resolveTerm;
 
 import java.util.Date;
-import org.omg.spec.api4kp._1_0.id.Term;
+import org.omg.spec.api4kp._20200801.id.Term;
 import edu.mayo.kmdp.util.Util;
 import java.net.URI;
 import java.util.Arrays;

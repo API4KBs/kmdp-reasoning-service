@@ -1,13 +1,14 @@
 package edu.mayo.kmdp.kbase.inference.dmn.v1_1;
 
-import edu.mayo.kmdp.inference.v4.server.InferenceApiInternal._infer;
+import static org.omg.spec.api4kp.taxonomy.krlanguage.KnowledgeRepresentationLanguageSeries.DMN_1_1;
+
 import edu.mayo.kmdp.kbase.inference.AbstractEvaluatorProvider;
 import edu.mayo.kmdp.kbase.inference.dmn.SemanticDMNEvaluator;
-import edu.mayo.kmdp.knowledgebase.v4.server.KnowledgeBaseApiInternal;
-import edu.mayo.kmdp.metadata.v2.surrogate.KnowledgeAsset;
-import edu.mayo.ontology.taxonomies.krlanguage.KnowledgeRepresentationLanguageSeries;
 import javax.inject.Named;
-import org.omg.spec.api4kp._1_0.services.KPServer;
+import org.omg.spec.api4kp._20200801.api.inference.v4.server.InferenceApiInternal._infer;
+import org.omg.spec.api4kp._20200801.api.knowledgebase.v4.server.KnowledgeBaseApiInternal;
+import org.omg.spec.api4kp._20200801.services.KPServer;
+import org.omg.spec.api4kp._20200801.surrogate.KnowledgeAsset;
 import org.springframework.beans.factory.annotation.Autowired;
 
 @Named
@@ -17,7 +18,7 @@ public class DMNEngineProvider
   public DMNEngineProvider(
       @KPServer
       @Autowired
-      KnowledgeBaseApiInternal kbaseManager) {
+          KnowledgeBaseApiInternal kbaseManager) {
     super(kbaseManager);
   }
 
@@ -31,7 +32,7 @@ public class DMNEngineProvider
 
   protected boolean supportsRepresentation(KnowledgeAsset knowledgeAsset) {
     return detectLanguage(knowledgeAsset)
-        .map(lang -> lang.asEnum() == KnowledgeRepresentationLanguageSeries.DMN_1_1)
+        .map(lang -> lang.isSame(DMN_1_1))
         .orElse(false);
   }
 }
