@@ -1,6 +1,6 @@
 package edu.mayo.kmdp.kbase.inference.dmn.v1_1;
 
-import static org.omg.spec.api4kp.taxonomy.krlanguage.KnowledgeRepresentationLanguageSeries.DMN_1_1;
+import static org.omg.spec.api4kp._20200801.taxonomy.krlanguage.KnowledgeRepresentationLanguageSeries.DMN_1_1;
 
 import edu.mayo.kmdp.kbase.inference.AbstractEvaluatorProvider;
 import edu.mayo.kmdp.kbase.inference.dmn.SemanticDMNEvaluator;

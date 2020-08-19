@@ -14,7 +14,7 @@
 
 package edu.mayo.kmdp.kbase.inference;
 
-import static org.omg.spec.api4kp.taxonomy.knowledgeoperation.KnowledgeProcessingOperationSeries.Inference_Task;
+import static org.omg.spec.api4kp._20200801.taxonomy.knowledgeoperation.KnowledgeProcessingOperationSeries.Inference_Task;
 
 import edu.mayo.kmdp.util.StreamUtil;
 import java.util.HashMap;

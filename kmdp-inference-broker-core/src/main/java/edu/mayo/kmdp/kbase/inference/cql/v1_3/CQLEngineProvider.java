@@ -1,6 +1,6 @@
 package edu.mayo.kmdp.kbase.inference.cql.v1_3;
 
-import static org.omg.spec.api4kp.taxonomy.krlanguage.KnowledgeRepresentationLanguageSeries.HL7_CQL;
+import static org.omg.spec.api4kp._20200801.taxonomy.krlanguage.KnowledgeRepresentationLanguageSeries.HL7_CQL;
 
 import edu.mayo.kmdp.kbase.inference.AbstractEvaluatorProvider;
 import javax.inject.Named;

@@ -14,8 +14,8 @@
 package edu.mayo.kmdp.kbase.inference.dmn;
 
 import static edu.mayo.kmdp.util.NameUtils.camelCase;
-import static org.omg.spec.api4kp.taxonomy.knowledgeoperation.KnowledgeProcessingOperationSeries.Inference_Task;
-import static org.omg.spec.api4kp.taxonomy.krlanguage.KnowledgeRepresentationLanguageSeries.DMN_1_1;
+import static org.omg.spec.api4kp._20200801.taxonomy.knowledgeoperation.KnowledgeProcessingOperationSeries.Inference_Task;
+import static org.omg.spec.api4kp._20200801.taxonomy.krlanguage.KnowledgeRepresentationLanguageSeries.DMN_1_1;
 
 import edu.mayo.kmdp.util.Util;
 import edu.mayo.kmdp.util.fhir.fhir3.FHIR3DataTypeConstructor;
