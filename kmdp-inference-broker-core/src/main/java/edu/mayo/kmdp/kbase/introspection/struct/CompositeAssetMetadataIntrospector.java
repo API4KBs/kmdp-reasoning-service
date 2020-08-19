@@ -3,6 +3,7 @@ package edu.mayo.kmdp.kbase.introspection.struct;
 import static org.omg.spec.api4kp._20200801.AbstractCarrier.rep;
 import static org.omg.spec.api4kp._20200801.surrogate.SurrogateBuilder.newSurrogate;
 import static org.omg.spec.api4kp.taxonomy.knowledgeassetrole._20190801.KnowledgeAssetRole.Composite_Knowledge_Asset;
+import static org.omg.spec.api4kp.taxonomy.knowledgeoperation.KnowledgeProcessingOperationSeries.Description_Task;
 import static org.omg.spec.api4kp.taxonomy.krlanguage.KnowledgeRepresentationLanguageSeries.Knowledge_Asset_Surrogate_2_0;
 import static org.omg.spec.api4kp.taxonomy.krlanguage.KnowledgeRepresentationLanguageSeries.OWL_2;
 import static org.omg.spec.api4kp.taxonomy.parsinglevel.ParsingLevelSeries.Concrete_Knowledge_Expression;
@@ -28,11 +29,10 @@ import org.omg.spec.api4kp._20200801.services.KnowledgeCarrier;
 import org.omg.spec.api4kp._20200801.surrogate.Component;
 import org.omg.spec.api4kp._20200801.surrogate.KnowledgeArtifact;
 import org.omg.spec.api4kp._20200801.surrogate.KnowledgeAsset;
-import org.omg.spec.api4kp.taxonomy.knowledgeoperation.KnowledgeProcessingOperationSeries;
 import org.springframework.beans.factory.annotation.Autowired;
 
 @Named
-@KPOperation(KnowledgeProcessingOperationSeries.Language_Information_Detection_Task)
+@KPOperation(Description_Task)
 @KPSupport(OWL_2)
 @KPComponent
 public class CompositeAssetMetadataIntrospector
