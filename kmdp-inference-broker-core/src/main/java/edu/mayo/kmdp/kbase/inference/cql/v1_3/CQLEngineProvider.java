@@ -7,6 +7,7 @@ import javax.inject.Named;
 import org.omg.spec.api4kp._20200801.api.inference.v4.server.InferenceApiInternal._infer;
 import org.omg.spec.api4kp._20200801.api.knowledgebase.v4.server.KnowledgeBaseApiInternal;
 import org.omg.spec.api4kp._20200801.services.KPServer;
+import org.omg.spec.api4kp._20200801.services.KnowledgeCarrier;
 import org.omg.spec.api4kp._20200801.surrogate.KnowledgeAsset;
 import org.springframework.beans.factory.annotation.Autowired;
 
@@ -28,7 +29,7 @@ public class CQLEngineProvider
   }
 
   @Override
-  protected _infer getEvaluator(KnowledgeAsset knowledgeAsset) {
+  protected _infer getEvaluator(KnowledgeCarrier knowledgeAsset) {
     return kbase.initKnowledgeBase(knowledgeAsset)
         .flatMap(kbId -> kbase.getKnowledgeBase(kbId.getUuid(),kbId.getVersionTag()))
         .map(CQLEvaluator::new)

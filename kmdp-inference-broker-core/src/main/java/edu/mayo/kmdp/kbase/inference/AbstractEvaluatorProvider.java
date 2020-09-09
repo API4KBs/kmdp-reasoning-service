@@ -1,6 +1,7 @@
 package edu.mayo.kmdp.kbase.inference;
 
 import static org.omg.spec.api4kp._20200801.surrogate.SurrogateHelper.canonicalRepresentationOf;
+import static org.omg.spec.api4kp._20200801.taxonomy.parsinglevel._20200801.ParsingLevel.Knowledge_Expression;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -10,9 +11,13 @@ import org.omg.spec.api4kp._20200801.api.inference.v4.server.InferenceApiInterna
 import org.omg.spec.api4kp._20200801.api.knowledgebase.v4.server.KnowledgeBaseApiInternal;
 import org.omg.spec.api4kp._20200801.id.KeyIdentifier;
 import org.omg.spec.api4kp._20200801.id.ResourceIdentifier;
+import org.omg.spec.api4kp._20200801.services.KnowledgeCarrier;
 import org.omg.spec.api4kp._20200801.services.SyntacticRepresentation;
+import org.omg.spec.api4kp._20200801.surrogate.KnowledgeArtifact;
 import org.omg.spec.api4kp._20200801.surrogate.KnowledgeAsset;
+import org.omg.spec.api4kp._20200801.surrogate.SurrogateHelper;
 import org.omg.spec.api4kp._20200801.taxonomy.krlanguage.KnowledgeRepresentationLanguage;
+import org.omg.spec.api4kp._20200801.taxonomy.parsinglevel.ParsingLevelSeries;
 
 public abstract class AbstractEvaluatorProvider
     implements Function<KnowledgeAsset, Optional<InferenceApiInternal._infer>> {
@@ -41,7 +46,11 @@ public abstract class AbstractEvaluatorProvider
     return getEvaluator(knowledgeAsset);
   }
 
-  protected abstract InferenceApiInternal._infer getEvaluator(KnowledgeAsset knowledgeAsset);
+  protected InferenceApiInternal._infer getEvaluator(KnowledgeAsset knowledgeAsset) {
+    return getEvaluator(SurrogateHelper.toRuntimeSurrogate(knowledgeAsset));
+  }
+
+  protected abstract InferenceApiInternal._infer getEvaluator(KnowledgeCarrier knowledgeAsset);
 
   protected boolean supportsRepresentation(KnowledgeAsset knowledgeAsset) {
     return knowledgeAsset == null;
