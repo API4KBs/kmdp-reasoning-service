@@ -20,11 +20,7 @@ public class CQLEngineProvider
   public CQLEngineProvider(
       @KPServer
       @Autowired
-          KnowledgeBaseApiInternal kbaseManager
-//      @KPServer
-//      @Autowired
-//      KnowledgeAssetRepositoryApiInternal assetRepo
-  ) {
+          KnowledgeBaseApiInternal kbaseManager) {
     super(kbaseManager);
   }
 

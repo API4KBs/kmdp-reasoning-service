@@ -120,6 +120,7 @@ public enum PCO implements Term {
     return null;
   }
 
+
   @Override
   public UUID getUuid() {
     return uuid;
@@ -127,6 +128,11 @@ public enum PCO implements Term {
 
   @Override
   public URI getNamespaceUri() {
+    return null;
+  }
+
+  @Override
+  public URI getVersionId() {
     return null;
   }
 

@@ -70,9 +70,6 @@ public abstract class BaseInferenceIntegrationTest {
     @Autowired
     PlanDefinitionMetadataIntrospector pdMetadataExtractor;
 
-    @Autowired
-    KnowledgeBaseProvider provider;
-
     @Bean
     @KPServer
     public MockAssetRepository backingRepo() {

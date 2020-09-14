@@ -127,6 +127,7 @@ public enum PCO implements Term {
   }
 
 
+
   @Override
   public URI getResourceId() {
     return null;
@@ -139,6 +140,11 @@ public enum PCO implements Term {
 
   @Override
   public URI getNamespaceUri() {
+    return null;
+  }
+
+  @Override
+  public URI getVersionId() {
     return null;
   }
 
