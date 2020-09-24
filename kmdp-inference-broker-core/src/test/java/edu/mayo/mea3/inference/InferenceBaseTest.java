@@ -1,7 +1,5 @@
 package edu.mayo.mea3.inference;
 
-import static edu.mayo.kmdp.kbase.introspection.cql.v1_3.CQLMetadataIntrospector.CQL_1_3_EXTRACTOR;
-import static edu.mayo.kmdp.kbase.introspection.dmn.v1_1.DMN11MetadataIntrospector.DMN1_1_EXTRACTOR;
 import static org.omg.spec.api4kp._20200801.AbstractCarrier.rep;
 import static org.omg.spec.api4kp._20200801.taxonomy.krformat.SerializationFormatSeries.TXT;
 import static org.omg.spec.api4kp._20200801.taxonomy.krformat.SerializationFormatSeries.XML_1_1;
@@ -11,30 +9,40 @@ import static org.omg.spec.api4kp._20200801.taxonomy.parsinglevel.ParsingLevelSe
 import static org.springframework.test.util.AssertionErrors.fail;
 
 import edu.mayo.kmdp.kbase.inference.dmn.KieDMNHelper;
-import edu.mayo.kmdp.kbase.introspection.cql.v1_3.CQLMetadataIntrospector;
-import edu.mayo.kmdp.kbase.introspection.dmn.DMNMetadataIntrospector;
+import edu.mayo.kmdp.knowledgebase.KnowledgeBaseProvider;
+import edu.mayo.kmdp.knowledgebase.introspectors.cql.v1_3.CQLMetadataIntrospector;
+import edu.mayo.kmdp.knowledgebase.introspectors.dmn.DMNMetadataIntrospector;
+import edu.mayo.kmdp.knowledgebase.introspectors.dmn.v1_1.DMN11MetadataIntrospector;
+import edu.mayo.kmdp.language.parsers.dmn.v1_1.DMN11Parser;
 import edu.mayo.mea3.inference.mockRepo.MockSingletonAssetRepository;
 import java.io.InputStream;
 import java.util.UUID;
+import org.junit.jupiter.api.Assertions;
 import org.kie.dmn.api.core.DMNRuntime;
 import org.omg.spec.api4kp._20200801.AbstractCarrier;
+import org.omg.spec.api4kp._20200801.api.knowledgebase.v4.server.KnowledgeBaseApiInternal;
 import org.omg.spec.api4kp._20200801.api.repository.asset.v4.server.KnowledgeAssetRepositoryApiInternal;
+import org.omg.spec.api4kp._20200801.id.Pointer;
 import org.omg.spec.api4kp._20200801.services.KPComponent;
 import org.omg.spec.api4kp._20200801.services.KnowledgeBase;
 import org.omg.spec.api4kp._20200801.services.KnowledgeCarrier;
 import org.omg.spec.api4kp._20200801.services.SyntacticRepresentation;
 import org.omg.spec.api4kp._20200801.surrogate.KnowledgeAsset;
 import org.omg.spec.api4kp._20200801.surrogate.SurrogateBuilder;
+import org.omg.spec.api4kp._20200801.taxonomy.parsinglevel.ParsingLevelSeries;
 
 public abstract class InferenceBaseTest {
 
-  static final String VTAG = "LATEST";
+  static final String VTAG = "0.0.0-LATEST";
 
   @KPComponent
-  DMNMetadataIntrospector dmnMetadataExtractor = new DMNMetadataIntrospector();
+  KnowledgeBaseApiInternal kbManager = new KnowledgeBaseProvider(null);
 
   @KPComponent
-  CQLMetadataIntrospector cqlMetadataExtractor = new CQLMetadataIntrospector();
+  DMNMetadataIntrospector dmnMetadataExtractor = new DMNMetadataIntrospector(kbManager);
+
+  @KPComponent
+  CQLMetadataIntrospector cqlMetadataExtractor = new CQLMetadataIntrospector(kbManager);
 
 
   protected MockSingletonAssetRepository initMockRepo(UUID modelId, String version,
@@ -69,16 +77,19 @@ public abstract class InferenceBaseTest {
   }
 
   private KnowledgeAsset getSurrogate(KnowledgeCarrier carrier) {
+
+    Pointer ptr = kbManager.initKnowledgeBase(carrier).orElseGet(Assertions::fail);
+
     switch (carrier.getRepresentation().getLanguage().asEnum()) {
       case DMN_1_1:
         return dmnMetadataExtractor
-            .introspect(DMN1_1_EXTRACTOR, carrier, null)
+            .applyNamedIntrospect(DMN11MetadataIntrospector.id, ptr.getUuid(),ptr.getVersionTag(),null)
             .flatOpt(kc -> kc.as(KnowledgeAsset.class))
             .orElseThrow(UnsupportedOperationException::new);
 
       case HL7_CQL:
         return cqlMetadataExtractor
-            .introspect(CQL_1_3_EXTRACTOR, carrier, null)
+            .applyNamedIntrospect(CQLMetadataIntrospector.id, ptr.getUuid(),ptr.getVersionTag(),null)
             .flatOpt(kc -> kc.as(KnowledgeAsset.class))
             .orElseThrow(UnsupportedOperationException::new);
       default:

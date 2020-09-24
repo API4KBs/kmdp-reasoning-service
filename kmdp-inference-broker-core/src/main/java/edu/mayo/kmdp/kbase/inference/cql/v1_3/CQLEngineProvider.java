@@ -4,7 +4,7 @@ import static org.omg.spec.api4kp._20200801.taxonomy.krlanguage.KnowledgeReprese
 
 import edu.mayo.kmdp.kbase.inference.AbstractEvaluatorProvider;
 import javax.inject.Named;
-import org.omg.spec.api4kp._20200801.api.inference.v4.server.InferenceApiInternal._infer;
+import org.omg.spec.api4kp._20200801.api.inference.v4.server.ReasoningApiInternal._evaluate;
 import org.omg.spec.api4kp._20200801.api.knowledgebase.v4.server.KnowledgeBaseApiInternal;
 import org.omg.spec.api4kp._20200801.services.KPServer;
 import org.omg.spec.api4kp._20200801.services.KnowledgeCarrier;
@@ -25,7 +25,7 @@ public class CQLEngineProvider
   }
 
   @Override
-  protected _infer getEvaluator(KnowledgeCarrier knowledgeAsset) {
+  protected _evaluate getEvaluator(KnowledgeCarrier knowledgeAsset) {
     return kbase.initKnowledgeBase(knowledgeAsset)
         .flatMap(kbId -> kbase.getKnowledgeBase(kbId.getUuid(),kbId.getVersionTag()))
         .map(CQLEvaluator::new)

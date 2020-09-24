@@ -19,16 +19,16 @@ import static org.omg.spec.api4kp._20200801.taxonomy.knowledgeoperation.Knowledg
 import edu.mayo.kmdp.util.StreamUtil;
 import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 import java.util.Optional;
 import java.util.Set;
 import java.util.UUID;
 import java.util.function.Function;
 import javax.inject.Named;
 import org.omg.spec.api4kp._20200801.Answer;
-import org.omg.spec.api4kp._20200801.api.inference.v4.server.InferenceApiInternal;
 import org.omg.spec.api4kp._20200801.api.inference.v4.server.ModelApiInternal;
+import org.omg.spec.api4kp._20200801.api.inference.v4.server.ReasoningApiInternal;
 import org.omg.spec.api4kp._20200801.api.repository.asset.v4.server.KnowledgeAssetCatalogApiInternal;
+import org.omg.spec.api4kp._20200801.datatypes.Bindings;
 import org.omg.spec.api4kp._20200801.id.KeyIdentifier;
 import org.omg.spec.api4kp._20200801.id.Pointer;
 import org.omg.spec.api4kp._20200801.id.SemanticIdentifier;
@@ -41,31 +41,31 @@ import org.springframework.beans.factory.annotation.Autowired;
 @KPServer
 @Named
 @KPOperation(Inference_Task)
-public class InferenceBroker implements InferenceApiInternal, ModelApiInternal {
+public class InferenceBroker implements ReasoningApiInternal, ModelApiInternal {
 
   private java.util.Map<KeyIdentifier, KnowledgeAsset> knownModels = new HashMap<>();
   private KnowledgeAssetCatalogApiInternal assetCatalog;
 
-  private Set<Function<KnowledgeAsset, Optional<_infer>>> evaluatorProviders;
+  private Set<Function<KnowledgeAsset, Optional<_evaluate>>> evaluatorProviders;
 
   @Autowired
   public InferenceBroker(
       @KPServer KnowledgeAssetCatalogApiInternal assetCatalog,
-      Set<Function<KnowledgeAsset, Optional<_infer>>> evaluatorProviders) {
+      Set<Function<KnowledgeAsset, Optional<_evaluate>>> evaluatorProviders) {
     this.assetCatalog = assetCatalog;
     this.evaluatorProviders = evaluatorProviders;
   }
 
   @Override
   @SuppressWarnings("rawtypes")
-  public Answer<Map> infer(UUID modelId, String versionTag, java.util.Map inputFeatures) {
+  public Answer<Bindings> evaluate(UUID modelId, String versionTag, Bindings inputFeatures) {
     // Broker pattern
     return getEvaluator(modelId, versionTag)
-        .flatMap(evaluator -> evaluator.infer(modelId, versionTag, inputFeatures));
+        .flatMap(evaluator -> evaluator.evaluate(modelId, versionTag, inputFeatures));
   }
 
 
-  private Answer<_infer> getEvaluator(UUID modelId, String versionTag) {
+  private Answer<_evaluate> getEvaluator(UUID modelId, String versionTag) {
     KeyIdentifier vid = SemanticIdentifier.newId(modelId, versionTag).asKey();
     KnowledgeAsset asset;
 

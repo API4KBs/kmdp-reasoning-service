@@ -42,7 +42,7 @@ import org.apache.jena.rdf.model.Model;
 import org.apache.jena.rdf.model.RDFNode;
 import org.omg.spec.api4kp._20200801.AbstractCarrier;
 import org.omg.spec.api4kp._20200801.Answer;
-import org.omg.spec.api4kp._20200801.api.inference.v4.server.QueryApiInternal._askQuery;
+import org.omg.spec.api4kp._20200801.api.inference.v4.server.ReasoningApiInternal._askQuery;
 import org.omg.spec.api4kp._20200801.api.knowledgebase.v4.server.KnowledgeBaseApiInternal;
 import org.omg.spec.api4kp._20200801.datatypes.Bindings;
 import org.omg.spec.api4kp._20200801.services.KPComponent;

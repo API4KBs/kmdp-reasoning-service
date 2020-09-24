@@ -27,7 +27,10 @@ import org.cqframework.cql.elm.execution.FunctionDef;
 import org.cqframework.cql.elm.execution.Library;
 import org.omg.spec.api4kp._20200801.AbstractCarrier;
 import org.omg.spec.api4kp._20200801.Answer;
-import org.omg.spec.api4kp._20200801.api.inference.v4.server.InferenceApiInternal._infer;
+import org.omg.spec.api4kp._20200801.PlatformComponentHelper;
+import org.omg.spec.api4kp._20200801.api.inference.v4.server.ReasoningApiInternal._evaluate;
+import org.omg.spec.api4kp._20200801.api.inference.v4.server.ReasoningApiInternal._infer;
+import org.omg.spec.api4kp._20200801.datatypes.Bindings;
 import org.omg.spec.api4kp._20200801.id.KeyIdentifier;
 import org.omg.spec.api4kp._20200801.id.SemanticIdentifier;
 import org.omg.spec.api4kp._20200801.services.KPOperation;
@@ -43,7 +46,7 @@ import org.opencds.cqf.cql.execution.Context;
 @KPOperation(Inference_Task)
 @KPSupport(HL7_CQL)
 public class CQLEvaluator
-    implements _infer {
+    implements _evaluate {
 
   private Map<KeyIdentifier, byte[]> artifactCache = new HashMap<>();
 
@@ -64,11 +67,12 @@ public class CQLEvaluator
   }
 
   @Override
-  public Answer<Map> infer(UUID modelId, String versionTag, Map features) {
-    Map<String, Object> out = getCarrier(modelId, versionTag)
+  public Answer<Bindings> evaluate(UUID modelId, String versionTag, Bindings features) {
+    Bindings out = getCarrier(modelId, versionTag)
         .flatMap(translator::cqlToExecutableLibrary)
         .map(lib -> internalEvaluate(lib, initExecutableKB(lib, features).orElse(null)))
-        .orElse(new HashMap<>());
+        .map(PlatformComponentHelper::asBindings)
+        .orElse(new Bindings());
 
     return Answer.of(out);
   }

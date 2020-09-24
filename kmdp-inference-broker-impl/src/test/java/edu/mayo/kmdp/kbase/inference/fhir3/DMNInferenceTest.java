@@ -1,24 +1,23 @@
 package edu.mayo.kmdp.kbase.inference.fhir3;
 
-import static java.util.Collections.emptyMap;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import edu.mayo.kmdp.kbase.inference.mockTerms.PCO;
 import edu.mayo.kmdp.util.Util;
-import java.util.HashMap;
-import java.util.Map;
 import java.util.UUID;
+import org.hl7.fhir.dstu3.model.Base;
 import org.hl7.fhir.dstu3.model.BooleanType;
 import org.hl7.fhir.dstu3.model.IntegerType;
 import org.hl7.fhir.dstu3.model.Quantity;
-import org.hl7.fhir.dstu3.model.Type;
+import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
-import org.omg.spec.api4kp._20200801.api.inference.v4.InferenceApi;
-import org.omg.spec.api4kp._20200801.api.inference.v4.server.InferenceApiInternal;
+import org.omg.spec.api4kp._20200801.Answer;
+import org.omg.spec.api4kp._20200801.api.inference.v4.ReasoningApi;
 import org.omg.spec.api4kp._20200801.api.inference.v4.server.Swagger2SpringBoot;
+import org.omg.spec.api4kp._20200801.datatypes.Bindings;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.context.SpringBootTest.WebEnvironment;
 import org.springframework.test.context.ContextConfiguration;
@@ -40,23 +39,22 @@ public class DMNInferenceTest extends BaseInferenceIntegrationTest {
 	}
 
 	@Test
-	public void testDMNaaS() {
-		InferenceApiInternal infService = InferenceApi.newInstance(serverUrl);
+	void testDMNaaS() {
+		ReasoningApi infService = ReasoningApi.newInstance(serverUrl);
 
-		Map<String, Type> map = new HashMap<>();
+		Bindings<String,Base> map = new Bindings<>();
 		map.put( PCO.Current_Caffeine_User.getTag(),
 				new BooleanType().setValue( true ) );
 		map.put( PCO.Current_Chronological_Age.getTag(),
 				new IntegerType().setValue( 37 ) );
 
-		java.util.Map out = infService.infer( modelId, VTAG, map )
-				.orElse(emptyMap());
+		Answer<Bindings> out = infService.evaluate( modelId, VTAG, map );
 
-		validate(out);
+		validate(out.orElseGet(Assertions::fail));
 	}
 
 
-	private void validate(Map out) {
+	private void validate(Bindings<?,?> out) {
 		assertTrue( out.get( PCO.Current_Caffeine_User.getTag() ) instanceof BooleanType );
 
 		Object ans = out.get( PCO.Hodgkin_Lymphoma_5_Year_Survival_Rate.getTag() );

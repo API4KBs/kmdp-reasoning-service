@@ -36,7 +36,9 @@ import org.kie.dmn.api.core.DMNResult;
 import org.kie.dmn.api.core.DMNRuntime;
 import org.kie.dmn.api.core.ast.DecisionNode;
 import org.omg.spec.api4kp._20200801.Answer;
-import org.omg.spec.api4kp._20200801.api.inference.v4.server.InferenceApiInternal._infer;
+import org.omg.spec.api4kp._20200801.PlatformComponentHelper;
+import org.omg.spec.api4kp._20200801.api.inference.v4.server.ReasoningApiInternal._evaluate;
+import org.omg.spec.api4kp._20200801.datatypes.Bindings;
 import org.omg.spec.api4kp._20200801.id.ConceptIdentifier;
 import org.omg.spec.api4kp._20200801.id.Term;
 import org.omg.spec.api4kp._20200801.services.KPOperation;
@@ -49,7 +51,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 
 @KPSupport(DMN_1_1)
 @KPOperation(Inference_Task)
-public class SemanticDMNEvaluator implements _infer {
+public class SemanticDMNEvaluator implements _evaluate {
 
   private DMNRuntime runtime;
 
@@ -61,8 +63,8 @@ public class SemanticDMNEvaluator implements _infer {
   }
 
   @Override
-  public Answer<Map> infer(UUID modelId, String versionTag,
-      java.util.Map features) {
+  public Answer<Bindings> evaluate(UUID modelId, String versionTag,
+      Bindings features) {
     DMNModel model = resolveModel(modelId, versionTag);
 
     Map<Term, Object> concepts = resolveConcepts(features);
@@ -70,7 +72,7 @@ public class SemanticDMNEvaluator implements _infer {
     DMNResult res = runtime.evaluateAll(model, ctx);
 //    Map<Term, Object> out = bindOutputs(res.getContext());
     Map<String, Object> out = extractOutputs(res.getContext());
-    return Answer.of(out);
+    return Answer.of(PlatformComponentHelper.asBindings(out));
   }
 
 

@@ -1,8 +1,5 @@
 package edu.mayo.kmdp.kbase.inference.fhir3;
 
-import static edu.mayo.kmdp.kbase.introspection.cql.v1_3.CQLMetadataIntrospector.CQL_1_3_EXTRACTOR;
-import static edu.mayo.kmdp.kbase.introspection.dmn.v1_1.DMN11MetadataIntrospector.DMN1_1_EXTRACTOR;
-import static edu.mayo.kmdp.kbase.introspection.fhir.stu3.PlanDefinitionMetadataIntrospector.FHIR_STU3_EXTRACTOR;
 import static org.junit.jupiter.api.Assertions.fail;
 import static org.omg.spec.api4kp._20200801.surrogate.SurrogateBuilder.artifactId;
 import static org.omg.spec.api4kp._20200801.surrogate.SurrogateBuilder.assetId;
@@ -14,17 +11,21 @@ import static org.omg.spec.api4kp._20200801.taxonomy.parsinglevel.ParsingLevelSe
 
 import edu.mayo.kmdp.kbase.inference.InferenceBroker;
 import edu.mayo.kmdp.kbase.inference.mockRepo.MockAssetRepository;
-import edu.mayo.kmdp.kbase.introspection.cql.v1_3.CQLMetadataIntrospector;
-import edu.mayo.kmdp.kbase.introspection.dmn.DMNMetadataIntrospector;
-import edu.mayo.kmdp.kbase.introspection.fhir.stu3.PlanDefinitionMetadataIntrospector;
 import edu.mayo.kmdp.knowledgebase.KnowledgeBaseProvider;
+import edu.mayo.kmdp.knowledgebase.introspectors.cql.v1_3.CQLMetadataIntrospector;
+import edu.mayo.kmdp.knowledgebase.introspectors.dmn.DMNMetadataIntrospector;
+import edu.mayo.kmdp.knowledgebase.introspectors.dmn.v1_1.DMN11MetadataIntrospector;
+import edu.mayo.kmdp.knowledgebase.introspectors.fhir.stu3.PlanDefinitionMetadataIntrospector;
 import edu.mayo.kmdp.language.LanguageDeSerializer;
 import edu.mayo.kmdp.util.Util;
 import java.io.InputStream;
 import java.util.Arrays;
 import java.util.UUID;
+import org.junit.jupiter.api.Assertions;
 import org.omg.spec.api4kp._20200801.AbstractCarrier;
+import org.omg.spec.api4kp._20200801.api.knowledgebase.v4.server.KnowledgeBaseApiInternal;
 import org.omg.spec.api4kp._20200801.id.IdentifierConstants;
+import org.omg.spec.api4kp._20200801.id.Pointer;
 import org.omg.spec.api4kp._20200801.id.ResourceIdentifier;
 import org.omg.spec.api4kp._20200801.services.KPServer;
 import org.omg.spec.api4kp._20200801.services.KnowledgeCarrier;
@@ -60,6 +61,9 @@ public abstract class BaseInferenceIntegrationTest {
           KnowledgeBaseProvider.class})
   @TestPropertySource(value = {"classpath:application.test.properties"})
   public static class InferenceTestConfig {
+
+    @Autowired
+    KnowledgeBaseApiInternal kbManager;
 
     @Autowired
     DMNMetadataIntrospector dmnMetadataExtractor;
@@ -99,25 +103,28 @@ public abstract class BaseInferenceIntegrationTest {
 
 
     private KnowledgeAsset getSurrogate(KnowledgeCarrier artifactCarrier) {
+
+      Pointer ptr = kbManager.initKnowledgeBase(artifactCarrier).orElseGet(Assertions::fail);
+
       KnowledgeRepresentationLanguage lang = artifactCarrier.getRepresentation().getLanguage();
       // TODO Implement an introspector broker
       switch (lang.asEnum()) {
         case DMN_1_1:
           return dmnMetadataExtractor
-              .introspect(
-                  DMN1_1_EXTRACTOR, artifactCarrier, null)
+              .applyNamedIntrospect(
+                  DMN11MetadataIntrospector.id, ptr.getUuid(), ptr.getVersionTag(), null)
               .flatOpt(kc -> kc.as(KnowledgeAsset.class))
               .orElseThrow(UnsupportedOperationException::new);
         case HL7_CQL:
           return cqlMetadataExtractor
-              .introspect(
-                  CQL_1_3_EXTRACTOR, artifactCarrier, null)
+              .applyNamedIntrospect(
+                  CQLMetadataIntrospector.id, ptr.getUuid(), ptr.getVersionTag(), null)
               .flatOpt(kc -> kc.as(KnowledgeAsset.class))
               .orElseThrow(UnsupportedOperationException::new);
         case FHIR_STU3:
           return pdMetadataExtractor
-              .introspect(
-                  FHIR_STU3_EXTRACTOR, artifactCarrier, null)
+              .applyNamedIntrospect(
+                  PlanDefinitionMetadataIntrospector.id, ptr.getUuid(), ptr.getVersionTag(), null)
               .flatOpt(kc -> kc.as(KnowledgeAsset.class))
               .orElseThrow(UnsupportedOperationException::new);
 

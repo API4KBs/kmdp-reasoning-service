@@ -1,15 +1,12 @@
 package edu.mayo.kmdp.kbase.inference.fhir3;
 
-import static java.util.Collections.emptyMap;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import edu.mayo.kmdp.kbase.inference.mockTerms.PCO;
 import edu.mayo.kmdp.util.Util;
 import java.util.Collections;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 import java.util.UUID;
 import org.hl7.fhir.dstu3.model.Base;
 import org.hl7.fhir.dstu3.model.CodeableConcept;
@@ -19,10 +16,10 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
 import org.omg.spec.api4kp._20200801.Answer;
-import org.omg.spec.api4kp._20200801.api.inference.v4.InferenceApi;
 import org.omg.spec.api4kp._20200801.api.inference.v4.ModelApi;
-import org.omg.spec.api4kp._20200801.api.inference.v4.server.InferenceApiInternal;
+import org.omg.spec.api4kp._20200801.api.inference.v4.ReasoningApi;
 import org.omg.spec.api4kp._20200801.api.inference.v4.server.Swagger2SpringBoot;
+import org.omg.spec.api4kp._20200801.datatypes.Bindings;
 import org.omg.spec.api4kp._20200801.id.Pointer;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.context.SpringBootTest.WebEnvironment;
@@ -46,13 +43,13 @@ public class CQLInferenceTest extends BaseInferenceIntegrationTest {
 	@Test
 	@Disabled("Current CQL engine does not support HAPI FHIR 4.x")
 	public void testCQLaaS() {
-		InferenceApiInternal infService = InferenceApi.newInstance(serverUrl);
+		ReasoningApi infService = ReasoningApi.newInstance(serverUrl);
 
-		Map<String, Base> inputs = new HashMap<>();
+		Bindings<String,Base> inputs = new Bindings<>();
 		inputs.put( PCO.Current_Smoker_Type.getTag(), getSmokerType());
 
-		Map out = infService.infer(modelId, VTAG, inputs )
-				.orElse(emptyMap());
+		Bindings out = infService.evaluate(modelId, VTAG, inputs )
+				.orElseGet(Bindings::new);
 
 		validateOutputs(out);
 	}
@@ -81,7 +78,7 @@ public class CQLInferenceTest extends BaseInferenceIntegrationTest {
 	}
 
 
-	private void validateOutputs(Map out) {
+	private void validateOutputs(Bindings out) {
 		assertNotNull( out );
 
 		assertTrue( out.containsKey( PCO.Current_Smoking_Status.getTag() ) );

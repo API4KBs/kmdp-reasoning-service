@@ -29,12 +29,8 @@ import edu.mayo.mea3.inference.mockTerms.PCO;
 import java.time.Year;
 import java.util.Arrays;
 import java.util.Collections;
-import java.util.HashMap;
 import java.util.HashSet;
-import java.util.Map;
 import java.util.UUID;
-import org.hl7.fhir.dstu3.model.Base;
-import org.hl7.fhir.dstu3.model.BaseResource;
 import org.hl7.fhir.dstu3.model.BooleanType;
 import org.hl7.fhir.dstu3.model.CodeableConcept;
 import org.hl7.fhir.dstu3.model.Coding;
@@ -49,6 +45,7 @@ import org.junit.jupiter.api.Test;
 import org.omg.spec.api4kp._20200801.api.knowledgebase.v4.server.KnowledgeBaseApiInternal;
 import org.omg.spec.api4kp._20200801.api.repository.asset.v4.server.KnowledgeAssetCatalogApiInternal;
 import org.omg.spec.api4kp._20200801.api.repository.asset.v4.server.KnowledgeAssetRepositoryApiInternal;
+import org.omg.spec.api4kp._20200801.datatypes.Bindings;
 
 @Disabled
 public class CQLTest extends InferenceBaseTest {
@@ -72,8 +69,8 @@ public class CQLTest extends InferenceBaseTest {
 
 		InferenceBroker server = initServer(semRepo,semRepo);
 
-		java.util.Map<?,?> out = server.infer(id, VTAG, new HashMap<>())
-				.orElse(Collections.emptyMap());
+		Bindings out = server.evaluate(id, VTAG, new Bindings())
+				.orElseGet(Bindings::new);
 
 		assertEquals(1, out.size());
 		assertEquals(3, out.get("Number3"));
@@ -89,7 +86,7 @@ public class CQLTest extends InferenceBaseTest {
 
 		InferenceBroker server = initServer(semRepo,semRepo);
 
-		Map<String, BaseResource> inputs = new HashMap<>();
+		Bindings inputs = new Bindings();
 		inputs.put(PATIENT, new Patient().setGender(AdministrativeGender.OTHER)
 				.setName(Collections.singletonList(new HumanName().addGiven("Doe"))));
 
@@ -98,8 +95,8 @@ public class CQLTest extends InferenceBaseTest {
 				.setValue(new Quantity().setValue(42)
 						.setUnit("brapples")));
 
-		java.util.Map<?,?> out =
-				server.infer(id, VTAG, inputs).orElse(Collections.emptyMap());
+		Bindings out =
+				server.evaluate(id, VTAG, inputs).orElseGet(Bindings::new);
 
 		assertEquals(3, out.size());
 		assertSame(inputs.get(PATIENT), out.get(PATIENT));
@@ -120,7 +117,7 @@ public class CQLTest extends InferenceBaseTest {
 
 		InferenceBroker server = initServer(semRepo, semRepo);
 
-		Map<String, Base> inputs = new HashMap<>();
+		Bindings inputs = new Bindings();
 
 		inputs.put(PATIENT, new Patient().setGender(AdministrativeGender.OTHER)
 				.setName(Collections.singletonList(new HumanName().addGiven("Doe"))));
@@ -131,8 +128,8 @@ public class CQLTest extends InferenceBaseTest {
 						.setValue(new CodeableConcept().setCoding(Collections
 								.singletonList(new Coding().setCode("smoker").setSystem("http://foo.bar#")))));
 
-		java.util.Map<?, ?> out = server.infer(id, VTAG, inputs)
-				.orElse(Collections.emptyMap());
+		Bindings out = server.evaluate(id, VTAG, inputs)
+				.orElseGet(Bindings::new);
 
 		assertEquals(5, out.size());
 		assertEquals(true, out.get("Answer"));
@@ -154,13 +151,13 @@ public class CQLTest extends InferenceBaseTest {
 
 		InferenceBroker server = initServer(semRepo,semRepo);
 
-		Map<String, Base> inputs = new HashMap<>();
+		Bindings inputs = new Bindings();
 		inputs.put(PATIENT, new Patient()
 				.setGender(AdministrativeGender.OTHER)
 				.setBirthDate( DateTimeUtil.parseDate("1981-01-12")));
 
-		java.util.Map<?, ?> out =
-				server.infer(id, VTAG, inputs).orElse(Collections.emptyMap());
+		Bindings out =
+				server.evaluate(id, VTAG, inputs).orElseGet(Bindings::new);
 
 		Object x = out.get(PCO.Current_Chronological_Age.getTag());
 		assertTrue(x instanceof Quantity);
@@ -182,7 +179,7 @@ public class CQLTest extends InferenceBaseTest {
 
 		InferenceBroker server = initServer(semRepo,semRepo);
 
-		Map<String, Base> inputs = new HashMap<>();
+		Bindings inputs = new Bindings();
 
 		inputs.put(PATIENT, new Patient());
 		inputs.put(PCO.PriorTEE.getTag(),
@@ -192,8 +189,8 @@ public class CQLTest extends InferenceBaseTest {
 										.setSystem("http://snomed.info/sct")
 										.setCode("266262004"))));
 
-		java.util.Map<?, ?> out = server.infer(id, VTAG, inputs)
-				.orElse(Collections.emptyMap());
+		Bindings out = server.evaluate(id, VTAG, inputs)
+				.orElseGet(Bindings::new);
 
 		Object x = out.get(PCO.History_Of_Arterial_Thromboembolism.getTag());
 		assertTrue(x instanceof BooleanType);
