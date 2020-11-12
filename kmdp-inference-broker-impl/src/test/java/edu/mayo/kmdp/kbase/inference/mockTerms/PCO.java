@@ -117,11 +117,6 @@ public enum PCO implements Term {
   }
 
   @Override
-  public URI getRef() {
-    return null;
-  }
-
-  @Override
   public URI getConceptId() {
     return null;
   }

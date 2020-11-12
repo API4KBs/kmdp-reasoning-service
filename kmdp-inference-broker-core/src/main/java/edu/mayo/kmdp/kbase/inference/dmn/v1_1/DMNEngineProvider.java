@@ -26,7 +26,7 @@ public class DMNEngineProvider
 
   protected boolean supportsRepresentation(KnowledgeAsset knowledgeAsset) {
     return detectLanguage(knowledgeAsset)
-        .map(lang -> lang.isSame(DMN_1_1))
+        .map(lang -> lang.sameAs(DMN_1_1))
         .orElse(false);
   }
 
