@@ -7,6 +7,7 @@ import static org.omg.spec.api4kp._20200801.taxonomy.krformat.SerializationForma
 import static org.omg.spec.api4kp._20200801.taxonomy.krformat.SerializationFormatSeries.XML_1_1;
 import static org.omg.spec.api4kp._20200801.taxonomy.krlanguage.KnowledgeRepresentationLanguageSeries.DMN_1_1;
 import static org.omg.spec.api4kp._20200801.taxonomy.krlanguage.KnowledgeRepresentationLanguageSeries.HL7_CQL;
+import static org.omg.spec.api4kp._20200801.taxonomy.krlanguage.KnowledgeRepresentationLanguageSeries.asEnum;
 import static org.omg.spec.api4kp._20200801.taxonomy.parsinglevel.ParsingLevelSeries.Encoded_Knowledge_Expression;
 
 import edu.mayo.kmdp.kbase.inference.InferenceBroker;
@@ -108,7 +109,7 @@ public abstract class BaseInferenceIntegrationTest {
 
       KnowledgeRepresentationLanguage lang = artifactCarrier.getRepresentation().getLanguage();
       // TODO Implement an introspector broker
-      switch (lang.asEnum()) {
+      switch (asEnum(lang)) {
         case DMN_1_1:
           return dmnMetadataExtractor
               .applyNamedIntrospect(

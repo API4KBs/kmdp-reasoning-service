@@ -17,6 +17,7 @@ import static org.omg.spec.api4kp._20200801.surrogate.SurrogateHelper.canonicalR
 import static org.omg.spec.api4kp._20200801.taxonomy.knowledgeoperation.KnowledgeProcessingOperationSeries.Inference_Task;
 import static org.omg.spec.api4kp._20200801.taxonomy.krlanguage.KnowledgeRepresentationLanguageSeries.FHIR_STU3;
 import static org.omg.spec.api4kp._20200801.taxonomy.krlanguage.KnowledgeRepresentationLanguageSeries.HL7_CQL;
+import static org.omg.spec.api4kp._20200801.taxonomy.krlanguage.KnowledgeRepresentationLanguageSeries.asEnum;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -110,7 +111,7 @@ public class CQLEvaluator
 
     ctx.registerLibraryLoader(new DefaultFHIRHelperLibraryLoader(translator));
 
-    switch (modelLanguage.asEnum()) {
+    switch (asEnum(modelLanguage)) {
       case FHIR_STU3:
         ctx.registerDataProvider("http://hl7.org/fhir", new InMemoryFhir3DataProvider(features));
         break;

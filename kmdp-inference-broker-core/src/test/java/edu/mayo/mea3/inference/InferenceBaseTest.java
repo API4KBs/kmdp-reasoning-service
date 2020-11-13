@@ -5,6 +5,7 @@ import static org.omg.spec.api4kp._20200801.taxonomy.krformat.SerializationForma
 import static org.omg.spec.api4kp._20200801.taxonomy.krformat.SerializationFormatSeries.XML_1_1;
 import static org.omg.spec.api4kp._20200801.taxonomy.krlanguage.KnowledgeRepresentationLanguageSeries.DMN_1_1;
 import static org.omg.spec.api4kp._20200801.taxonomy.krlanguage.KnowledgeRepresentationLanguageSeries.HL7_CQL;
+import static org.omg.spec.api4kp._20200801.taxonomy.krlanguage.KnowledgeRepresentationLanguageSeries.asEnum;
 import static org.omg.spec.api4kp._20200801.taxonomy.parsinglevel.ParsingLevelSeries.Encoded_Knowledge_Expression;
 import static org.springframework.test.util.AssertionErrors.fail;
 
@@ -13,7 +14,6 @@ import edu.mayo.kmdp.knowledgebase.KnowledgeBaseProvider;
 import edu.mayo.kmdp.knowledgebase.introspectors.cql.v1_3.CQLMetadataIntrospector;
 import edu.mayo.kmdp.knowledgebase.introspectors.dmn.DMNMetadataIntrospector;
 import edu.mayo.kmdp.knowledgebase.introspectors.dmn.v1_1.DMN11MetadataIntrospector;
-import edu.mayo.kmdp.language.parsers.dmn.v1_1.DMN11Parser;
 import edu.mayo.mea3.inference.mockRepo.MockSingletonAssetRepository;
 import java.io.InputStream;
 import java.util.UUID;
@@ -29,7 +29,6 @@ import org.omg.spec.api4kp._20200801.services.KnowledgeCarrier;
 import org.omg.spec.api4kp._20200801.services.SyntacticRepresentation;
 import org.omg.spec.api4kp._20200801.surrogate.KnowledgeAsset;
 import org.omg.spec.api4kp._20200801.surrogate.SurrogateBuilder;
-import org.omg.spec.api4kp._20200801.taxonomy.parsinglevel.ParsingLevelSeries;
 
 public abstract class InferenceBaseTest {
 
@@ -80,7 +79,7 @@ public abstract class InferenceBaseTest {
 
     Pointer ptr = kbManager.initKnowledgeBase(carrier).orElseGet(Assertions::fail);
 
-    switch (carrier.getRepresentation().getLanguage().asEnum()) {
+    switch (asEnum(carrier.getRepresentation().getLanguage())) {
       case DMN_1_1:
         return dmnMetadataExtractor
             .applyNamedIntrospect(DMN11MetadataIntrospector.id, ptr.getUuid(),ptr.getVersionTag(),null)

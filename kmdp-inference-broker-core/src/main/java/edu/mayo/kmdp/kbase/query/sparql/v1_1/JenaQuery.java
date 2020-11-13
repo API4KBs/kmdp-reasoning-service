@@ -18,6 +18,7 @@ package edu.mayo.kmdp.kbase.query.sparql.v1_1;
 import static org.omg.spec.api4kp._20200801.AbstractCarrier.rep;
 import static org.omg.spec.api4kp._20200801.taxonomy.krformat.SerializationFormatSeries.TXT;
 import static org.omg.spec.api4kp._20200801.taxonomy.krlanguage.KnowledgeRepresentationLanguageSeries.SPARQL_1_1;
+import static org.omg.spec.api4kp._20200801.taxonomy.parsinglevel.ParsingLevelSeries.asEnum;
 
 import edu.mayo.kmdp.util.JenaUtil;
 import edu.mayo.kmdp.util.Util;
@@ -116,7 +117,7 @@ public class JenaQuery implements _askQuery {
 
   private Optional<List<Bindings>> applyQuery(KnowledgeCarrier query, Model m) {
     Optional<Query> qry = Optional.empty();
-    switch (query.getLevel().asEnum()) {
+    switch (asEnum(query.getLevel())) {
       case Encoded_Knowledge_Expression:
       case Serialized_Knowledge_Expression:
         qry = query.asString()
