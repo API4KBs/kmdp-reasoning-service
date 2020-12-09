@@ -24,7 +24,7 @@ public class MockSingletonAssetRepository implements KnowledgeAssetRepositoryApi
   }
 
   @Override
-  public Answer<KnowledgeCarrier> getCanonicalKnowledgeAssetCarrier(UUID assetId, String versionTag,
+  public Answer<KnowledgeCarrier> getKnowledgeAssetVersionCanonicalCarrier(UUID assetId, String versionTag,
       String xAccept) {
     if (assetId.equals(this.modelId) && versionTag.equals(this.version)) {
       return Answer.of(carrier);

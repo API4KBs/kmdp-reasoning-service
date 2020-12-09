@@ -75,7 +75,7 @@ public class DMNTest extends InferenceBaseTest {
 
 		DMNRuntime runtime = KieDMNHelper
 				.initRuntime(new KnowledgeBase().withManifestation(
-						semRepo.getCanonicalKnowledgeAssetCarrier(id, VTAG).get()));
+						semRepo.getKnowledgeAssetVersionCanonicalCarrier(id, VTAG).get()));
 		DMNModel model = runtime.getModels().get(0);
 
 		DMNContext ctx = runtime.newContext();

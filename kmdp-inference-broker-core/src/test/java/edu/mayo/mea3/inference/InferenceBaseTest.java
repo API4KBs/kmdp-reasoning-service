@@ -111,7 +111,7 @@ public abstract class InferenceBaseTest {
 
     return KieDMNHelper
         .initRuntime(new KnowledgeBase().withManifestation(
-            semRepo.getCanonicalKnowledgeAssetCarrier(id, VTAG).get()));
+            semRepo.getKnowledgeAssetVersionCanonicalCarrier(id, VTAG).get()));
   }
 
 }
