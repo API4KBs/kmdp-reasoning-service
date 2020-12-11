@@ -6,7 +6,7 @@ import static org.omg.spec.api4kp._20200801.surrogate.SurrogateBuilder.assetId;
 import static org.omg.spec.api4kp._20200801.taxonomy.krformat.SerializationFormatSeries.TXT;
 import static org.omg.spec.api4kp._20200801.taxonomy.krformat.SerializationFormatSeries.XML_1_1;
 import static org.omg.spec.api4kp._20200801.taxonomy.krlanguage.KnowledgeRepresentationLanguageSeries.DMN_1_1;
-import static org.omg.spec.api4kp._20200801.taxonomy.krlanguage.KnowledgeRepresentationLanguageSeries.HL7_CQL;
+import static org.omg.spec.api4kp._20200801.taxonomy.krlanguage.KnowledgeRepresentationLanguageSeries.HL7_CQL_1_3;
 import static org.omg.spec.api4kp._20200801.taxonomy.krlanguage.KnowledgeRepresentationLanguageSeries.asEnum;
 import static org.omg.spec.api4kp._20200801.taxonomy.parsinglevel.ParsingLevelSeries.Encoded_Knowledge_Expression;
 
@@ -79,7 +79,7 @@ public abstract class BaseInferenceIntegrationTest {
     @KPServer
     public MockAssetRepository backingRepo() {
       KnowledgeCarrier c1 = loadCarrier("mockCQL", "/mockCQL.cql",
-          AbstractCarrier.rep(HL7_CQL, TXT));
+          AbstractCarrier.rep(HL7_CQL_1_3, TXT));
       KnowledgeCarrier c2 = loadCarrier("mockPredictor", "/MockPredictor.dmn",
           AbstractCarrier.rep(DMN_1_1, XML_1_1));
 
@@ -87,7 +87,6 @@ public abstract class BaseInferenceIntegrationTest {
           Arrays.asList(getSurrogate(c1), getSurrogate(c2)),
           Arrays.asList(c1, c2)
       );
-
     }
 
     private KnowledgeCarrier loadCarrier(String modelName,
@@ -116,7 +115,7 @@ public abstract class BaseInferenceIntegrationTest {
                   DMN11MetadataIntrospector.id, ptr.getUuid(), ptr.getVersionTag(), null)
               .flatOpt(kc -> kc.as(KnowledgeAsset.class))
               .orElseThrow(UnsupportedOperationException::new);
-        case HL7_CQL:
+        case HL7_CQL_1_3:
           return cqlMetadataExtractor
               .applyNamedIntrospect(
                   CQLMetadataIntrospector.id, ptr.getUuid(), ptr.getVersionTag(), null)

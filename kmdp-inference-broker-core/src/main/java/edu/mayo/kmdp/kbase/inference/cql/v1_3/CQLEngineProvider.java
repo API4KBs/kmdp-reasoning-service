@@ -1,6 +1,6 @@
 package edu.mayo.kmdp.kbase.inference.cql.v1_3;
 
-import static org.omg.spec.api4kp._20200801.taxonomy.krlanguage.KnowledgeRepresentationLanguageSeries.HL7_CQL;
+import static org.omg.spec.api4kp._20200801.taxonomy.krlanguage.KnowledgeRepresentationLanguageSeries.HL7_CQL_1_3;
 
 import edu.mayo.kmdp.kbase.inference.AbstractEvaluatorProvider;
 import javax.inject.Named;
@@ -35,7 +35,7 @@ public class CQLEngineProvider
   @Override
   protected boolean supportsRepresentation(KnowledgeAsset knowledgeAsset) {
     return detectLanguage(knowledgeAsset)
-        .map(lang -> lang.sameAs(HL7_CQL))
+        .map(lang -> lang.sameAs(HL7_CQL_1_3))
         .orElse(false);
   }
 }

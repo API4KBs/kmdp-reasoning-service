@@ -16,7 +16,7 @@ package edu.mayo.kmdp.kbase.inference.cql.v1_3;
 import static org.omg.spec.api4kp._20200801.surrogate.SurrogateHelper.canonicalRepresentationOf;
 import static org.omg.spec.api4kp._20200801.taxonomy.knowledgeoperation.KnowledgeProcessingOperationSeries.Inference_Task;
 import static org.omg.spec.api4kp._20200801.taxonomy.krlanguage.KnowledgeRepresentationLanguageSeries.FHIR_STU3;
-import static org.omg.spec.api4kp._20200801.taxonomy.krlanguage.KnowledgeRepresentationLanguageSeries.HL7_CQL;
+import static org.omg.spec.api4kp._20200801.taxonomy.krlanguage.KnowledgeRepresentationLanguageSeries.HL7_CQL_1_3;
 import static org.omg.spec.api4kp._20200801.taxonomy.krlanguage.KnowledgeRepresentationLanguageSeries.asEnum;
 
 import java.util.HashMap;
@@ -30,7 +30,6 @@ import org.omg.spec.api4kp._20200801.AbstractCarrier;
 import org.omg.spec.api4kp._20200801.Answer;
 import org.omg.spec.api4kp._20200801.PlatformComponentHelper;
 import org.omg.spec.api4kp._20200801.api.inference.v4.server.ReasoningApiInternal._evaluate;
-import org.omg.spec.api4kp._20200801.api.inference.v4.server.ReasoningApiInternal._infer;
 import org.omg.spec.api4kp._20200801.datatypes.Bindings;
 import org.omg.spec.api4kp._20200801.id.KeyIdentifier;
 import org.omg.spec.api4kp._20200801.id.SemanticIdentifier;
@@ -45,7 +44,7 @@ import org.opencds.cqf.cql.execution.Context;
 
 
 @KPOperation(Inference_Task)
-@KPSupport(HL7_CQL)
+@KPSupport(HL7_CQL_1_3)
 public class CQLEvaluator
     implements _evaluate {
 

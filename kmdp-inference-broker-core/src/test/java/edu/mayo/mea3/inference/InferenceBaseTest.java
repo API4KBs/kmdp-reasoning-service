@@ -4,7 +4,7 @@ import static org.omg.spec.api4kp._20200801.AbstractCarrier.rep;
 import static org.omg.spec.api4kp._20200801.taxonomy.krformat.SerializationFormatSeries.TXT;
 import static org.omg.spec.api4kp._20200801.taxonomy.krformat.SerializationFormatSeries.XML_1_1;
 import static org.omg.spec.api4kp._20200801.taxonomy.krlanguage.KnowledgeRepresentationLanguageSeries.DMN_1_1;
-import static org.omg.spec.api4kp._20200801.taxonomy.krlanguage.KnowledgeRepresentationLanguageSeries.HL7_CQL;
+import static org.omg.spec.api4kp._20200801.taxonomy.krlanguage.KnowledgeRepresentationLanguageSeries.HL7_CQL_1_3;
 import static org.omg.spec.api4kp._20200801.taxonomy.krlanguage.KnowledgeRepresentationLanguageSeries.asEnum;
 import static org.omg.spec.api4kp._20200801.taxonomy.parsinglevel.ParsingLevelSeries.Encoded_Knowledge_Expression;
 import static org.springframework.test.util.AssertionErrors.fail;
@@ -54,7 +54,7 @@ public abstract class InferenceBaseTest {
     if (modelPath.endsWith(".dmn")) {
       rep = rep(DMN_1_1,XML_1_1);
     } else if (modelPath.endsWith("cql")) {
-      rep = rep(HL7_CQL, TXT);
+      rep = rep(HL7_CQL_1_3, TXT);
     } else {
       throw new IllegalArgumentException("Unable to detect model type from path " + modelPath);
     }
@@ -86,7 +86,7 @@ public abstract class InferenceBaseTest {
             .flatOpt(kc -> kc.as(KnowledgeAsset.class))
             .orElseThrow(UnsupportedOperationException::new);
 
-      case HL7_CQL:
+      case HL7_CQL_1_3:
         return cqlMetadataExtractor
             .applyNamedIntrospect(CQLMetadataIntrospector.id, ptr.getUuid(),ptr.getVersionTag(),null)
             .flatOpt(kc -> kc.as(KnowledgeAsset.class))
