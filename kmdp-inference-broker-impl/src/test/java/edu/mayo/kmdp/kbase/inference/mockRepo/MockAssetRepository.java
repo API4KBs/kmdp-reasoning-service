@@ -33,7 +33,7 @@ public class MockAssetRepository implements KnowledgeAssetRepositoryApiInternal,
   }
 
   @Override
-  public Answer<KnowledgeCarrier> getCanonicalKnowledgeAssetCarrier(UUID assetId, String versionTag,
+  public Answer<KnowledgeCarrier> getKnowledgeAssetVersionCanonicalCarrier(UUID assetId, String versionTag,
       String xAccept) {
     return Answer.of(carriers.get(getKey(assetId,versionTag)));
   }
