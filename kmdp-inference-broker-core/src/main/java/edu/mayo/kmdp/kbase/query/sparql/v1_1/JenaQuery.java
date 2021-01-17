@@ -15,12 +15,12 @@
  */
 package edu.mayo.kmdp.kbase.query.sparql.v1_1;
 
+import static edu.mayo.kmdp.util.JenaUtil.askQueryResults;
 import static org.omg.spec.api4kp._20200801.AbstractCarrier.rep;
 import static org.omg.spec.api4kp._20200801.taxonomy.krformat.SerializationFormatSeries.TXT;
 import static org.omg.spec.api4kp._20200801.taxonomy.krlanguage.KnowledgeRepresentationLanguageSeries.SPARQL_1_1;
 import static org.omg.spec.api4kp._20200801.taxonomy.parsinglevel.ParsingLevelSeries.asEnum;
 
-import edu.mayo.kmdp.util.JenaUtil;
 import edu.mayo.kmdp.util.Util;
 import java.net.URI;
 import java.nio.charset.Charset;
@@ -62,6 +62,13 @@ public class JenaQuery implements _askQuery {
   public static KnowledgeCarrier transitiveClosure(URI subject, URI property) {
     String query = "" +
         "select ?component where { <" + subject + "> <" + property + ">* ?component . }";
+    return AbstractCarrier.of(query)
+        .withRepresentation(rep(SPARQL_1_1, TXT, Charset.defaultCharset()));
+  }
+
+  public static KnowledgeCarrier wholeGraph() {
+    String query = "" +
+        "select ?s ?p ?o where { ?s ?p ?o }";
     return AbstractCarrier.of(query)
         .withRepresentation(rep(SPARQL_1_1, TXT, Charset.defaultCharset()));
   }
@@ -125,12 +132,16 @@ public class JenaQuery implements _askQuery {
             .map(ParameterizedSparqlString::asQuery);
         break;
       case Concrete_Knowledge_Expression:
+        qry = query.as(ParameterizedSparqlString.class)
+            .map(ParameterizedSparqlString::asQuery);
+        break;
+      case Abstract_Knowledge_Expression:
         qry = query.as(Query.class);
         break;
       default:
     }
     return qry
-        .map(q -> JenaUtil.askQueryResults(m, q))
+        .map(q -> askQueryResults(m, q))
         .map(this::toBindings);
   }
 
