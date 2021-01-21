@@ -21,8 +21,8 @@ import static org.omg.spec.api4kp._20200801.taxonomy.krformat.SerializationForma
 import static org.omg.spec.api4kp._20200801.taxonomy.krlanguage.KnowledgeRepresentationLanguageSeries.SPARQL_1_1;
 import static org.omg.spec.api4kp._20200801.taxonomy.parsinglevel.ParsingLevelSeries.asEnum;
 
+import edu.mayo.kmdp.knowledgebase.binders.sparql.v1_1.SparqlQueryBinder;
 import edu.mayo.kmdp.util.Util;
-import java.net.URI;
 import java.nio.charset.Charset;
 import java.util.LinkedList;
 import java.util.List;
@@ -59,18 +59,17 @@ public class JenaQuery implements _askQuery {
 
   KnowledgeBaseApiInternal._getKnowledgeBase kBaseSource;
 
-  public static KnowledgeCarrier transitiveClosure(URI subject, URI property) {
-    String query = "" +
-        "select ?component where { <" + subject + "> <" + property + ">* ?component . }";
-    return AbstractCarrier.of(query)
-        .withRepresentation(rep(SPARQL_1_1, TXT, Charset.defaultCharset()));
-  }
+  static SparqlQueryBinder binder = new SparqlQueryBinder();
 
   public static KnowledgeCarrier wholeGraph() {
     String query = "" +
         "select ?s ?p ?o where { ?s ?p ?o }";
     return AbstractCarrier.of(query)
         .withRepresentation(rep(SPARQL_1_1, TXT, Charset.defaultCharset()));
+  }
+
+  public static Answer<KnowledgeCarrier> bind(KnowledgeCarrier query, Bindings binds) {
+    return binder.bind(query, binds);
   }
 
   public JenaQuery(@Autowired(required = false) KnowledgeBaseApiInternal._getKnowledgeBase kBaseSource) {
