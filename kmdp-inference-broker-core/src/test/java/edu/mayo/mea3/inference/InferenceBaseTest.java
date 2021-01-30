@@ -1,6 +1,9 @@
 package edu.mayo.mea3.inference;
 
+import static edu.mayo.kmdp.registry.Registry.BASE_UUID_URN_URI;
 import static org.omg.spec.api4kp._20200801.AbstractCarrier.rep;
+import static org.omg.spec.api4kp._20200801.surrogate.SurrogateBuilder.artifactId;
+import static org.omg.spec.api4kp._20200801.surrogate.SurrogateBuilder.assetId;
 import static org.omg.spec.api4kp._20200801.taxonomy.krformat.SerializationFormatSeries.TXT;
 import static org.omg.spec.api4kp._20200801.taxonomy.krformat.SerializationFormatSeries.XML_1_1;
 import static org.omg.spec.api4kp._20200801.taxonomy.krlanguage.KnowledgeRepresentationLanguageSeries.DMN_1_1;
@@ -67,8 +70,8 @@ public abstract class InferenceBaseTest {
 
     KnowledgeCarrier carrier = AbstractCarrier
         .of(getBytes(path))
-        .withAssetId(SurrogateBuilder.assetId(modelId.toString(),version))
-        .withArtifactId(SurrogateBuilder.artifactId(UUID.randomUUID().toString(),VTAG))
+        .withAssetId(assetId(BASE_UUID_URN_URI, modelId.toString(),version))
+        .withArtifactId(artifactId(BASE_UUID_URN_URI, UUID.randomUUID().toString(),VTAG))
         .withLevel(Encoded_Knowledge_Expression)
         .withRepresentation(rep);
 
