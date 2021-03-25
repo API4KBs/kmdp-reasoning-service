@@ -26,7 +26,7 @@ public class CQLEngineProvider
 
   @Override
   protected _evaluate getEvaluator(KnowledgeCarrier knowledgeAsset) {
-    return kbase.initKnowledgeBase(knowledgeAsset)
+    return kbase.initKnowledgeBase(knowledgeAsset, null)
         .flatMap(kbId -> kbase.getKnowledgeBase(kbId.getUuid(),kbId.getVersionTag()))
         .map(CQLEvaluator::new)
         .orElseThrow(UnsupportedOperationException::new);

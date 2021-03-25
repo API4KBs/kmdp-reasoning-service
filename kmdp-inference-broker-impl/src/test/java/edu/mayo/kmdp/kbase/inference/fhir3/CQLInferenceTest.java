@@ -26,70 +26,69 @@ import org.springframework.boot.test.context.SpringBootTest.WebEnvironment;
 import org.springframework.test.context.ContextConfiguration;
 
 @SpringBootTest(
-		webEnvironment = WebEnvironment.RANDOM_PORT,
-		classes = Swagger2SpringBoot.class)
+    webEnvironment = WebEnvironment.RANDOM_PORT,
+    classes = Swagger2SpringBoot.class)
 @ContextConfiguration(classes = BaseInferenceIntegrationTest.InferenceTestConfig.class)
 public class CQLInferenceTest extends BaseInferenceIntegrationTest {
 
-	private static final UUID 		modelId 			= Util.uuid("mockCQL");
+  private static final UUID modelId = Util.uuid("mockCQL");
 
-	String serverUrl;
+  String serverUrl;
 
-	@BeforeEach
-	void init() {
-		serverUrl = "http://localhost:" + port;
-	}
+  @BeforeEach
+  void init() {
+    serverUrl = "http://localhost:" + port;
+  }
 
-	@Test
-	@Disabled("Current CQL engine does not support HAPI FHIR 4.x")
-	public void testCQLaaS() {
-		ReasoningApi infService = ReasoningApi.newInstance(serverUrl);
+  @Test
+  @Disabled("Current CQL engine does not support HAPI FHIR 4.x")
+  public void testCQLaaS() {
+    ReasoningApi infService = ReasoningApi.newInstance(serverUrl);
 
-		Bindings<String,Base> inputs = new Bindings<>();
-		inputs.put( PCO.Current_Smoker_Type.getTag(), getSmokerType());
+    Bindings<String, Base> inputs = new Bindings<>();
+    inputs.put(PCO.Current_Smoker_Type.getTag(), getSmokerType());
 
-		Bindings out = infService.evaluate(modelId, VTAG, inputs )
-				.orElseGet(Bindings::new);
+    Bindings out = infService.evaluate(modelId, VTAG, inputs, null)
+        .orElseGet(Bindings::new);
 
-		validateOutputs(out);
-	}
+    validateOutputs(out);
+  }
 
-	@Test
-	public void testInitialization() {
-		ModelApi client = ModelApi.newInstance(serverUrl);
+  @Test
+  public void testInitialization() {
+    ModelApi client = ModelApi.newInstance(serverUrl);
 
-		Answer<List<Pointer>> availableModels = client.listModels();
+    Answer<List<Pointer>> availableModels = client.listModels();
 
-		assertTrue(availableModels.isSuccess());
-		List<Pointer> modelRefs = availableModels.orElse(Collections.emptyList());
-		modelRefs
-				.forEach(ptr -> {
-					System.out.println(ptr.getName());
-					System.out.println(ptr.getHref());
-				});
-	}
-
-
-	private Base getSmokerType() {
-		return new Observation().setCode(new CodeableConcept()
-				.setCoding(Collections.singletonList(new Coding().setCode("loinc-something"))))
-				.setValue(new CodeableConcept()
-						.setCoding(Collections.singletonList(new Coding().setCode("smoker"))));
-	}
+    assertTrue(availableModels.isSuccess());
+    List<Pointer> modelRefs = availableModels.orElse(Collections.emptyList());
+    modelRefs
+        .forEach(ptr -> {
+          System.out.println(ptr.getName());
+          System.out.println(ptr.getHref());
+        });
+  }
 
 
-	private void validateOutputs(Bindings out) {
-		assertNotNull( out );
+  private Base getSmokerType() {
+    return new Observation().setCode(new CodeableConcept()
+        .setCoding(Collections.singletonList(new Coding().setCode("loinc-something"))))
+        .setValue(new CodeableConcept()
+            .setCoding(Collections.singletonList(new Coding().setCode("smoker"))));
+  }
 
-		assertTrue( out.containsKey( PCO.Current_Smoking_Status.getTag() ) );
-		Object o1 = out.get( PCO.Current_Smoking_Status.getTag() );
-		assertTrue( o1 instanceof Observation );
 
-		assertTrue( out.containsKey( PCO.Current_Smoker_Type.getTag() ) );
-		Object o2 = out.get( PCO.Current_Smoker_Type.getTag() );
-		assertTrue( o2 instanceof Coding );
-	}
+  private void validateOutputs(Bindings out) {
+    assertNotNull(out);
 
+    assertTrue(out.containsKey(PCO.Current_Smoking_Status.getTag()));
+    Object o1 = out.get(PCO.Current_Smoking_Status.getTag());
+    assertTrue(o1 instanceof Observation);
+
+    assertTrue(out.containsKey(PCO.Current_Smoker_Type.getTag()));
+    Object o2 = out.get(PCO.Current_Smoker_Type.getTag());
+    assertTrue(o2 instanceof Coding);
+  }
 
 
 }

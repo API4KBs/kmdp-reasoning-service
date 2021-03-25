@@ -77,11 +77,11 @@ public class JenaQuery implements _askQuery {
   }
 
   @Override
-  public Answer<List<Bindings>> askQuery(UUID modelId, String versionTag, KnowledgeCarrier query) {
+  public Answer<List<Bindings>> askQuery(UUID modelId, String versionTag, KnowledgeCarrier query, String params) {
     if (kBaseSource == null) {
       return Answer.unsupported();
     }
-    return kBaseSource.getKnowledgeBase(modelId, versionTag)
+    return kBaseSource.getKnowledgeBase(modelId, versionTag, params)
         .flatMap(kBase -> {
           if (isLocal(kBase)) {
             return Answer.of(kBase)

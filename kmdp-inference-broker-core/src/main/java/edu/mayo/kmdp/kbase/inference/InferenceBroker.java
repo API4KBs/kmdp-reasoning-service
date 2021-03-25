@@ -58,10 +58,10 @@ public class InferenceBroker implements ReasoningApiInternal, ModelApiInternal {
 
   @Override
   @SuppressWarnings("rawtypes")
-  public Answer<Bindings> evaluate(UUID modelId, String versionTag, Bindings inputFeatures) {
+  public Answer<Bindings> evaluate(UUID modelId, String versionTag, Bindings inputFeatures, String params) {
     // Broker pattern
     return getEvaluator(modelId, versionTag)
-        .flatMap(evaluator -> evaluator.evaluate(modelId, versionTag, inputFeatures));
+        .flatMap(evaluator -> evaluator.evaluate(modelId, versionTag, inputFeatures, params));
   }
 
 

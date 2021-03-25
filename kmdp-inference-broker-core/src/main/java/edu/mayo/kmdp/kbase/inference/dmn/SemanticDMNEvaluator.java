@@ -64,7 +64,7 @@ public class SemanticDMNEvaluator implements _evaluate {
 
   @Override
   public Answer<Bindings> evaluate(UUID modelId, String versionTag,
-      Bindings features) {
+      Bindings features, String params) {
     DMNModel model = resolveModel(modelId, versionTag);
 
     Map<Term, Object> concepts = resolveConcepts(features);

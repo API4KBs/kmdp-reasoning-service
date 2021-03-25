@@ -34,7 +34,7 @@ public class DMNEngineProvider
   protected _evaluate getEvaluator(KnowledgeCarrier knowledgeAsset) {
     ResourceIdentifier assetId = knowledgeAsset.getAssetId();
     if (kbase.hasKnowledgeBase(assetId.getUuid(),assetId.getVersionTag()).isFailure()) {
-      kbase.initKnowledgeBase(knowledgeAsset);
+      kbase.initKnowledgeBase(knowledgeAsset, null);
     }
     return kbase.getKnowledgeBase(assetId.getUuid(),assetId.getVersionTag())
         .map(SemanticDMNEvaluator::new)

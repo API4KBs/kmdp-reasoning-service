@@ -80,7 +80,7 @@ public abstract class InferenceBaseTest {
 
   private KnowledgeAsset getSurrogate(KnowledgeCarrier carrier) {
 
-    Pointer ptr = kbManager.initKnowledgeBase(carrier).orElseGet(Assertions::fail);
+    Pointer ptr = kbManager.initKnowledgeBase(carrier, null).orElseGet(Assertions::fail);
 
     switch (asEnum(carrier.getRepresentation().getLanguage())) {
       case DMN_1_1:

@@ -24,43 +24,43 @@ import org.springframework.test.context.ContextConfiguration;
 
 
 @SpringBootTest(
-		webEnvironment = WebEnvironment.RANDOM_PORT,
-		classes = Swagger2SpringBoot.class)
+    webEnvironment = WebEnvironment.RANDOM_PORT,
+    classes = Swagger2SpringBoot.class)
 @ContextConfiguration(classes = BaseInferenceIntegrationTest.InferenceTestConfig.class)
 public class DMNInferenceTest extends BaseInferenceIntegrationTest {
 
-	private static final UUID 		modelId 			= Util.uuid("mockPredictor");
+  private static final UUID modelId = Util.uuid("mockPredictor");
 
-	String serverUrl;
+  String serverUrl;
 
-	@BeforeEach
-	void init() {
-		serverUrl = "http://localhost:" + port;
-	}
+  @BeforeEach
+  void init() {
+    serverUrl = "http://localhost:" + port;
+  }
 
-	@Test
-	void testDMNaaS() {
-		ReasoningApi infService = ReasoningApi.newInstance(serverUrl);
+  @Test
+  void testDMNaaS() {
+    ReasoningApi infService = ReasoningApi.newInstance(serverUrl);
 
-		Bindings<String,Base> map = new Bindings<>();
-		map.put( PCO.Current_Caffeine_User.getTag(),
-				new BooleanType().setValue( true ) );
-		map.put( PCO.Current_Chronological_Age.getTag(),
-				new IntegerType().setValue( 37 ) );
+    Bindings<String, Base> map = new Bindings<>();
+    map.put(PCO.Current_Caffeine_User.getTag(),
+        new BooleanType().setValue(true));
+    map.put(PCO.Current_Chronological_Age.getTag(),
+        new IntegerType().setValue(37));
 
-		Answer<Bindings> out = infService.evaluate( modelId, VTAG, map );
+    Answer<Bindings> out = infService.evaluate(modelId, VTAG, map, null);
 
-		validate(out.orElseGet(Assertions::fail));
-	}
+    validate(out.orElseGet(Assertions::fail));
+  }
 
 
-	private void validate(Bindings<?,?> out) {
-		assertTrue( out.get( PCO.Current_Caffeine_User.getTag() ) instanceof BooleanType );
+  private void validate(Bindings<?, ?> out) {
+    assertTrue(out.get(PCO.Current_Caffeine_User.getTag()) instanceof BooleanType);
 
-		Object ans = out.get( PCO.Hodgkin_Lymphoma_5_Year_Survival_Rate.getTag() );
-		assertNotNull( ans );
-		assertTrue( ans instanceof Quantity );
-		assertEquals( 42, ((Quantity) ans).getValue().intValue() );
-	}
+    Object ans = out.get(PCO.Hodgkin_Lymphoma_5_Year_Survival_Rate.getTag());
+    assertNotNull(ans);
+    assertTrue(ans instanceof Quantity);
+    assertEquals(42, ((Quantity) ans).getValue().intValue());
+  }
 
 }

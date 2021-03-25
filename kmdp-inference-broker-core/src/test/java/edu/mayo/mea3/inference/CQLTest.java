@@ -69,7 +69,7 @@ public class CQLTest extends InferenceBaseTest {
 
 		InferenceBroker server = initServer(semRepo,semRepo);
 
-		Bindings out = server.evaluate(id, VTAG, new Bindings())
+		Bindings out = server.evaluate(id, VTAG, new Bindings(), null)
 				.orElseGet(Bindings::new);
 
 		assertEquals(1, out.size());
@@ -96,7 +96,7 @@ public class CQLTest extends InferenceBaseTest {
 						.setUnit("brapples")));
 
 		Bindings out =
-				server.evaluate(id, VTAG, inputs).orElseGet(Bindings::new);
+				server.evaluate(id, VTAG, inputs, null).orElseGet(Bindings::new);
 
 		assertEquals(3, out.size());
 		assertSame(inputs.get(PATIENT), out.get(PATIENT));
@@ -128,7 +128,7 @@ public class CQLTest extends InferenceBaseTest {
 						.setValue(new CodeableConcept().setCoding(Collections
 								.singletonList(new Coding().setCode("smoker").setSystem("http://foo.bar#")))));
 
-		Bindings out = server.evaluate(id, VTAG, inputs)
+		Bindings out = server.evaluate(id, VTAG, inputs, null)
 				.orElseGet(Bindings::new);
 
 		assertEquals(5, out.size());
@@ -157,7 +157,7 @@ public class CQLTest extends InferenceBaseTest {
 				.setBirthDate( DateTimeUtil.parseDate("1981-01-12")));
 
 		Bindings out =
-				server.evaluate(id, VTAG, inputs).orElseGet(Bindings::new);
+				server.evaluate(id, VTAG, inputs, null).orElseGet(Bindings::new);
 
 		Object x = out.get(PCO.Current_Chronological_Age.getTag());
 		assertTrue(x instanceof Quantity);
@@ -189,7 +189,7 @@ public class CQLTest extends InferenceBaseTest {
 										.setSystem("http://snomed.info/sct")
 										.setCode("266262004"))));
 
-		Bindings out = server.evaluate(id, VTAG, inputs)
+		Bindings out = server.evaluate(id, VTAG, inputs, null)
 				.orElseGet(Bindings::new);
 
 		Object x = out.get(PCO.History_Of_Arterial_Thromboembolism.getTag());

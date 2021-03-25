@@ -105,7 +105,7 @@ public abstract class BaseInferenceIntegrationTest {
 
     private KnowledgeAsset getSurrogate(KnowledgeCarrier artifactCarrier) {
 
-      Pointer ptr = kbManager.initKnowledgeBase(artifactCarrier).orElseGet(Assertions::fail);
+      Pointer ptr = kbManager.initKnowledgeBase(artifactCarrier, null).orElseGet(Assertions::fail);
 
       KnowledgeRepresentationLanguage lang = artifactCarrier.getRepresentation().getLanguage();
       // TODO Implement an introspector broker

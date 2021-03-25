@@ -67,7 +67,7 @@ public class CQLEvaluator
   }
 
   @Override
-  public Answer<Bindings> evaluate(UUID modelId, String versionTag, Bindings features) {
+  public Answer<Bindings> evaluate(UUID modelId, String versionTag, Bindings features, String params) {
     Bindings out = getCarrier(modelId, versionTag)
         .flatMap(translator::cqlToExecutableLibrary)
         .map(lib -> internalEvaluate(lib, initExecutableKB(lib, features).orElse(null)))
