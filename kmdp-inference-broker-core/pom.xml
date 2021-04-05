@@ -7,7 +7,7 @@
   <parent>
     <artifactId>kmdp-inference-broker</artifactId>
     <groupId>edu.mayo.kmdp</groupId>
-    <version>4.9.12</version>
+    <version>4.9.13-SNAPSHOT</version>
   </parent>
 
   <artifactId>kmdp-inference-broker-core</artifactId>
