@@ -1,4 +1,4 @@
-package edu.mayo.mea3.inference.mockRepo;
+package edu.mayo.kmdp.kbase.inference.mockRepo;
 
 import java.util.UUID;
 import org.omg.spec.api4kp._20200801.Answer;

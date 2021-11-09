@@ -13,7 +13,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package edu.mayo.mea3.inference;
+package edu.mayo.kmdp.kbase.inference;
 
 import static edu.mayo.kmdp.util.JSonUtil.asMapOf;
 import static org.junit.jupiter.api.Assertions.assertTrue;

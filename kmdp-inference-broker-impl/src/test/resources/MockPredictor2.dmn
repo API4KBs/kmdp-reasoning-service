@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="UTF-8" standalone="yes"?>
 <definitions namespace="http://www.foo.bar.com/dmn/1.1/diagram/45d9ab96e7d84be3afe6f578e20c029b.xml"
-  name="MockPredictor" id="id-1eaf8d13ff5344b0aea312292f61112a" 
-  xmlns="http://www.omg.org/spec/DMN/20151101/dmn.xsd" 
-  xmlns:mock="http://www.foo.bar.com/dmn/1.1/diagram/45d9ab96e7d84be3afe6f578e20c029b.xml" 
+  name="MockPredictor" id="id-1eaf8d13ff5344b0aea312292f61112a"
+  xmlns="http://www.omg.org/spec/DMN/20151101/dmn.xsd"
+  xmlns:mock="http://www.foo.bar.com/dmn/1.1/diagram/45d9ab96e7d84be3afe6f578e20c029b.xml"
   xmlns:feel="http://www.omg.org/spec/FEEL/20140401">
     <itemDefinition isCollection="false" name="riskOfHeartFailure" id="id-7fcee8c47420ae84073a785010e078b6" label="Risk of Heart Failure">
         <itemComponent isCollection="false" name="newElement" id="id-7fcee8c47420ae84073a785010e078b6-relation-E94D81E3-7811-4983-A831-FE51775C7DD7" label="">
@@ -72,7 +72,7 @@
     <inputData name="currentChronologicalAge" id="id-7cbeddece4f9577ce81a21bb88e99083" label="Current chronological age">
         <variable typeRef="mock:currentChronologicalAge" name="currentChronologicalAge" id="id-7cbeddece4f9577ce81a21bb88e99083_variable"/>
     </inputData>
-    <decision name="riskOfHeartFailure" id="id-b75fa7b662d7b861380c16bac0b3d5a0" label="Risk of Heart Failure"> 
+    <decision name="riskOfHeartFailure" id="id-b75fa7b662d7b861380c16bac0b3d5a0" label="Risk of Heart Failure">
         <variable typeRef="mock:riskOfHeartFailure" name="riskOfHeartFailure" id="id-b75fa7b662d7b861380c16bac0b3d5a0_variable"/>
         <informationRequirement>
             <requiredInput href="#id-7cbeddece4f9577ce81a21bb88e99083"/>

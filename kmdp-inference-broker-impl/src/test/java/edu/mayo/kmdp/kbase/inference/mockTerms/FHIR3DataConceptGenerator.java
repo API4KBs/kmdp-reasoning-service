@@ -1,4 +1,4 @@
-package edu.mayo.mea3.inference.mockTerms;
+package edu.mayo.kmdp.kbase.inference.mockTerms;
 
 import org.hl7.fhir.dstu3.model.DataElement;
 
