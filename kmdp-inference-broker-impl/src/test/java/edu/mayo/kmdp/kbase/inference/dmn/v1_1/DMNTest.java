@@ -21,7 +21,6 @@ import static org.omg.spec.api4kp._20200801.taxonomy.krformat.SerializationForma
 import static org.omg.spec.api4kp._20200801.taxonomy.krlanguage.KnowledgeRepresentationLanguageSeries.DMN_1_1;
 
 import ca.uhn.fhir.context.FhirContext;
-import ca.uhn.fhir.parser.IParser;
 import edu.mayo.kmdp.kbase.inference.InferenceBaseTest;
 import edu.mayo.kmdp.kbase.inference.dmn.KieDMNHelper;
 import edu.mayo.kmdp.kbase.inference.mockTerms.PCO;
@@ -43,7 +42,7 @@ import org.omg.spec.api4kp._20200801.services.KnowledgeBase;
 
 public class DMNTest extends InferenceBaseTest {
 
-  static IParser JSON = FhirContext.forDstu3().newJsonParser();
+  static final FhirContext fhirContext = FhirContext.forDstu3();
 
   @Test
   public void testEngine() {
@@ -94,7 +93,8 @@ public class DMNTest extends InferenceBaseTest {
 
   public static String toString(Object v) {
     if (v instanceof Type) {
-      return JSON.encodeResourceToString(new Observation().setValue((Type) v));
+      return fhirContext.newJsonParser()
+          .encodeResourceToString(new Observation().setValue((Type) v));
     }
     if (v instanceof Map) {
       return ((Map) v).keySet().stream()
