@@ -5,17 +5,17 @@
   <parent>
     <artifactId>kmdp-inference-service-base</artifactId>
     <groupId>edu.mayo.kmdp</groupId>
-    <version>11.1.4</version>
+    <version>11.1.5-SNAPSHOT</version>
   </parent>
 
   <artifactId>kmdp-inference-broker</artifactId>
-  <version>5.12.4</version>
+  <version>5.12.5-SNAPSHOT</version>
   <packaging>pom</packaging>
 
   <name>KMDP :: Service :: Inference Broker :: TEST</name>
 
   <properties>
-    <kmdp.servers.version>5.12.4</kmdp.servers.version>
+    <kmdp.servers.version>5.12.5-SNAPSHOT</kmdp.servers.version>
   </properties>
 
   <modules>
